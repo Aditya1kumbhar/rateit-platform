@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  phone         String?   @unique
+  email         String?   @unique
+  phoneVerified Boolean   @default(false)
+  displayName   String?
+  avatarUrl     String?
+  trustScore    Float     @default(50.0)
+  accountAge    DateTime  @default(now())
+  flagCount     Int       @default(0)
+  isBanned      Boolean   @default(false)
+  banReason     String?
+  consentGiven  Boolean   @default(false)
+  consentDate   DateTime?
+  dataEraseReq  DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  bio           String?
+  flags         Flag[]
+  lists         List[]
+  reviews       Review[]
+  claims        BusinessClaim[]
+
+  @@index([phone])
+  @@index([trustScore])
+}
+
+model Place {
+  id             String      @id @default(uuid())
+  name           String
+  category       Category
+  description    String?
+  address        String
+  city           String      @default("Pune")
+  latitude       Float
+  longitude      Float
+  avgRating      Float       @default(0)
+  weightedRating Float       @default(0)
+  reviewCount    Int         @default(0)
+  geofenceRadius Int         @default(50)
+  isVerifiedBiz  Boolean     @default(false)
+  claimStatus    ClaimStatus @default(UNCLAIMED)
+  ownerPhone     String?
+  businessPhone  String?
+  tags           String[]
+  priceRange     String?
+  imageUrl       String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  reviews        Review[]
+  businessClaims BusinessClaim[]
+  listItems      ListItem[]
+
+  @@index([category, city])
+  @@index([avgRating(sort: Desc)])
+  @@index([name])
+  @@unique([name, address])
+}
+
+model Review {
+  id              String     @id @default(uuid())
+  userId          String
+  placeId         String
+  rating          Int
+  text            String?
+  tags            String[]
+  photoUrls       String[]   @default([])
+  photoExifData   Json?
+  visibility      Visibility @default(PUBLIC)
+  isBlindRevealed Boolean    @default(false)
+  checkinLat      Float?
+  checkinLng      Float?
+  checkinVerified Boolean    @default(false)
+  trustWeight     Float      @default(1.0)
+  flagCount       Int        @default(0)
+  isHidden        Boolean    @default(false)
+  version         Int        @default(1)
+  publishDate     DateTime   @default(now())
+  editedAt        DateTime?
+  createdAt       DateTime   @default(now())
+  bizReply        BizReply?
+  flags           Flag[]
+  place           Place      @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([placeId, publishDate(sort: Desc)])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([flagCount])
+  @@unique([userId, placeId])
+}
+
+model BizReply {
+  id        String   @id @default(uuid())
+  reviewId  String   @unique
+  text      String
+  repliedAt DateTime @default(now())
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+}
+
+model Flag {
+  id        String     @id @default(uuid())
+  reviewId  String
+  userId    String
+  reason    FlagReason
+  detail    String?
+  createdAt DateTime   @default(now())
+  review    Review     @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewId, userId])
+}
+
+model List {
+  id          String   @id @default(uuid())
+  userId      String
+  name        String
+  isPrivate   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  description String?
+  iconName    String?  @default("Heart")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items       ListItem[]
+
+  @@index([userId])
+}
+
+model ListItem {
+  id        String   @id @default(uuid())
+  listId    String
+  placeId   String
+  createdAt DateTime @default(now())
+
+  list      List     @relation(fields: [listId], references: [id], onDelete: Cascade)
+  place     Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  @@unique([listId, placeId])
+}
+
+model BusinessClaim {
+  id          String      @id @default(uuid())
+  placeId     String
+  userId      String
+  phone       String?
+  documentUrl String?
+  status      ClaimStatus @default(PENDING)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  place       Place       @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Category {
+  COACHING
+  PG_HOSTEL
+  LOCAL_SERVICE
+  RESTAURANT
+  CAFE
+}
+
+enum ClaimStatus {
+  UNCLAIMED
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum Visibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum FlagReason {
+  FAKE_REVIEW
+  OFFENSIVE
+  IRRELEVANT
+  SPAM
+  DEFAMATORY
+}

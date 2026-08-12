@@ -1,0 +1,9 @@
+{
+  "name": "aerovolt-ers",
+  "version": "1.0.0",
+  "description": "AeroVolt ERS — 2026 Formula 1 Energy Strategy Engine",
+  "scripts": {
+    "start:server": "cd server && node index.js",
+    "start:client": "cd client && npm run dev"
+  }
+}

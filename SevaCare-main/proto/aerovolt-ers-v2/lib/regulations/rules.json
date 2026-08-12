@@ -1,0 +1,91 @@
+[
+  {
+    "id": "FIA-V19-01",
+    "name": "State of Charge (SoC) Window",
+    "description": "Battery SoC must remain within safe operational bounds (10% to 100%).",
+    "condition": {
+      "and": [
+        {
+          "var": "carState.soc",
+          "op": ">=",
+          "val": 10.0
+        },
+        {
+          "var": "carState.soc",
+          "op": "<=",
+          "val": 100.0
+        }
+      ]
+    },
+    "violation_msg": "Battery SoC ({carState.soc}%) violates allowed window of 10%-100%."
+  },
+  {
+    "id": "FIA-V19-02",
+    "name": "Kinetic Energy Recovery Limit",
+    "description": "Maximum MGU-K energy recovery per lap cannot exceed 2.0 MJ.",
+    "condition": {
+      "var": "carState.energyRecovered_MJ",
+      "op": "<=",
+      "val": 2.0
+    },
+    "violation_msg": "Energy recovered this lap ({carState.energyRecovered_MJ} MJ) exceeds regulatory limit of 2.0 MJ."
+  },
+  {
+    "id": "FIA-V19-03",
+    "name": "Deployment Power Limit",
+    "description": "Max deployment is capped at 120kW under normal conditions.",
+    "condition": {
+      "or": [
+        {
+          "var": "recommendation.isOverride",
+          "op": "==",
+          "val": true
+        },
+        {
+          "and": [
+            {
+              "var": "recommendation.isOverride",
+              "op": "==",
+              "val": false
+            },
+            {
+              "var": "recommendation.power_kW",
+              "op": "<=",
+              "val": 120
+            }
+          ]
+        }
+      ]
+    },
+    "violation_msg": "Requested deployment power ({recommendation.power_kW} kW) exceeds normal limit of 120kW."
+  },
+  {
+    "id": "FIA-V19-04",
+    "name": "Overtake Override Eligibility",
+    "description": "Overtake modes (>120kW) are only permitted when trailing gap is <= 1.0s.",
+    "condition": {
+      "or": [
+        {
+          "var": "recommendation.isOverride",
+          "op": "==",
+          "val": false
+        },
+        {
+          "and": [
+            {
+              "var": "recommendation.isOverride",
+              "op": "==",
+              "val": true
+            },
+            {
+              "var": "carState.leadingCarGap_s",
+              "op": "<=",
+              "val": 1.0
+            }
+          ]
+        }
+      ]
+    },
+    "violation_msg": "Override active but gap to leading car ({carState.leadingCarGap_s}s) exceeds DRS 1.0s threshold."
+  }
+]
