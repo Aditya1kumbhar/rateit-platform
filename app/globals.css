@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 60 9% 98%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 60 5% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 60 5% 96%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 0%;
+    --radius: 0.75rem;
+
+    /* Custom calm colors */
+    --calm-yellow: 48 100% 88%;
+    --calm-olive: 82 39% 78%;
+    --soft-gray: 0 0% 96%;
+    --warm-white: 60 9% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+/* Custom calm design system */
+.calm-button-yellow {
+  @apply bg-yellow-100 hover:bg-yellow-200 text-gray-800 border-0 transition-all duration-300 ease-out;
+}
+
+.calm-button-olive {
+  @apply bg-lime-100 hover:bg-lime-200 text-gray-800 border-0 transition-all duration-300 ease-out;
+}
+
+.calm-card {
+  @apply bg-black text-white shadow-sm hover:shadow-md transition-all duration-300 ease-out;
+}
+
+.calm-surface {
+  @apply bg-gray-50 border border-gray-100;
+}
+
+.bottom-nav-item {
+  @apply flex flex-col items-center justify-center space-y-1 py-2 px-3 transition-all duration-200 ease-out;
+}
+
+.bottom-nav-active {
+  @apply text-gray-800;
+}
+
+.bottom-nav-inactive {
+  @apply text-gray-400 hover:text-gray-600;
+}
