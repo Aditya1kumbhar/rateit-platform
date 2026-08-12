@@ -1,311 +1,149 @@
-# RateIT - Universal Rating Platform
+# RateIT — Hyperlocal Verified Review Platform (Pune V1)
 
-![RateIT Logo](https://img.shields.io/badge/RateIT-Universal%20Rating%20Platform-4B0082?style=for-the-badge)
+![RateIT Banner](https://img.shields.io/badge/RateIT-Pune%20V1-4B0082?style=for-the-badge&logo=next.js)
+![Next.js 14](https://img.shields.io/badge/Next.js-14.2-black?style=for-the-badge&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-## 🌟 Overview
-
-RateIT is a minimalist but addictive web platform where users can rate, review, discover, and share opinions on anything — from restaurants, movies, products, to local shops and experiences. Built with a focus on creating a trusted, social, and universally relevant rating portal that feels emotionally engaging and fun.
-
-## 🎯 Purpose & Vision
-
-**Purpose:** Create a comprehensive rating ecosystem that enables users to discover, rate, and share experiences across all categories of life.
-
-**Vision:** Build a trusted, social, and universally relevant rating portal that makes discovering great experiences effortless and enjoyable.
-
-## ✨ Core Features
-
-### 🏠 Landing Page
-- **Animated gradient background** with brand colors (#4B0082, #FF6B6B)
-- **Sticky header** with search functionality and user avatar
-- **Hero section** with compelling CTA buttons
-- **"Continue as Guest"** functionality for immediate access
-- **Trending categories** showcase
-
-### 🔍 Discover System
-- **Advanced search** with filtering and sorting capabilities
-- **Category-based filtering** (Restaurants, Movies, Cafes, etc.)
-- **Sort options** by rating, review count, or name
-- **Save to lists** functionality with modal interface
-- **Detailed place information** with ratings and reviews
-
-### 📊 Dashboard Features
-- **Real-time statistics** calculated from user activity
-  - Items rated this week
-  - Favorites saved
-  - Lists created
-  - Badges earned
-- **Category shortcuts** for quick navigation
-- **Suggested actions** based on user behavior
-- **Trending reviews** with clickable cards
-
-### 📝 Rating & Review System
-- **1-5 star rating system** with visual feedback
-- **Photo upload** capabilities (Upload Photo / Snap Live)
-- **Caption/feedback** text area for detailed reviews
-- **Contextual tags** (chips) for quick categorization
-- **Visibility controls** (Public, Followers, Private)
-- **Comments toggle** for social interaction
-
-### 📋 List Management
-- **Custom list creation** with personalized names
-- **Save items** to multiple lists simultaneously
-- **Public/Private** list visibility settings
-- **"Let's add" prompt** when no lists exist
-- **Visual list cards** with item counts
-
-### 👤 User Profiles
-- **Profile statistics** with real data calculation
-- **Achievement badges** system
-- **Saved lists** display with privacy indicators
-- **Rating streak** tracking
-- **Profile customization** options
-
-### 🎬 Detailed Item Views
-- **Comprehensive item pages** with full details
-- **Tabbed interface** (Overview, Reviews, Photos, Info)
-- **User reviews** with ratings and photos
-- **Business information** (hours, contact, location)
-- **Photo galleries** for visual content
-- **Social actions** (like, share, save)
-
-## 🛠 Technology Stack
-
-### Frontend
-- **React.js 18+** - Modern React with hooks and context
-- **Next.js 14+** - App Router for optimal performance
-- **TypeScript** - Type-safe development
-- **Tailwind CSS** - Utility-first styling
-- **shadcn/ui** - High-quality component library
-- **Lucide React** - Beautiful icon system
-
-### Backend (Planned)
-- **Python** - Backend API development
-- **PostgreSQL** - Primary database
-- **JWT Authentication** - Secure user sessions
-- **RESTful APIs** - Clean API architecture
-
-### Hosting & Deployment
-- **Vercel** - Frontend hosting and deployment
-- **Render/Heroku** - Backend hosting
-- **Vercel Analytics** - Performance monitoring
-
-### Search & Discovery
-- **Elasticsearch/Algolia** - Advanced search capabilities
-- **Real-time filtering** - Instant search results
-
-## 🎨 Design System
-
-### Color Palette
-- **Primary:** `#4B0082` (Deep Purple)
-- **Accent:** `#FF6B6B` (Coral Red)
-- **Background:** `#F9FAFB` (Light Gray)
-- **Text:** `#2E2E2E` (Dark Gray)
-
-### Typography
-- **Headings:** Bold, clear hierarchy
-- **Body:** Readable, accessible font sizes
-- **Interactive:** Hover states and transitions
-
-### Components
-- **Cards:** Clean, shadowed containers
-- **Buttons:** Rounded, colorful CTAs
-- **Forms:** Intuitive input fields
-- **Navigation:** Sticky, accessible headers
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js 18+ installed
-- npm or yarn package manager
-- Git for version control
-
-### Installation
-
-1. **Clone the repository**
-   \`\`\`bash
-   git clone https://github.com/yourusername/rateit-platform.git
-   cd rateit-platform
-   \`\`\`
-
-2. **Install dependencies**
-   \`\`\`bash
-   npm install
-   # or
-   yarn install
-   \`\`\`
-
-3. **Run the development server**
-   \`\`\`bash
-   npm run dev
-   # or
-   yarn dev
-   \`\`\`
-
-4. **Open your browser**
-   Navigate to `http://localhost:3000` to see the application.
-
-### Project Structure
-\`\`\`
-rateit-platform/
-├── app/                    # Next.js App Router pages
-│   ├── page.tsx           # Landing page & dashboard
-│   ├── discover/          # Search & discovery
-│   ├── category/          # Category-specific pages
-│   ├── item/              # Detailed item views
-│   ├── lists/             # List management
-│   ├── profile/           # User profiles
-│   └── layout.tsx         # Root layout
-├── components/            # Reusable UI components
-│   └── ui/               # shadcn/ui components
-├── lib/                  # Utility functions
-│   └── mock.ts           # Mock data for development
-├── public/               # Static assets
-└── README.md             # This file
-\`\`\`
-
-## 📱 User Roles & Permissions
-
-### 🎭 Guest User
-- View ratings and reviews
-- Search and browse trending items
-- Access category shortcuts
-- Use discovery features
-- **No account required**
-
-### 👤 Registered User
-- All guest features plus:
-- Post ratings and reviews
-- Upload photos with reviews
-- Create and manage custom lists
-- Follow other users
-- Save favorites
-- Earn achievement badges
-
-### 🛡 Admin User
-- All registered user features plus:
-- Content moderation tools
-- User management
-- Category management
-- Analytics dashboard access
-- System configuration
-
-## 🔒 Security & Privacy
-
-### Data Protection
-- **HTTPS (TLS 1.2+)** - Encrypted data transmission
-- **AES-256 encryption** - Secure data storage
-- **Input sanitization** - XSS and injection prevention
-- **Rate limiting** - API abuse prevention
-
-### Authentication
-- **JWT tokens** - Secure session management
-- **Role-based access** - Granular permissions
-- **Password hashing** - Secure credential storage
-- **OAuth integration** - Social login options
-
-### Privacy Controls
-- **Visibility settings** - Control who sees your content
-- **Data export** - Download your data anytime
-- **Account deletion** - Complete data removal
-- **Privacy policy** - Transparent data practices
-
-## 🎮 Mock Data & Development
-
-The application includes comprehensive mock data for development and testing:
-
-### Sample Data Includes:
-- **8 user ratings** with realistic dates and reviews
-- **15 favorite items** across multiple categories
-- **5 custom lists** with varying privacy settings
-- **7 achievement badges** with progression tracking
-- **Category-specific items** for restaurants, cafes, movies, colleges
-- **Detailed item information** with reviews and photos
-
-### Statistics Calculation:
-- **Real-time stats** calculated from mock data
-- **Weekly activity** tracking
-- **Achievement progress** monitoring
-- **List management** metrics
-
-## 🔮 Future Enhancements
-
-### Phase 2 Features
-- **AI-powered recommendations** based on user preferences
-- **Direct messaging** between users
-- **Q&A system** for community interaction
-- **Advanced analytics** for business insights
-
-### Phase 3 Features
-- **Gamification elements** (points, levels, challenges)
-- **Social feeds** with friend activity
-- **Business profiles** for establishments
-- **API for third-party integrations**
-
-### Phase 4 Features
-- **Mobile applications** (iOS/Android)
-- **Offline functionality** for saved content
-- **Multi-language support** for global reach
-- **Advanced moderation** with AI assistance
-
-## 🤝 Contributing
-
-We welcome contributions from the community! Here's how you can help:
-
-### Development Process
-1. **Fork the repository**
-2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
-3. **Commit your changes** (`git commit -m 'Add amazing feature'`)
-4. **Push to the branch** (`git push origin feature/amazing-feature`)
-5. **Open a Pull Request**
-
-### Contribution Guidelines
-- Follow the existing code style
-- Write clear commit messages
-- Add tests for new features
-- Update documentation as needed
-- Ensure responsive design
-
-## 📊 Performance & Analytics
-
-### Key Metrics
-- **Page load times** < 2 seconds
-- **Core Web Vitals** optimization
-- **SEO-friendly** structure
-- **Accessibility** WCAG 2.1 compliance
-
-### Monitoring
-- **Vercel Analytics** for performance tracking
-- **Error monitoring** with detailed logging
-- **User behavior** analytics
-- **A/B testing** capabilities
-
-## 📞 Support & Contact
-
-### Getting Help
-- **Documentation:** Check this README and code comments
-- **Issues:** Open a GitHub issue for bugs or feature requests
-- **Discussions:** Join our community discussions
-- **Email:** support@rateit-platform.com
-
-### Community
-- **Discord:** Join our developer community
-- **Twitter:** Follow @RateITPlatform for updates
-- **Blog:** Read about our development journey
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **shadcn/ui** for the beautiful component library
-- **Vercel** for hosting and deployment platform
-- **Lucide** for the comprehensive icon set
-- **Tailwind CSS** for the utility-first CSS framework
-- **Next.js team** for the amazing React framework
+RateIT is a hyper-focused, trustworthy review ecosystem designed specifically for student & young professional hubs in **Pune** (Kothrud, FC Road, Viman Nagar, Hinjewadi). RateIT addresses the rampant problem of paid, fake, and unverified reviews on platforms like Google Maps and Justdial by introducing **Check-In Verification**, **EXIF GPS Metadata Extraction**, **Anti-Fraud Heuristics**, and **Trust Tiers**.
 
 ---
 
-**Built with ❤️ by the RateIT team**
+## 🚀 Key Upgrades & V1 Feature Highlights
 
-*Making discovery delightful, one rating at a time.*
+### 🎯 1. Hyperlocal Pune Seed Engine (`lib/mock.ts`)
+- Specialized data model for student priorities: **Coaching Classes (IIT-JEE, MPSC, UPSC)**, **PG Hostels**, **Cafés**, and **Local Services**.
+- Enriched mock datasets featuring actual Pune locations (*FC Road, Karve Nagar, Wakad, Hinjewadi Phase 1*).
+- Consistent place mapping with unique identifiers across landing pages, categories, search, and detail views.
+
+### 🛡️ 2. Verified Reviews & Anti-Fraud Infrastructure (`lib/fraud-heuristics.ts` & `lib/trust-score.ts`)
+- **Check-In Verification**: Compares user GPS coordinates against business geofences (lat/lng radius check).
+- **EXIF Metadata Parsing (`lib/exif.ts`)**: Validates uploaded photo timestamps and GPS coordinates directly from photo headers to prevent stock photo spam.
+- **Trust Tiers**: Categorizes reviewers into `UNVERIFIED`, `COMMUNITY`, `VERIFIED_VISITOR`, and `TRUSTED_RESIDENT` based on historical rating density and verification history.
+- **Fraud Heuristics Engine**:
+  - Burst detection (flagging sudden rating spikes).
+  - Suspicious text repetition & sentiment anomaly flags.
+  - Device/IP rate-limiting (`lib/ratelimit.ts`).
+
+### ⚖️ 3. Indian Legal Compliance (IT Act Section 79)
+- **Safe Harbour Provision Compliance**: Standardized terms of service, privacy policy, and grievance officer pages (`/terms`, `/privacy`, `/moderation-policy`, `/grievance`).
+- **Grievance Officer Portal**: Official contact info and turnaround SLA (36 hours) for takedown notices as required under the *Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021*.
+
+### 📱 4. Dynamic UI & Seamless Navigation
+- **Dynamic Category Mapping (`app/category/[slug]/page.tsx`)**: Decodes URL parameters cleanly (e.g., `Cafés` → `CAFE`) and filters places dynamically.
+- **Interactive Discover Grid (`app/discover/page.tsx`)**: Fully clickable cards with real-time category filtering and sorting (Highest Rated, Most Reviews, A-Z).
+- **Detailed Place Views (`app/item/[id]/page.tsx`)**: Dynamically renders place info, photo galleries, operational hours, verified badge tags, and place-specific user reviews.
+- **Enhanced Rating Modal (`components/enhanced-rate-modal.tsx`)**: Interactive 5-star rating system with photo upload triggers, verification badges, tag chips, and real API connectivity (`POST /api/reviews`).
+- **Hydration Safety**: Fully compliant with Next.js SSR hydration rules (`suppressHydrationWarning`).
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Framework** | Next.js 14 (App Router), React 18 |
+| **Language** | TypeScript (Strict mode) |
+| **Styling & UI** | Tailwind CSS, shadcn/ui, Lucide Icons, Lenis Smooth Scroll |
+| **Database & ORM** | PostgreSQL, Prisma ORM, Supabase |
+| **Authentication** | Custom Session Handler (`lib/userAuth.ts`), NextAuth / Supabase Auth ready |
+| **Testing** | Playwright (E2E Integration Tests) |
+| **Code Review** | CodeRabbit AI Integration |
+
+---
+
+## 📊 Database Schema Overview (`prisma/schema.prisma`)
+
+```prisma
+enum Category {
+  COACHING
+  PG_HOSTEL
+  CAFE
+  RESTAURANT
+  LOCAL_SERVICE
+}
+
+enum TrustTier {
+  UNVERIFIED
+  COMMUNITY
+  VERIFIED_VISITOR
+  TRUSTED_RESIDENT
+}
+
+model Place {
+  id          String   @id @default(cuid())
+  name        String
+  category    Category
+  address     String
+  lat         Float
+  lng         Float
+  avgRating   Float    @default(0)
+  reviewCount Int      @default(0)
+  reviews     Review[]
+}
+
+model Review {
+  id              String    @id @default(cuid())
+  rating          Int
+  text            String
+  checkinVerified Boolean   @default(false)
+  trustTier       TrustTier @default(UNVERIFIED)
+  placeId         String
+  place           Place     @relation(fields: [placeId], references: [id])
+}
+```
+
+---
+
+## 💻 Getting Started Locally
+
+### Prerequisites
+- Node.js 18.x or higher
+- npm / pnpm / yarn
+
+### 1. Clone & Install
+```bash
+git clone https://github.com/Aditya1kumbhar/rateit-platform.git
+cd rateit-platform
+npm install
+```
+
+### 2. Set Up Environment Variables
+Create a `.env` file in the root directory:
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/rateit"
+NEXT_PUBLIC_SUPABASE_URL="https://your-supabase-project.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
+```
+
+### 3. Run Prisma Migrations & Seed
+```bash
+npx prisma migrate dev --name init
+npx prisma db seed
+```
+
+### 4. Start Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 🧪 Testing
+
+Run E2E tests using Playwright:
+```bash
+npx playwright test
+```
+
+---
+
+## 📄 License & Legal Notice
+
+Distributed under the MIT License. RateIT complies with the Indian Information Technology Act, 2000 & Intermediary Guidelines Rules 2021.
+
+---
+
+*Built with ❤️ for Pune students and residents.*
