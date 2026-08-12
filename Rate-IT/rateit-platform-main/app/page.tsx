@@ -33,6 +33,7 @@ const mockUserData = {
   ratings: [
     {
       id: 1,
+      itemId: "1", // IIT JEE Academy
       itemName: "IIT JEE Academy",
       category: "Coaching",
       rating: 4.5,
@@ -42,6 +43,7 @@ const mockUserData = {
     },
     {
       id: 2,
+      itemId: "5", // Sunrise PG for Boys
       itemName: "Sunrise PG for Boys",
       category: "PG / Hostel",
       rating: 3.8,
@@ -51,6 +53,7 @@ const mockUserData = {
     },
     {
       id: 3,
+      itemId: "8", // Café Good Luck
       itemName: "Café Good Luck",
       category: "Café",
       rating: 4.2,
@@ -60,6 +63,7 @@ const mockUserData = {
     },
     {
       id: 4,
+      itemId: "2", // Mahesh Tutorials
       itemName: "Mahesh Tutorials",
       category: "Coaching",
       rating: 4.0,
@@ -69,6 +73,7 @@ const mockUserData = {
     },
     {
       id: 5,
+      itemId: "6", // Green Villa Hostel
       itemName: "Green Villa Hostel",
       category: "PG / Hostel",
       rating: 4.5,
@@ -229,20 +234,21 @@ export default function HomePage() {
             { name: "PGs & Hostels", icon: Home, count: "32 listed" },
             { name: "Local Services", icon: Wrench, count: "Coming soon" },
             { name: "Restaurants", icon: Utensils, count: "24 listed" },
-            { name: "Cafés", icon: Coffee, count: "18 listed" },
+            { name: "Cafes", icon: Coffee, count: "18 listed" },
           ].map((category, index) => (
-            <Card
-              key={index}
-              className="bg-gray-50 cursor-pointer group border-0 hover:shadow-md transition-all hover:-translate-y-0.5"
-            >
-              <CardContent className="p-6">
-                <div className="w-12 h-12 rounded-xl bg-gray-200 mb-4 flex items-center justify-center group-hover:bg-yellow-100 transition-colors">
-                  <category.icon className="h-6 w-6 text-gray-600 group-hover:text-yellow-700 transition-colors" />
-                </div>
-                <h4 className="text-sm font-semibold text-gray-800 mb-1">{category.name}</h4>
-                <p className="text-xs text-gray-400">{category.count}</p>
-              </CardContent>
-            </Card>
+            <Link key={index} href={`/category/${category.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>
+              <Card
+                className="bg-gray-50 cursor-pointer group border-0 hover:shadow-md transition-all hover:-translate-y-0.5 h-full"
+              >
+                <CardContent className="p-6">
+                  <div className="w-12 h-12 rounded-xl bg-gray-200 mb-4 flex items-center justify-center group-hover:bg-yellow-100 transition-colors">
+                    <category.icon className="h-6 w-6 text-gray-600 group-hover:text-yellow-700 transition-colors" />
+                  </div>
+                  <h4 className="text-sm font-semibold text-gray-800 mb-1">{category.name}</h4>
+                  <p className="text-xs text-gray-400">{category.count}</p>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       </section>
@@ -342,6 +348,7 @@ function CalmDashboard({
 
   const trendingReviews = mockUserData.ratings.slice(0, 4).map((r) => ({
     id: r.id,
+    itemId: r.itemId,
     title: r.itemName,
     rating: r.rating,
     category: r.category,
@@ -454,7 +461,7 @@ function CalmDashboard({
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             {trendingReviews.map((review) => (
-              <Link key={review.id} href={`/item/${review.id}`}>
+              <Link key={review.id} href={`/item/${review.itemId || review.id}`}>
                 <Card className="bg-gray-50 cursor-pointer group border-0 hover:shadow-md transition-all">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-3">

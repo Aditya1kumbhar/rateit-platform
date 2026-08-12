@@ -11,43 +11,7 @@ import Link from "next/link"
 import { EnhancedRateModal } from "@/components/enhanced-rate-modal"
 import { BottomNav } from "@/components/bottom-nav"
 import { SaveToListsModal } from "@/components/save-to-lists-modal"
-
-// Mock data for discover page
-const mockPlaces = [
-  {
-    id: 1,
-    name: "The Daily Grind",
-    category: "Coffee Shop",
-    rating: 4.5,
-    reviewCount: 234,
-    location: "Downtown SF",
-    price: "$$",
-    tags: ["Cozy", "WiFi", "Good Coffee"],
-    description: "A cozy coffee shop perfect for working and meetings.",
-  },
-  {
-    id: 2,
-    name: "Bella Vista Restaurant",
-    category: "Restaurant",
-    rating: 4.8,
-    reviewCount: 456,
-    location: "North Beach",
-    price: "$$$",
-    tags: ["Italian", "Romantic", "Great View"],
-    description: "Authentic Italian cuisine with stunning city views.",
-  },
-  {
-    id: 3,
-    name: "Golden Gate Cinema",
-    category: "Entertainment",
-    rating: 4.6,
-    reviewCount: 312,
-    location: "Mission District",
-    price: "$$",
-    tags: ["IMAX", "Comfortable", "Latest Movies"],
-    description: "Premium cinema experience with latest technology.",
-  },
-]
+import { PUNE_SEED_PLACES } from "@/lib/mock"
 
 export default function DiscoverPage() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -59,13 +23,14 @@ export default function DiscoverPage() {
   const [showSaveModal, setShowSaveModal] = useState(false)
   const [selectedItemForSave, setSelectedItemForSave] = useState<string>("")
 
-  const categories = ["all", "Coffee Shop", "Restaurant", "Entertainment", "Fitness", "Bakery"]
+  // Dynamic categories based on data
+  const categories = ["all", "COACHING", "PG_HOSTEL", "CAFE", "RESTAURANT", "LOCAL_SERVICE"]
 
   const filteredAndSortedPlaces = useMemo(() => {
-    const filtered = mockPlaces.filter((place) => {
+    const filtered = PUNE_SEED_PLACES.filter((place) => {
       const matchesSearch =
         place.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        place.description.toLowerCase().includes(searchQuery.toLowerCase())
+        (place.description && place.description.toLowerCase().includes(searchQuery.toLowerCase()))
       const matchesCategory = selectedCategory === "all" || place.category === selectedCategory
       return matchesSearch && matchesCategory
     })
@@ -73,7 +38,7 @@ export default function DiscoverPage() {
     return filtered.sort((a, b) => {
       switch (sortBy) {
         case "rating":
-          return b.rating - a.rating
+          return b.avgRating - a.avgRating
         case "reviews":
           return b.reviewCount - a.reviewCount
         case "name":
@@ -85,7 +50,7 @@ export default function DiscoverPage() {
   }, [searchQuery, selectedCategory, sortBy])
 
   return (
-    <div className="min-h-screen bg-white pb-20">
+    <div className="min-h-screen bg-[#F9FAFB] pb-20">
       {/* Header */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -104,49 +69,42 @@ export default function DiscoverPage() {
       </header>
 
       <div className="container mx-auto px-4 py-6">
-        {/* Search and Filters */}
-        <div className="space-y-6 mb-8">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-            <Input
-              placeholder="Search places, restaurants, cafes..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-500 focus:border-gray-300 rounded-xl"
-            />
-          </div>
+        {/* Search */}
+        <div className="relative mb-6">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <Input
+            className="pl-10 h-12 bg-white border-gray-200 focus:border-gray-300 focus:ring-0 text-gray-800 placeholder:text-gray-400 rounded-xl"
+            placeholder="Search places, categories..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
 
-          <div className="flex flex-wrap gap-4">
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-48 bg-gray-50 border-gray-200 text-black rounded-xl">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent className="bg-white border-gray-200 rounded-xl">
-                {categories.map((category) => (
-                  <SelectItem key={category} value={category} className="text-black hover:bg-gray-50">
-                    {category === "all" ? "All Categories" : category}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+        {/* Filters */}
+        <div className="flex items-center gap-3 mb-6 overflow-x-auto pb-2 scrollbar-hide">
+          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <SelectTrigger className="w-[140px] bg-white border-gray-200">
+              <SelectValue placeholder="Category" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map((cat) => (
+                <SelectItem key={cat} value={cat}>
+                  {cat === "all" ? "All Categories" : cat.replace('_', ' ')}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-48 bg-gray-50 border-gray-200 text-black rounded-xl">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent className="bg-white border-gray-200 rounded-xl">
-                <SelectItem value="rating" className="text-black hover:bg-gray-50">
-                  Highest Rated
-                </SelectItem>
-                <SelectItem value="reviews" className="text-black hover:bg-gray-50">
-                  Most Reviews
-                </SelectItem>
-                <SelectItem value="name" className="text-black hover:bg-gray-50">
-                  Name A-Z
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-[140px] bg-white border-gray-200">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="rating">Highest Rated</SelectItem>
+              <SelectItem value="reviews">Most Reviews</SelectItem>
+              <SelectItem value="name">Name A-Z</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Results */}
@@ -154,74 +112,89 @@ export default function DiscoverPage() {
           <p className="text-gray-600">{filteredAndSortedPlaces.length} places found</p>
 
           {filteredAndSortedPlaces.map((place) => (
-            <Card key={place.id} className="calm-card border-0 hover:shadow-lg transition-all">
-              <CardContent className="p-6">
-                <div className="flex space-x-6">
-                  <div className="w-24 h-24 bg-gray-800 rounded-xl flex-shrink-0"></div>
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h3 className="font-semibold text-white text-xl mb-2">{place.name}</h3>
-                        <div className="flex items-center space-x-3 mb-2">
-                          <div className="flex items-center">
-                            <Star className="h-4 w-4 text-yellow-400 fill-current mr-1" />
-                            <span className="font-medium text-white">{place.rating}</span>
+            <Link key={place.id} href={`/item/${place.id}`} className="block">
+              <Card className="bg-white border border-gray-200 hover:shadow-lg transition-all">
+                <CardContent className="p-6">
+                  <div className="flex space-x-6">
+                    <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex-shrink-0"></div>
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h3 className="font-semibold text-gray-800 text-xl mb-2">{place.name}</h3>
+                          <div className="flex items-center space-x-3 mb-2">
+                            <div className="flex items-center">
+                              <Star className="h-4 w-4 text-yellow-400 fill-current mr-1" />
+                              <span className="font-medium text-gray-800">{place.avgRating}</span>
+                            </div>
+                            <span className="text-gray-500">•</span>
+                            <span className="text-gray-600">{place.reviewCount} reviews</span>
+                            {place.priceRange && (
+                              <>
+                                <span className="text-gray-500">•</span>
+                                <span className="text-gray-600">{place.priceRange}</span>
+                              </>
+                            )}
                           </div>
-                          <span className="text-gray-500">•</span>
-                          <span className="text-gray-300">{place.reviewCount} reviews</span>
-                          <span className="text-gray-500">•</span>
-                          <span className="text-gray-300">{place.price}</span>
+                          <div className="flex items-center space-x-2 mb-3">
+                            <MapPin className="h-4 w-4 text-gray-400" />
+                            <span className="text-gray-600">{place.address}</span>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-2 mb-3">
-                          <MapPin className="h-4 w-4 text-gray-400" />
-                          <span className="text-gray-300">{place.location}</span>
-                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-gray-400 hover:text-red-400"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            setSelectedItemForSave(place.name)
+                            setShowSaveModal(true)
+                          }}
+                        >
+                          <Heart className="h-5 w-5" />
+                        </Button>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-gray-400 hover:text-red-400"
-                        onClick={(e) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          setSelectedItemForSave(place.name)
-                          setShowSaveModal(true)
-                        }}
-                      >
-                        <Heart className="h-5 w-5" />
-                      </Button>
-                    </div>
-                    <p className="text-gray-300 mb-3">{place.description}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {place.tags.map((tag, index) => (
-                        <Badge key={index} variant="secondary" className="bg-gray-700 text-gray-200 hover:bg-gray-600">
-                          {tag}
-                        </Badge>
-                      ))}
+                      <p className="text-gray-600 mb-3">{place.description}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {place.tags?.map((tag, index) => (
+                          <Badge key={index} variant="secondary" className="bg-gray-100 text-gray-600 hover:bg-gray-200">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
+          {filteredAndSortedPlaces.length === 0 && (
+            <div className="text-center py-10">
+              <p className="text-gray-500">No places found matching your search.</p>
+            </div>
+          )}
         </div>
       </div>
 
-      <BottomNav onRateClick={() => setShowRateModal(true)} />
+      {/* Floating Action Button */}
+      <div className="fixed bottom-20 right-4 z-40">
+        <Button
+          size="lg"
+          onClick={() => setShowRateModal(true)}
+          className="rounded-full shadow-lg bg-black hover:bg-gray-800 text-white border-0"
+        >
+          <Plus className="h-5 w-5 mr-2" />
+          Add Place
+        </Button>
+      </div>
 
-      {/* Rate Modal */}
+      {/* Modals */}
       {showRateModal && <EnhancedRateModal onClose={() => setShowRateModal(false)} />}
-
-      {/* Save to Lists Modal */}
-      {showSaveModal && (
-        <SaveToListsModal
-          itemName={selectedItemForSave}
-          onClose={() => {
-            setShowSaveModal(false)
-            setSelectedItemForSave("")
-          }}
-        />
-      )}
+      <SaveToListsModal
+        isOpen={showSaveModal}
+        onClose={() => setShowSaveModal(false)}
+        itemName={selectedItemForSave}
+      />
     </div>
   )
 }

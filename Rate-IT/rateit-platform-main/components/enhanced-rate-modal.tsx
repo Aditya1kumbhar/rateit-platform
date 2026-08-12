@@ -102,9 +102,8 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [uploadedPhotos, setUploadedPhotos] = useState<File[]>([])
   const [visibility, setVisibility] = useState<"PUBLIC" | "PRIVATE">("PUBLIC")
-
-  // Step 5: Consent
   const [consentChecked, setConsentChecked] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // ================================================================
   // STEP 1: Place Search
@@ -203,9 +202,27 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
       consentGiven: consentChecked,
       // Photos would be uploaded to Supabase Storage
     }
-    console.log("Review submitted:", reviewData)
-    // TODO: POST to /api/reviews
-    onClose()
+    setIsSubmitting(true)
+    try {
+      const response = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reviewData),
+      })
+      const result = await response.json()
+      if (result.success) {
+        console.log("Review submitted successfully:", result)
+        onClose()
+      } else {
+        console.error("Failed to submit review:", result.error)
+        alert(result.error || "Failed to submit review. Please try again.")
+      }
+    } catch (error) {
+      console.error("Error submitting review:", error)
+      alert("Network error. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   // ================================================================
@@ -719,10 +736,10 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
               {/* Submit */}
               <Button
                 onClick={handleSubmit}
-                disabled={!consentChecked}
+                disabled={!consentChecked || isSubmitting}
                 className="w-full bg-black hover:bg-gray-800 text-white py-3 rounded-xl font-medium disabled:opacity-50"
               >
-                🎉 Publish Review
+                {isSubmitting ? "Submitting..." : "🎉 Publish Review"}
               </Button>
             </div>
           )}

@@ -14,6 +14,7 @@
 export const PUNE_SEED_PLACES = [
   // ========== COACHING CLASSES ==========
   {
+    id: "1",
     name: "IIT JEE Academy",
     category: "COACHING" as const,
     description: "JEE/NEET preparation with experienced faculty. Known for small batch sizes and personal attention.",
@@ -27,6 +28,7 @@ export const PUNE_SEED_PLACES = [
     priceRange: "$$$",
   },
   {
+    id: "2",
     name: "Mahesh Tutorials",
     category: "COACHING" as const,
     description: "SSC/HSC board exam coaching. Multiple branches across Pune. Strong in Maths and Science.",
@@ -40,6 +42,7 @@ export const PUNE_SEED_PLACES = [
     priceRange: "$$",
   },
   {
+    id: "3",
     name: "Kale Classes",
     category: "COACHING" as const,
     description: "UPSC and MPSC preparation. Marathi and English medium. Evening batches available.",
@@ -53,6 +56,7 @@ export const PUNE_SEED_PLACES = [
     priceRange: "$$",
   },
   {
+    id: "4",
     name: "Code Academy Pune",
     category: "COACHING" as const,
     description: "Full-stack web development bootcamp. 6-month program with placement assistance.",
@@ -68,6 +72,7 @@ export const PUNE_SEED_PLACES = [
 
   // ========== PGs & HOSTELS ==========
   {
+    id: "5",
     name: "Sunrise PG for Boys",
     category: "PG_HOSTEL" as const,
     description: "Boys PG near Kothrud bus stop. Includes meals, WiFi, and laundry. AC rooms available.",
@@ -81,6 +86,7 @@ export const PUNE_SEED_PLACES = [
     priceRange: "$$",
   },
   {
+    id: "6",
     name: "Green Villa Hostel",
     category: "PG_HOSTEL" as const,
     description: "Co-living space near Hinjewadi IT Park. Modern amenities, gym, and parking.",
@@ -94,6 +100,7 @@ export const PUNE_SEED_PLACES = [
     priceRange: "$$$",
   },
   {
+    id: "7",
     name: "Comfort Stay PG",
     category: "PG_HOSTEL" as const,
     description: "Girls PG with strict timings. Home-cooked Maharashtrian meals. CCTV security.",
@@ -109,6 +116,7 @@ export const PUNE_SEED_PLACES = [
 
   // ========== CAFÉS ==========
   {
+    id: "8",
     name: "Café Good Luck",
     category: "CAFE" as const,
     description: "Iconic FC Road café since 1951. Famous for bun maska and Irani chai. A Pune institution.",
@@ -122,6 +130,7 @@ export const PUNE_SEED_PLACES = [
     priceRange: "$",
   },
   {
+    id: "9",
     name: "Vohuman Café",
     category: "CAFE" as const,
     description: "Classic Pune breakfast spot. Cheese omelette and chai is legendary. Cash only.",
@@ -137,6 +146,7 @@ export const PUNE_SEED_PLACES = [
 
   // ========== RESTAURANTS ==========
   {
+    id: "10",
     name: "Vaishali Restaurant",
     category: "RESTAURANT" as const,
     description: "Legendary South Indian restaurant on FC Road. Known for dosas and filter coffee.",
@@ -150,6 +160,7 @@ export const PUNE_SEED_PLACES = [
     priceRange: "$$",
   },
   {
+    id: "11",
     name: "Shreemaya Celebrity",
     category: "RESTAURANT" as const,
     description: "Pure veg thali restaurant. Unlimited Maharashtrian and Rajasthani thalis.",

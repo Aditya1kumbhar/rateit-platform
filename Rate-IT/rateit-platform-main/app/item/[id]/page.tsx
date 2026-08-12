@@ -8,61 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ArrowLeft, Star, MapPin, Heart, Share, ThumbsUp } from "lucide-react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-
-// Mock detailed item data
-const itemDetails = {
-  1: {
-    name: "The Daily Grind",
-    category: "Coffee Shop",
-    rating: 4.5,
-    reviewCount: 234,
-    location: "123 Main St, Downtown SF",
-    price: "$$",
-    phone: "(415) 555-0123",
-    hours: "Mon-Fri: 7AM-8PM, Sat-Sun: 8AM-9PM",
-    website: "www.dailygrind.com",
-    image: "/placeholder.svg?height=300&width=400",
-    tags: ["WiFi", "Cozy", "Good Coffee", "Outdoor Seating"],
-    description:
-      "The Daily Grind is a beloved neighborhood coffee shop that has been serving the community for over 10 years. Known for our expertly crafted espresso drinks and cozy atmosphere, we're the perfect spot for both work and relaxation.",
-    features: ["Free WiFi", "Outdoor Seating", "Laptop Friendly", "Pet Friendly", "Takeout Available"],
-    reviews: [
-      {
-        id: 1,
-        author: "Sarah M.",
-        rating: 5,
-        date: "2 days ago",
-        text: "Amazing coffee and such a cozy atmosphere! Perfect place to work or catch up with friends. The baristas are super friendly and know their stuff.",
-        likes: 12,
-        images: ["/placeholder.svg?height=150&width=150"],
-      },
-      {
-        id: 2,
-        author: "Mike R.",
-        rating: 4,
-        date: "1 week ago",
-        text: "Great coffee, but can get pretty crowded during peak hours. The outdoor seating is a nice touch though!",
-        likes: 8,
-        images: [],
-      },
-      {
-        id: 3,
-        author: "Emma L.",
-        rating: 5,
-        date: "2 weeks ago",
-        text: "My go-to coffee shop! The staff remembers my order and the WiFi is reliable. Highly recommend the lavender latte.",
-        likes: 15,
-        images: ["/placeholder.svg?height=150&width=150", "/placeholder.svg?height=150&width=150"],
-      },
-    ],
-    photos: [
-      "/placeholder.svg?height=200&width=300",
-      "/placeholder.svg?height=200&width=300",
-      "/placeholder.svg?height=200&width=300",
-      "/placeholder.svg?height=200&width=300",
-    ],
-  },
-}
+import { EnhancedRateModal } from "@/components/enhanced-rate-modal"
+import { PUNE_SEED_PLACES, PUNE_SEED_REVIEWS } from "@/lib/mock"
 
 export default function ItemDetailPage() {
   const params = useParams()
@@ -70,9 +17,11 @@ export default function ItemDetailPage() {
   const [activeTab, setActiveTab] = useState("overview")
   const [showRateModal, setShowRateModal] = useState(false)
 
-  const item = itemDetails[id as unknown as keyof typeof itemDetails]
+  // Find the place from the seed data
+  const placeIndex = PUNE_SEED_PLACES.findIndex((p) => p.id === id)
+  const place = placeIndex !== -1 ? PUNE_SEED_PLACES[placeIndex] : null
 
-  if (!item) {
+  if (!place) {
     return (
       <div className="min-h-screen bg-[#F9FAFB] flex items-center justify-center">
         <div className="text-center">
@@ -85,9 +34,37 @@ export default function ItemDetailPage() {
     )
   }
 
+  // Get matching reviews
+  const placeReviews = PUNE_SEED_REVIEWS.filter(r => r.placeIndex === placeIndex)
+
+  // Map to the UI item shape
+  const item = {
+    name: place.name,
+    category: place.category,
+    rating: place.avgRating || 0,
+    reviewCount: place.reviewCount || 0,
+    location: place.address,
+    price: place.priceRange || "$$",
+    phone: "Not available",
+    hours: "9 AM - 9 PM",
+    website: "Not available",
+    description: place.description || "No description provided.",
+    tags: place.tags || [],
+    features: place.tags || [],
+    photos: Array(4).fill(0),
+    reviews: placeReviews.map((r, i) => ({
+      id: i,
+      author: r.displayName || "Anonymous User",
+      rating: r.rating,
+      date: "Recent",
+      text: r.text,
+      likes: Math.floor(Math.random() * 20),
+      images: [],
+    }))
+  }
+
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
-      {/* Header */}
       <header className="bg-white border-b border-gray-200 px-4 py-4 sticky top-0 z-40">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -109,8 +86,7 @@ export default function ItemDetailPage() {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
-        {/* Hero Section */}
+      <div className="container mx-auto px-4 py-6 pb-24">
         <div className="mb-6">
           <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-4"></div>
 
@@ -139,14 +115,9 @@ export default function ItemDetailPage() {
                 ))}
               </div>
             </div>
-            <Button onClick={() => setShowRateModal(true)} className="bg-[#4B0082] hover:bg-[#3A0066] text-white">
-              <Star className="h-4 w-4 mr-2" />
-              Rate It
-            </Button>
           </div>
         </div>
 
-        {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -170,7 +141,7 @@ export default function ItemDetailPage() {
                   <div className="grid grid-cols-2 gap-2">
                     {item.features.map((feature, index) => (
                       <div key={index} className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-[#4B0082] rounded-full"></div>
+                        <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                         <span className="text-gray-600">{feature}</span>
                       </div>
                     ))}
@@ -182,51 +153,47 @@ export default function ItemDetailPage() {
 
           <TabsContent value="reviews" className="mt-6">
             <div className="space-y-4">
-              {item.reviews.map((review) => (
-                <Card key={review.id} className="bg-white border border-gray-200">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h4 className="font-semibold text-[#2E2E2E]">{review.author}</h4>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`h-4 w-4 ${i < review.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
-                              />
-                            ))}
+              {item.reviews.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">No reviews yet.</p>
+                </div>
+              ) : (
+                item.reviews.map((review) => (
+                  <Card key={review.id} className="bg-white border border-gray-200">
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h4 className="font-semibold text-[#2E2E2E]">{review.author}</h4>
+                          <div className="flex items-center space-x-2 mt-1">
+                            <div className="flex items-center">
+                              {[...Array(5)].map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`h-4 w-4 ${i < review.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
+                                />
+                              ))}
+                            </div>
+                            <span className="text-gray-500 text-sm">{review.date}</span>
                           </div>
-                          <span className="text-gray-500 text-sm">{review.date}</span>
                         </div>
                       </div>
-                    </div>
-                    <p className="text-gray-600 mb-3">{review.text}</p>
-                    {review.images.length > 0 && (
-                      <div className="flex space-x-2 mb-3">
-                        {review.images.map((image, index) => (
-                          <div
-                            key={index}
-                            className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg"
-                          ></div>
-                        ))}
+                      <p className="text-gray-600 mb-3">{review.text}</p>
+                      <div className="flex items-center space-x-4">
+                        <Button variant="ghost" size="sm" className="text-gray-500 hover:text-yellow-600">
+                          <ThumbsUp className="h-4 w-4 mr-1" />
+                          {review.likes}
+                        </Button>
                       </div>
-                    )}
-                    <div className="flex items-center space-x-4">
-                      <Button variant="ghost" size="sm" className="text-gray-500 hover:text-[#4B0082]">
-                        <ThumbsUp className="h-4 w-4 mr-1" />
-                        {review.likes}
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                ))
+              )}
             </div>
           </TabsContent>
 
           <TabsContent value="photos" className="mt-6">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {item.photos.map((photo, index) => (
+              {item.photos.map((_, index) => (
                 <div key={index} className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg"></div>
               ))}
             </div>
@@ -258,6 +225,15 @@ export default function ItemDetailPage() {
           </TabsContent>
         </Tabs>
       </div>
+
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 z-40">
+        <Button onClick={() => setShowRateModal(true)} className="w-full bg-black hover:bg-gray-800 text-white rounded-full py-6 text-lg">
+          <Star className="h-5 w-5 mr-2" />
+          Rate {item.name}
+        </Button>
+      </div>
+
+      {showRateModal && <EnhancedRateModal onClose={() => setShowRateModal(false)} />}
     </div>
   )
 }
