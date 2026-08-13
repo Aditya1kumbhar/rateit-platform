@@ -1,4 +1,4 @@
-# RateIT 🌟 — India's 1st Hyperlocal Verified Review Platform (Pune Edition)
+# RateIT 🌟 — India's 1st Hyperlocal Verified Review Platform 
 
 > **"Rate Anything with Confidence. 100% Honest Reviews, Zero Fake Spam."**  
 > *Specially crafted for students, young professionals, recruiters, and hackathon judges to explore how smart technology solves real-life Indian problems.*
@@ -13,7 +13,7 @@
 
 ---
 
-## 💡 What is RateIT in 1 Minute? (The Simple Pitch)
+## 💡 What is RateIT in 1 Minute? 
 
 Have you ever wasted your hard-earned money on a **coaching class**, booked a **bad PG hostel**, or eaten at a **dirty café** just because it had fake 5-star ratings on Google Maps?
 
