@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   Star,
@@ -78,12 +79,28 @@ const PUNE_PLACES = [
 type Step = "search" | "checkin" | "blind-rating" | "review" | "confirm"
 
 export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateModalProps) {
+  const router = useRouter()
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    import("@/lib/userAuth").then(({ userSession }) => {
+      userSession.isLoggedIn().then(loggedIn => {
+        if (!loggedIn) {
+          router.push(`/login?reason=rate&redirect=${encodeURIComponent(window.location.pathname)}`)
+        } else {
+          setIsAuthenticated(true)
+        }
+      })
+    })
+  }, [router])
+
   // Step management
   const [currentStep, setCurrentStep] = useState<Step>(preSelectedPlace ? "checkin" : "search")
 
   // Step 1: Place selection
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedPlace, setSelectedPlace] = useState(preSelectedPlace || null)
+
 
   // Step 2: Check-in
   const [isLocating, setIsLocating] = useState(false)
@@ -189,7 +206,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
   // ================================================================
   // STEP 5: Submit
   // ================================================================
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const reviewData = {
       placeId: selectedPlace?.id,
       rating,
@@ -272,6 +289,17 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
   // ================================================================
   // RENDER
   // ================================================================
+  if (isAuthenticated === null) {
+    return (
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-2xl w-full max-w-md p-8 flex flex-col items-center justify-center shadow-2xl">
+          <Loader2 className="h-8 w-8 text-yellow-500 animate-spin mb-4" />
+          <p className="text-sm font-medium text-gray-600">Checking authentication...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl">

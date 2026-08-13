@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma"
 import { getAuthenticatedUser } from "@/lib/server-auth"
 import { businessClaimSchema } from "@/lib/validation"
 
+export const dynamic = "force-dynamic"
+
 export async function POST(request: NextRequest) {
   try {
     const authenticated = await getAuthenticatedUser()

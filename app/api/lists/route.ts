@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma"
 import { getAuthenticatedUser } from "@/lib/server-auth"
 import { createListSchema } from "@/lib/validation"
 
+export const dynamic = "force-dynamic"
+
 export async function GET() {
   try {
     const authenticated = await getAuthenticatedUser()

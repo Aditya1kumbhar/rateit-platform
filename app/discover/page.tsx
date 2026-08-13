@@ -28,9 +28,13 @@ export default function DiscoverPage() {
 
   const filteredAndSortedPlaces = useMemo(() => {
     const filtered = PUNE_SEED_PLACES.filter((place) => {
+      const normalizedSearch = searchQuery.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+      const normalizedName = place.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+      const normalizedDescription = place.description ? place.description.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : ""
+
       const matchesSearch =
-        place.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (place.description && place.description.toLowerCase().includes(searchQuery.toLowerCase()))
+        normalizedName.includes(normalizedSearch) ||
+        normalizedDescription.includes(normalizedSearch)
       const matchesCategory = selectedCategory === "all" || place.category === selectedCategory
       return matchesSearch && matchesCategory
     })
@@ -190,11 +194,12 @@ export default function DiscoverPage() {
 
       {/* Modals */}
       {showRateModal && <EnhancedRateModal onClose={() => setShowRateModal(false)} />}
-      <SaveToListsModal
-        isOpen={showSaveModal}
-        onClose={() => setShowSaveModal(false)}
-        itemName={selectedItemForSave}
-      />
+      {showSaveModal && (
+        <SaveToListsModal
+          onClose={() => setShowSaveModal(false)}
+          itemName={selectedItemForSave}
+        />
+      )}
     </div>
   )
 }

@@ -8,6 +8,8 @@ import { getAuthenticatedUser } from "@/lib/server-auth"
 import { computeTrustScore } from "@/lib/trust-score"
 import { reviewSchema } from "@/lib/validation"
 
+export const dynamic = "force-dynamic"
+
 export async function POST(request: NextRequest) {
   try {
     const authenticated = await getAuthenticatedUser()

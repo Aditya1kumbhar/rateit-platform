@@ -100,29 +100,44 @@ const calculateStats = () => {
   }
 }
 
-export default function HomePage() {
+import { Suspense } from "react"
+
+function HomePageContent() {
   const [user, setUser] = useState<any>(null)
   const [isGuest, setIsGuest] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [heroSearchQuery, setHeroSearchQuery] = useState("")
   const router = useRouter()
   const searchParams = useSearchParams()
 
   useLenis()
 
   useEffect(() => {
+    let isMounted = true
     const checkAuth = async () => {
-      const activeUser = await userSession.getUser()
-      if (activeUser) {
-        setUser(activeUser)
-      } else {
-        const guestMode = searchParams.get("guest") === "true" || typeof window !== "undefined" && localStorage.getItem("rateit_guest_mode") === "true"
-        if (guestMode) {
-          setIsGuest(true)
+      try {
+        const activeUser = await userSession.getUser()
+        if (isMounted) {
+          if (activeUser) {
+            setUser(activeUser)
+          } else {
+            const guestParam = searchParams?.get("guest") === "true"
+            const guestStorage = typeof window !== "undefined" && localStorage.getItem("rateit_guest_mode") === "true"
+            if (guestParam || guestStorage) {
+              setIsGuest(true)
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Auth check error:", e)
+      } finally {
+        if (isMounted) {
+          setIsLoading(false)
         }
       }
-      setIsLoading(false)
     }
     checkAuth()
+    return () => { isMounted = false }
   }, [searchParams])
 
   const handleGetStarted = () => router.push("/login")
@@ -145,108 +160,228 @@ export default function HomePage() {
     router.push("/")
   }
 
+  const handleHeroSearch = (e?: React.FormEvent) => {
+    e?.preventDefault()
+    if (heroSearchQuery.trim()) {
+      router.push(`/discover?search=${encodeURIComponent(heroSearchQuery.trim())}`)
+    } else {
+      router.push("/discover")
+    }
+  }
+
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-gray-300 border-t-gray-800 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading...</p>
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <div className="text-center space-y-3">
+          <div className="w-10 h-10 border-3 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-slate-400 text-sm font-medium">Loading RateIT Pune...</p>
         </div>
       </div>
     )
   }
 
-  if (user || isGuest) {
-    return <CalmDashboard user={user} isGuest={isGuest} onLogout={handleLogout} />
-  }
-
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-black">RateIT</h1>
-            <span className="text-xs px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded-full font-medium">
-              Pune
-            </span>
+    <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-amber-400 selection:text-slate-950 font-sans relative overflow-x-hidden">
+      {/* Background Ambient Mesh Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-gradient-to-b from-amber-500/15 via-indigo-600/10 to-transparent blur-3xl pointer-events-none -z-10" />
+
+      {/* Glassmorphic Header */}
+      <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/80 transition-all">
+        <div className="container mx-auto px-4 py-3.5 flex items-center justify-between">
+          {/* Logo & City Badge */}
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform">
+              R
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold tracking-tight text-white flex items-center gap-1.5">
+                RateIT
+                <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wider px-2 py-0.5 bg-amber-400/10 text-amber-300 border border-amber-400/30 rounded-full font-semibold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Pune Live
+                </span>
+              </span>
+            </div>
+          </Link>
+
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-300">
+            <Link href="/discover" className="hover:text-amber-400 transition-colors flex items-center gap-1.5">
+              <Search className="w-4 h-4 text-amber-400" />
+              Discover Places
+            </Link>
+            <Link href="/category/coaching-classes" className="hover:text-amber-400 transition-colors">
+              Coaching
+            </Link>
+            <Link href="/category/pgs-hostels" className="hover:text-amber-400 transition-colors">
+              PGs & Hostels
+            </Link>
+            <Link href="/moderation-policy" className="hover:text-amber-400 transition-colors">
+              Trust Engine
+            </Link>
+          </nav>
+
+          {/* Auth Action Buttons */}
+          <div className="flex items-center space-x-3">
+            {user ? (
+              <div className="flex items-center gap-3">
+                <Link href="/profile" className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
+                  <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700">
+                    <User className="h-4 w-4" />
+                  </div>
+                  <span className="text-sm font-medium hidden sm:inline-block">
+                    {user.displayName || user.phone || "User"}
+                  </span>
+                </Link>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="text-slate-400 hover:text-red-400 hover:bg-slate-800/80 rounded-full h-8 w-8 p-0 flex items-center justify-center"
+                >
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </div>
+            ) : (
+              <>
+                {!isGuest && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleContinueAsGuest}
+                    className="text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-full text-xs font-medium px-4"
+                  >
+                    Browse Guest
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  onClick={handleGetStarted}
+                  className="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-semibold px-5 rounded-full shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all text-xs"
+                >
+                  Sign In
+                </Button>
+              </>
+            )}
           </div>
-          <Button variant="ghost" size="icon" className="text-gray-600 hover:text-black">
-            <Search className="h-5 w-5" />
-          </Button>
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl">
-          <h2 className="text-4xl md:text-5xl font-bold text-black mb-6 leading-tight">
-            Trusted Reviews for Pune&apos;s Coaching Classes, PGs & More.
-          </h2>
-          <p className="text-lg text-gray-600 mb-4 max-w-2xl">
-            Verified check-in reviews. No fake ratings. No paid placements.
-            See what real students and residents actually think.
+      {/* Hero Section */}
+      <section className="relative pt-12 pb-20 md:pt-20 md:pb-28 container mx-auto px-4">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          
+          {/* Trust Pill Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 text-xs text-slate-300 shadow-xl">
+            <Shield className="h-3.5 w-3.5 text-amber-400" />
+            <span>EXIF GPS Verified Reviews for FC Road, Kothrud & Hinjewadi</span>
+          </div>
+
+          {/* Main Headline */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-[1.15]">
+            Hyperlocal Verified Reviews for{" "}
+            <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
+              Pune&apos;s Student Hubs
+            </span>
+          </h1>
+
+          <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            Zero paid reviews. Zero bot ratings. Every rating is verified using real-time GPS check-ins & EXIF photo metadata.
           </p>
 
-          {/* Trust signals */}
-          <div className="flex flex-wrap gap-4 mb-10 text-sm text-gray-500">
-            <div className="flex items-center gap-1.5">
-              <MapPin className="h-4 w-4 text-green-600" />
-              <span>Location-verified reviews</span>
+          {/* Interactive In-Hero Search Bar */}
+          <form onSubmit={handleHeroSearch} className="max-w-2xl mx-auto relative group">
+            <div className="relative flex items-center rounded-2xl bg-slate-900/90 border border-slate-800 p-2 shadow-2xl shadow-amber-500/5 focus-within:border-amber-400/60 focus-within:ring-2 focus-within:ring-amber-400/20 transition-all">
+              <MapPin className="w-5 h-5 text-amber-400 ml-3 shrink-0" />
+              <input
+                type="text"
+                value={heroSearchQuery}
+                onChange={(e) => setHeroSearchQuery(e.target.value)}
+                placeholder="Search IIT Coaching, FC Road Cafes, Hinjewadi PGs..."
+                className="w-full bg-transparent px-3 py-2 text-sm md:text-base text-white placeholder-slate-500 focus:outline-none"
+              />
+              <Button
+                type="submit"
+                className="bg-amber-400 hover:bg-amber-500 text-slate-950 font-semibold rounded-xl px-6 py-2.5 shrink-0 transition-all shadow-md"
+              >
+                <Search className="w-4 h-4 mr-2" />
+                Search
+              </Button>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Shield className="h-4 w-4 text-blue-600" />
-              <span>Fraud detection built-in</span>
+
+            {/* Quick Area Filter Chips */}
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-4 text-xs text-slate-400">
+              <span className="text-slate-500 font-medium">Popular:</span>
+              {[
+                { label: "📍 Kothrud Coaching", query: "Kothrud" },
+                { label: "☕ FC Road Cafes", query: "FC Road" },
+                { label: "🏠 Hinjewadi PGs", query: "Hinjewadi" },
+                { label: "🎓 Viman Nagar", query: "Viman Nagar" },
+              ].map((chip, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => router.push(`/discover?search=${encodeURIComponent(chip.query)}`)}
+                  className="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 hover:border-amber-400/40 hover:text-amber-300 transition-colors"
+                >
+                  {chip.label}
+                </button>
+              ))}
             </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle className="h-4 w-4 text-yellow-600" />
-              <span>Phone-verified reviewers</span>
+          </form>
+
+          {/* Live Trust Metrics Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 max-w-3xl mx-auto">
+            <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm">
+              <div className="text-2xl md:text-3xl font-extrabold text-amber-400">1,250+</div>
+              <div className="text-xs text-slate-400 font-medium mt-1">Verified Student Reviews</div>
+            </div>
+            <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm">
+              <div className="text-2xl md:text-3xl font-extrabold text-amber-400">48+</div>
+              <div className="text-xs text-slate-400 font-medium mt-1">Pune Institutes & Hubs</div>
+            </div>
+            <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm">
+              <div className="text-2xl md:text-3xl font-extrabold text-emerald-400">100%</div>
+              <div className="text-xs text-slate-400 font-medium mt-1">Anti-Fraud Protection</div>
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <Button
-              size="lg"
-              onClick={handleGetStarted}
-              className="bg-yellow-400 hover:bg-yellow-500 text-gray-800 px-8 py-3 text-lg font-medium rounded-full transition-colors"
-            >
-              <Play className="h-5 w-5 mr-2" />
-              Get Started
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={handleContinueAsGuest}
-              className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-8 py-3 text-lg rounded-full border-gray-200 transition-colors"
-            >
-              Browse as Guest
-            </Button>
-          </div>
         </div>
       </section>
 
-      {/* Categories — India/Pune specific */}
-      <section className="container mx-auto px-4 py-16">
-        <h3 className="text-3xl font-bold text-black mb-2">Browse Categories</h3>
-        <p className="text-gray-500 mb-8">Categories Google Reviews doesn&apos;t serve well</p>
-        <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
+      {/* Categories Section */}
+      <section className="container mx-auto px-4 py-16 border-t border-slate-900">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Explore Categories</h2>
+            <p className="text-slate-400 text-sm mt-1">Tailored for Pune students, job seekers, and locals</p>
+          </div>
+          <Link href="/discover" className="text-amber-400 hover:text-amber-300 text-sm font-semibold flex items-center gap-1">
+            Browse all places &rarr;
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {[
-            { name: "Coaching Classes", icon: GraduationCap, count: "48 listed" },
-            { name: "PGs & Hostels", icon: Home, count: "32 listed" },
-            { name: "Local Services", icon: Wrench, count: "Coming soon" },
-            { name: "Restaurants", icon: Utensils, count: "24 listed" },
-            { name: "Cafes", icon: Coffee, count: "18 listed" },
-          ].map((category, index) => (
-            <Link key={index} href={`/category/${category.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>
-              <Card
-                className="bg-gray-50 cursor-pointer group border-0 hover:shadow-md transition-all hover:-translate-y-0.5 h-full"
-              >
-                <CardContent className="p-6">
-                  <div className="w-12 h-12 rounded-xl bg-gray-200 mb-4 flex items-center justify-center group-hover:bg-yellow-100 transition-colors">
-                    <category.icon className="h-6 w-6 text-gray-600 group-hover:text-yellow-700 transition-colors" />
+            { name: "Coaching Classes", slug: "coaching-classes", icon: GraduationCap, count: "48 Hubs", tag: "IIT / MPSC" },
+            { name: "PGs & Hostels", slug: "pgs-hostels", icon: Home, count: "32 Verified", tag: "Student Stay" },
+            { name: "Cafes", slug: "cafes", icon: Coffee, count: "24 Listed", tag: "FC Road & Viman" },
+            { name: "Restaurants", slug: "restaurants", icon: Utensils, count: "18 Listed", tag: "Mess & Dining" },
+            { name: "Local Services", slug: "local-services", icon: Wrench, count: "Verified Only", tag: "Laundries & Tech" },
+          ].map((cat, index) => (
+            <Link key={index} href={`/category/${cat.slug}`}>
+              <Card className="bg-slate-900/80 border-slate-800 hover:border-amber-400/50 hover:bg-slate-800/80 transition-all hover:-translate-y-1 group h-full">
+                <CardContent className="p-5 flex flex-col justify-between h-full space-y-4">
+                  <div className="w-10 h-10 rounded-xl bg-amber-400/10 border border-amber-400/20 text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <cat.icon className="h-5 w-5" />
                   </div>
-                  <h4 className="text-sm font-semibold text-gray-800 mb-1">{category.name}</h4>
-                  <p className="text-xs text-gray-400">{category.count}</p>
+                  <div>
+                    <span className="text-[10px] font-semibold text-amber-400 uppercase tracking-wider">{cat.tag}</span>
+                    <h3 className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors mt-0.5">
+                      {cat.name}
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-1">{cat.count}</p>
+                  </div>
                 </CardContent>
               </Card>
             </Link>
@@ -254,254 +389,83 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Trust explanation */}
-      <section className="container mx-auto px-4 py-16">
-        <h3 className="text-3xl font-bold text-black mb-8">Why RateIT is Different</h3>
+      {/* Trust & Anti-Fraud Comparison Section */}
+      <section className="container mx-auto px-4 py-16 border-t border-slate-900">
+        <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-white">Why RateIT is Different</h2>
+          <p className="text-slate-400 text-sm">How we eradicate paid reviews and fake ratings in Pune</p>
+        </div>
+
         <div className="grid md:grid-cols-3 gap-6">
           {[
             {
               icon: MapPin,
-              title: "Check-In Verified",
-              description:
-                "Reviews are GPS-verified. If you're at the location when you rate, your review gets a ✅ badge and carries more weight.",
+              title: "GPS Geofence Verification",
+              description: "Reviews are validated against business coordinates. Ratings given at the actual venue earn a Verified Check-in Badge.",
+              color: "text-emerald-400",
+              bgColor: "bg-emerald-500/10",
+              borderColor: "border-emerald-500/20",
             },
             {
               icon: Shield,
-              title: "Blind Rating System",
-              description:
-                "You submit your rating before seeing others. This prevents anchoring bias and keeps aggregate scores honest.",
+              title: "EXIF Photo Anti-Spam",
+              description: "Uploaded photos undergo client-side EXIF header extraction to confirm capture time & location, stopping stock photo spam.",
+              color: "text-amber-400",
+              bgColor: "bg-amber-500/10",
+              borderColor: "border-amber-500/20",
             },
             {
               icon: Star,
-              title: "Trust Score",
-              description:
-                "Every reviewer has a trust score based on verification, consistency, and community feedback. No anonymous bots.",
+              title: "Blind Rating System",
+              description: "Users submit ratings before seeing aggregate scores, eliminating peer anchoring bias and keeping reviews honest.",
+              color: "text-indigo-400",
+              bgColor: "bg-indigo-500/10",
+              borderColor: "border-indigo-500/20",
             },
           ].map((feature, i) => (
-            <div key={i} className="space-y-3">
-              <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                <feature.icon className="h-5 w-5 text-yellow-700" />
+            <div key={i} className={`p-6 rounded-2xl bg-slate-900/60 border ${feature.borderColor} space-y-4 hover:bg-slate-900/90 transition-colors`}>
+              <div className={`w-11 h-11 ${feature.bgColor} rounded-xl flex items-center justify-center`}>
+                <feature.icon className={`h-6 w-6 ${feature.color}`} />
               </div>
-              <h4 className="font-semibold text-black">{feature.title}</h4>
-              <p className="text-sm text-gray-600 leading-relaxed">{feature.description}</p>
+              <h3 className="text-base font-bold text-white">{feature.title}</h3>
+              <p className="text-xs md:text-sm text-slate-400 leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-900 bg-slate-950/90 py-8 text-slate-400 text-xs">
+        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-white text-sm">RateIT Pune</span>
+            <span>&bull; IT Act Section 79 Safe Harbour Compliant</span>
+          </div>
+          <div className="flex items-center space-x-4">
+            <Link href="/terms" className="hover:text-amber-400 transition-colors">Terms</Link>
+            <Link href="/privacy" className="hover:text-amber-400 transition-colors">Privacy Policy</Link>
+            <Link href="/grievance" className="hover:text-amber-400 transition-colors">Grievance Officer</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
 
-function CalmDashboard({
-  user,
-  isGuest,
-  onLogout,
-}: {
-  user: any
-  isGuest: boolean
-  onLogout: () => void
-}) {
-  const [showRateModal, setShowRateModal] = useState(false)
-  const [activeTab, setActiveTab] = useState("home")
-  const router = useRouter()
-  const stats = calculateStats()
 
-  const handleOpenRateModal = () => {
-    if (!user || isGuest) {
-      router.push("/login?reason=rate&redirect=/")
-      return
-    }
-    setShowRateModal(true)
-  }
-
-  const quickStats = [
-    { label: "This week", value: stats.itemsRatedThisWeek.toString() },
-    { label: "Favorites", value: stats.favoritesSaved.toString() },
-    { label: "Lists", value: stats.listsCreated.toString() },
-    { label: "Badges", value: stats.badgesEarned.toString() },
-  ]
-
-  const categories = [
-    { name: "Coaching", icon: GraduationCap },
-    { name: "PGs & Hostels", icon: Home },
-    { name: "Cafés", icon: Coffee },
-    { name: "Restaurants", icon: Utensils },
-    { name: "Services", icon: Wrench },
-  ]
-
-  const suggestedActions = [
-    {
-      title: "IIT JEE Academy",
-      subtitle: "Rate your coaching class",
-      icon: GraduationCap,
-    },
-    {
-      title: "Your PG/Hostel",
-      subtitle: "Review where you stay",
-      icon: Home,
-    },
-    {
-      title: "Top 5 Cafés in Pune",
-      subtitle: "Create a list",
-      icon: Heart,
-    },
-  ]
-
-  const trendingReviews = mockUserData.ratings.slice(0, 4).map((r) => ({
-    id: r.id,
-    itemId: r.itemId,
-    title: r.itemName,
-    rating: r.rating,
-    category: r.category,
-    caption: r.caption,
-    checkinVerified: r.checkinVerified,
-  }))
-
-  const displayName = user ? user.name : "Guest"
-
+export default function HomePage() {
   return (
-    <div className="min-h-screen bg-white pb-20">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold text-black">RateIT</h1>
-              <span className="text-xs px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded-full font-medium">
-                Pune
-              </span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button variant="ghost" size="icon" className="text-gray-600 hover:text-black">
-                <Search className="h-5 w-5" />
-              </Button>
-              {user && (
-                <Button variant="ghost" size="icon" onClick={onLogout} className="text-gray-600 hover:text-black">
-                  <LogOut className="h-5 w-5" />
-                </Button>
-              )}
-            </div>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+          <div className="text-center space-y-3">
+            <div className="w-10 h-10 border-3 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-slate-400 text-sm font-medium">Loading RateIT Pune...</p>
           </div>
         </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-6 space-y-8">
-        {/* Welcome */}
-        <div className="space-y-4">
-          <div>
-            <h2 className="text-3xl font-bold text-black mb-2">
-              Good evening, {displayName}
-              {isGuest && <span className="text-lg text-gray-500 ml-2">(Guest Mode)</span>}
-            </h2>
-            <p className="text-gray-600">What are you looking to review today?</p>
-          </div>
-        </div>
-
-        {/* Quick Stats */}
-        <div>
-          <h3 className="text-xl font-semibold text-black mb-4">Your Activity</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {quickStats.map((stat, index) => (
-              <Card key={index} className="bg-gray-50 border-0 hover:shadow-md transition-all">
-                <CardContent className="p-6 text-center">
-                  <div className="text-3xl font-bold text-gray-800 mb-1">{stat.value}</div>
-                  <div className="text-sm text-gray-600">{stat.label}</div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Category Shortcuts */}
-        <div>
-          <h3 className="text-xl font-semibold text-black mb-4">Categories</h3>
-          <div className="flex flex-wrap gap-3">
-            {categories.map((cat, index) => (
-              <Link key={index} href={`/category/${cat.name.toLowerCase().replace(/\s+/g, '-')}`}>
-                <Button
-                  variant="outline"
-                  className="bg-gray-50 hover:bg-gray-100 text-gray-700 border-gray-200 rounded-full px-4 py-2 flex items-center space-x-2 transition-colors"
-                >
-                  <cat.icon className="h-4 w-4" />
-                  <span>{cat.name}</span>
-                </Button>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Suggested Actions */}
-        <div>
-          <h3 className="text-xl font-semibold text-black mb-4">Suggested Actions</h3>
-          <div className="space-y-3">
-            {suggestedActions.map((action, index) => (
-              <Card key={index} className="bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors border-0">
-                <CardContent className="p-4 flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center">
-                    <action.icon className="h-6 w-6 text-gray-700" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-800">{action.title}</h4>
-                    <p className="text-sm text-gray-600">{action.subtitle}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Trending Reviews */}
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-semibold text-black">Recent Reviews in Pune</h3>
-            <Link href="/discover">
-              <Button variant="ghost" className="text-gray-600 hover:text-black text-sm">
-                Show all
-              </Button>
-            </Link>
-          </div>
-          <div className="grid md:grid-cols-2 gap-4">
-            {trendingReviews.map((review) => (
-              <Link key={review.id} href={`/item/${review.itemId || review.id}`}>
-                <Card className="bg-gray-50 cursor-pointer group border-0 hover:shadow-md transition-all">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-3">
-                      <h4 className="font-semibold text-gray-800 group-hover:text-gray-600 transition-colors">
-                        {review.title}
-                      </h4>
-                      {review.checkinVerified && (
-                        <span className="flex items-center gap-1 text-xs px-2 py-0.5 bg-green-50 text-green-700 rounded-full border border-green-200 flex-shrink-0">
-                          <CheckCircle className="h-3 w-3" />
-                          Verified
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center space-x-2 mb-2">
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`h-3 w-3 ${
-                              i < review.rating ? "text-yellow-500 fill-current" : "text-gray-300"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <span className="text-sm text-gray-700">{review.rating}</span>
-                    </div>
-                    <p className="text-xs text-gray-500 mb-2">{review.category}</p>
-                    <p className="text-sm text-gray-500 line-clamp-2">{review.caption}</p>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <BottomNav onRateClick={handleOpenRateModal} />
-
-      {showRateModal && <EnhancedRateModal onClose={() => setShowRateModal(false)} />}
-    </div>
+      }
+    >
+      <HomePageContent />
+    </Suspense>
   )
 }

@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma"
 import { getAuthenticatedUser } from "@/lib/server-auth"
 import { profileSchema } from "@/lib/validation"
 
+export const dynamic = "force-dynamic"
+
 const profileInclude = {
   reviews: {
     include: { place: true },

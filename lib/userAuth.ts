@@ -126,19 +126,22 @@ export const auth = {
    * Get the current session user.
    */
   getSession: async (): Promise<AuthUser | null> => {
-    const supabase = createClient()
+    try {
+      const supabase = createClient()
+      const fetchPromise = supabase.auth.getUser().then(({ data }) => data?.user || null)
+      const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 200))
+      const user = await Promise.race([fetchPromise, timeoutPromise])
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
+      if (!user) return null
 
-    if (!user) return null
-
-    return {
-      id: user.id,
-      phone: user.phone || '',
-      displayName: user.user_metadata?.display_name || null,
-      phoneVerified: !!user.phone_confirmed_at,
+      return {
+        id: user.id,
+        phone: user.phone || '',
+        displayName: user.user_metadata?.display_name || null,
+        phoneVerified: !!user.phone_confirmed_at,
+      }
+    } catch {
+      return null
     }
   },
 
@@ -234,7 +237,12 @@ export const userSession = {
         try { return JSON.parse(cached) } catch {}
       }
     }
-    return auth.getSession()
+    try {
+      const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 2000))
+      return await Promise.race([auth.getSession(), timeoutPromise])
+    } catch {
+      return null
+    }
   },
 
   isLoggedIn: async (): Promise<boolean> => {
@@ -242,7 +250,7 @@ export const userSession = {
       const cached = localStorage.getItem('rateit_user_session')
       if (cached) return true
     }
-    const user = await auth.getSession()
+    const user = await userSession.getUser()
     return user !== null
   },
 

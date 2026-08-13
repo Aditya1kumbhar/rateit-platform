@@ -159,15 +159,16 @@ export default function CategoryPage() {
         </Button>
       </div>
 
-      <BottomNav />
+      <BottomNav onRateClick={() => setShowRateModal(true)} />
 
       {showRateModal && <EnhancedRateModal onClose={() => setShowRateModal(false)} />}
       
-      <SaveToListsModal
-        isOpen={showSaveModal}
-        onClose={() => setShowSaveModal(false)}
-        itemName={selectedItemForSave}
-      />
+      {showSaveModal && (
+        <SaveToListsModal
+          onClose={() => setShowSaveModal(false)}
+          itemName={selectedItemForSave}
+        />
+      )}
     </div>
   )
 }
