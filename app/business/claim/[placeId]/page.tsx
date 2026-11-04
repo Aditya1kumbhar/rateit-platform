@@ -38,13 +38,13 @@ export default function BusinessClaimPage({ params }: { params: { placeId: strin
         <div className="text-center space-y-2">
           <Link
             href={`/item/${params.placeId}`}
-            className="inline-flex items-center gap-1.5 text-xs text-fg-subtle hover:text-fg transition-colors mb-2 apple-focus rounded-full px-3 py-1"
+            className="inline-flex items-center gap-1.5 text-xs text-fg-subtle hover:text-fg transition-colors mb-2 apple-focus rounded-lg px-3 py-1"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Place</span>
           </Link>
 
-          <div className="w-12 h-12 rounded-full bg-accent-tint text-accent-link flex items-center justify-center mx-auto shadow-md">
+          <div className="w-12 h-12 rounded-xl bg-accent-tint text-accent-link flex items-center justify-center mx-auto shadow-md">
             <Building2 className="w-6 h-6" />
           </div>
 
@@ -72,7 +72,7 @@ export default function BusinessClaimPage({ params }: { params: { placeId: strin
 
               <Button
                 onClick={() => setStep("verify")}
-                className="w-full bg-accent hover:bg-accent-hover text-white font-semibold py-3 rounded-full text-xs apple-press apple-focus shadow-md shadow-accent/20"
+                className="w-full bg-accent hover:bg-accent-hover text-white font-semibold py-3 rounded-xl text-xs apple-press apple-focus shadow-md shadow-accent/20"
               >
                 Begin Automated Verification &rarr;
               </Button>
@@ -102,7 +102,7 @@ export default function BusinessClaimPage({ params }: { params: { placeId: strin
               <Button
                 onClick={handleAutoVerify}
                 disabled={isLoading}
-                className="w-full bg-accent hover:bg-accent-hover text-white font-semibold py-3 rounded-full text-xs apple-press apple-focus"
+                className="w-full bg-accent hover:bg-accent-hover text-white font-semibold py-3 rounded-xl text-xs apple-press apple-focus"
               >
                 {isLoading ? "Validating Records..." : "Verify Record Match"}
               </Button>
@@ -134,14 +134,14 @@ export default function BusinessClaimPage({ params }: { params: { placeId: strin
                   type="button"
                   variant="ghost"
                   onClick={() => setStep("verify")}
-                  className="flex-1 rounded-full text-fg-subtle hover:text-fg apple-focus"
+                  className="flex-1 rounded-lg text-fg-subtle hover:text-fg apple-focus"
                 >
                   Back
                 </Button>
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="flex-1 bg-accent hover:bg-accent-hover text-white font-semibold py-2.5 rounded-full apple-press apple-focus"
+                  className="flex-1 bg-accent hover:bg-accent-hover text-white font-semibold py-2.5 rounded-xl apple-press apple-focus"
                 >
                   {isLoading ? "Submitting..." : "Submit Claim"}
                 </Button>
@@ -151,7 +151,7 @@ export default function BusinessClaimPage({ params }: { params: { placeId: strin
 
           {step === "success" && (
             <div className="text-center space-y-4 text-xs">
-              <div className="w-14 h-14 bg-success/10 border border-success/20 text-success rounded-full flex items-center justify-center mx-auto">
+              <div className="w-14 h-14 bg-success/10 border border-success/20 text-success rounded-xl flex items-center justify-center mx-auto">
                 <CheckCircle className="h-7 w-7" />
               </div>
               <h3 className="text-lg font-semibold text-fg">Claim In Review</h3>
@@ -159,7 +159,7 @@ export default function BusinessClaimPage({ params }: { params: { placeId: strin
                 Our verification desk will review your business credentials within 24 to 48 hours. You will receive an SMS and dashboard access upon approval.
               </p>
               <Link href={`/item/${params.placeId}`} className="block pt-2">
-                <Button className="w-full bg-accent hover:bg-accent-hover text-white font-semibold py-2.5 rounded-full apple-press apple-focus">
+                <Button className="w-full bg-accent hover:bg-accent-hover text-white font-semibold py-2.5 rounded-xl apple-press apple-focus">
                   Return to Place Listing
                 </Button>
               </Link>

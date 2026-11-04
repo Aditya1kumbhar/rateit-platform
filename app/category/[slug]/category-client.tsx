@@ -63,7 +63,7 @@ export function CategoryClient({ categoryName, places }: CategoryClientProps) {
       <div className="p-6 md:p-8 rounded-modal bg-surface border-0 relative overflow-hidden shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-accent-tint text-accent-link border border-accent-link/20">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-accent-tint text-accent-link border border-accent-link/20">
               <Sparkles className="w-3.5 h-3.5" />
               Pune Verified Hubs
             </span>
@@ -98,7 +98,7 @@ export function CategoryClient({ categoryName, places }: CategoryClientProps) {
             <button
               key={sort.id}
               onClick={() => setSortBy(sort.id)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors duration-150 apple-press apple-focus ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors duration-150 apple-press apple-focus ${
                 sortBy === sort.id
                   ? "bg-accent text-white shadow-sm shadow-accent/20"
                   : "bg-surface-2 text-fg-muted hover:text-fg hover:bg-surface-3 border border-hairline"
@@ -158,7 +158,7 @@ export function CategoryClient({ categoryName, places }: CategoryClientProps) {
                       setShowSaveModal(true)
                     }}
                     title="Save to list"
-                    className="p-1.5 rounded-full text-fg-subtle hover:text-danger hover:bg-surface-3 transition-colors apple-press apple-focus"
+                    className="p-1.5 rounded-lg text-fg-subtle hover:text-danger hover:bg-surface-3 transition-colors apple-press apple-focus"
                   >
                     <Heart className="w-4 h-4" />
                   </button>
@@ -181,7 +181,7 @@ export function CategoryClient({ categoryName, places }: CategoryClientProps) {
                   {item.tags.slice(0, 4).map((tag, tagIdx) => (
                     <span
                       key={tagIdx}
-                      className="text-[10px] font-medium text-fg-muted bg-surface-2 px-2.5 py-0.5 rounded-full border border-hairline"
+                      className="text-[10px] font-medium text-fg-muted bg-surface-2 px-2.5 py-0.5 rounded-md border border-hairline"
                     >
                       #{tag}
                     </span>
@@ -201,7 +201,7 @@ export function CategoryClient({ categoryName, places }: CategoryClientProps) {
             <Button
               onClick={() => openRateModal()}
               size="sm"
-              className="mt-2 bg-accent hover:bg-accent-hover text-white font-semibold rounded-full px-5 py-2.5 apple-press apple-focus"
+              className="mt-2 bg-accent hover:bg-accent-hover text-white font-semibold rounded-lg px-5 py-2.5 apple-press apple-focus"
             >
               Add First Spot
             </Button>

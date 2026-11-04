@@ -97,7 +97,7 @@ export function ItemClient({ place }: ItemClientProps) {
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: `${place.name} — RateIT Pune`,
+        title: `${place.name}: RateIT Pune`,
         text: `Check out verified student & local reviews for ${place.name} in Pune.`,
         url: window.location.href,
       }).catch(() => {})
@@ -156,18 +156,18 @@ export function ItemClient({ place }: ItemClientProps) {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-semibold text-fg-muted bg-surface-2 px-3 py-1 rounded-full border border-hairline">
+              <span className="text-xs font-semibold text-fg-muted bg-surface-2 px-3 py-1 rounded-md border border-hairline">
                 {place.category.replace("_", " ")}
               </span>
               {place.isVerifiedBiz ? (
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-success bg-success/10 px-3 py-1 rounded-full border border-success/20">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-success bg-success/10 px-3 py-1 rounded-md border border-success/20">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   Verified Business Claim
                 </span>
               ) : (
                 <Link
                   href={`/business/claim/${place.id}`}
-                  className="inline-flex items-center gap-1 text-[11px] font-medium text-fg-subtle hover:text-fg bg-surface-2 px-3 py-1 rounded-full border border-hairline transition-colors apple-focus"
+                  className="inline-flex items-center gap-1 text-[11px] font-medium text-fg-subtle hover:text-fg bg-surface-2 px-3 py-1 rounded-lg border border-hairline transition-colors apple-focus"
                 >
                   Claim this business &rarr;
                 </Link>
@@ -220,14 +220,14 @@ export function ItemClient({ place }: ItemClientProps) {
                   longitude: place.longitude,
                 })
               }
-              className="flex-1 sm:flex-initial px-6 py-3 rounded-full bg-accent hover:bg-accent-hover text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-accent/20 apple-press apple-focus cursor-pointer min-h-[44px]"
+              className="flex-1 sm:flex-initial px-6 py-3 rounded-xl bg-accent hover:bg-accent-hover text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-accent/20 apple-press apple-focus cursor-pointer min-h-[44px]"
             >
               <Star className="w-4 h-4 fill-white" />
               <span>Rate this spot</span>
             </button>
             <button
               onClick={() => setShowSaveModal(true)}
-              className="p-3 rounded-full bg-surface-2 border border-hairline text-fg hover:bg-surface-3 transition-colors apple-press apple-focus min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="p-3 rounded-xl bg-surface-2 border border-hairline text-fg hover:bg-surface-3 transition-colors apple-press apple-focus min-h-[44px] min-w-[44px] flex items-center justify-center"
               title="Save to list"
               aria-label="Save to list"
             >
@@ -235,7 +235,7 @@ export function ItemClient({ place }: ItemClientProps) {
             </button>
             <button
               onClick={handleShare}
-              className="p-3 rounded-full bg-surface-2 border border-hairline text-fg hover:bg-surface-3 transition-colors apple-press apple-focus min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="p-3 rounded-xl bg-surface-2 border border-hairline text-fg hover:bg-surface-3 transition-colors apple-press apple-focus min-h-[44px] min-w-[44px] flex items-center justify-center"
               title="Share"
               aria-label="Share spot"
             >
@@ -247,17 +247,17 @@ export function ItemClient({ place }: ItemClientProps) {
 
       {/* Tabs Container */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-surface-2 border border-hairline p-1 rounded-full grid grid-cols-4 max-w-md">
-          <TabsTrigger value="overview" className="rounded-full text-xs font-semibold data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
+        <TabsList className="bg-surface-2 border border-hairline p-1 rounded-xl grid grid-cols-4 max-w-md">
+          <TabsTrigger value="overview" className="rounded-lg text-xs font-semibold data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
             Overview
           </TabsTrigger>
-          <TabsTrigger value="reviews" className="rounded-full text-xs font-semibold data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
+          <TabsTrigger value="reviews" className="rounded-lg text-xs font-semibold data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
             Reviews ({place.reviews.length})
           </TabsTrigger>
-          <TabsTrigger value="photos" className="rounded-full text-xs font-semibold data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
+          <TabsTrigger value="photos" className="rounded-lg text-xs font-semibold data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
             Photos
           </TabsTrigger>
-          <TabsTrigger value="info" className="rounded-full text-xs font-semibold data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
+          <TabsTrigger value="info" className="rounded-lg text-xs font-semibold data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
             Location
           </TabsTrigger>
         </TabsList>
@@ -278,7 +278,7 @@ export function ItemClient({ place }: ItemClientProps) {
                 {place.tags.map((tag, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-fg-muted bg-surface-2 border border-hairline px-3 py-1 rounded-full"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-fg-muted bg-surface-2 border border-hairline px-3 py-1 rounded-md"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-link" />
                     {tag}
@@ -302,7 +302,7 @@ export function ItemClient({ place }: ItemClientProps) {
                       : "Top Bayesian rated in this category"}
                   </p>
                 </div>
-                <span className="text-[10px] uppercase tracking-wider font-semibold text-accent-link bg-accent-tint px-2.5 py-0.5 rounded-full border border-accent-link/20">
+                <span className="text-[10px] uppercase tracking-wider font-semibold text-accent-link bg-accent-tint px-2.5 py-0.5 rounded-md border border-accent-link/20">
                   {similarType === "collaborative" ? "Collaborative" : "Category Match"}
                 </span>
               </div>
@@ -352,7 +352,7 @@ export function ItemClient({ place }: ItemClientProps) {
                   })
                 }
                 size="sm"
-                className="mt-2 bg-accent hover:bg-accent-hover text-white font-semibold rounded-full px-5 py-2 apple-press apple-focus cursor-pointer"
+                className="mt-2 bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl px-5 py-2 apple-press apple-focus cursor-pointer"
               >
                 Write First Review
               </Button>
@@ -369,7 +369,7 @@ export function ItemClient({ place }: ItemClientProps) {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-9 h-9 rounded-full bg-surface-2 border border-hairline flex items-center justify-center font-semibold text-sm text-accent-link">
+                      <div className="w-9 h-9 rounded-xl bg-surface-2 border border-hairline flex items-center justify-center font-semibold text-sm text-accent-link">
                         {rev.user?.displayName ? rev.user.displayName[0].toUpperCase() : "U"}
                       </div>
                       <div>
@@ -377,7 +377,7 @@ export function ItemClient({ place }: ItemClientProps) {
                           <h4 className="text-sm font-semibold text-fg">
                             {rev.user?.displayName || "Pune Student"}
                           </h4>
-                          <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${badge.color}`}>
+                          <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-md border ${badge.color}`}>
                             {badge.label}
                           </span>
                         </div>
@@ -397,7 +397,7 @@ export function ItemClient({ place }: ItemClientProps) {
                     </div>
 
                     {rev.checkinVerified && (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-success bg-success/10 px-2.5 py-1 rounded-full border border-success/20">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-success bg-success/10 px-2.5 py-1 rounded-md border border-success/20">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         GPS Verified
                       </span>
@@ -428,7 +428,7 @@ export function ItemClient({ place }: ItemClientProps) {
                       {rev.tags.map((t, idx) => (
                         <span
                           key={idx}
-                          className="text-[10px] font-medium text-fg-muted bg-surface-2 px-2.5 py-0.5 rounded-full border border-hairline"
+                          className="text-[10px] font-medium text-fg-muted bg-surface-2 px-2.5 py-0.5 rounded-md border border-hairline"
                         >
                           #{t}
                         </span>
@@ -451,7 +451,7 @@ export function ItemClient({ place }: ItemClientProps) {
                   <div className="pt-2 border-t border-hairline flex items-center justify-between text-xs">
                     <button
                       onClick={() => handleHelpfulClick(rev.id)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-colors apple-press apple-focus ${
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-colors apple-press apple-focus ${
                         hasVoted[rev.id]
                           ? "bg-accent-tint border-accent-link/30 text-accent-link font-semibold"
                           : "bg-surface-2 border-hairline text-fg-subtle hover:text-fg"

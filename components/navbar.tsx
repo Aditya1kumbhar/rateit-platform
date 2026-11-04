@@ -42,14 +42,14 @@ export function Navbar() {
     <header className="sticky top-0 z-40 w-full liquid-glass transition-[background-color,border-color] duration-150">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
         {/* Logo & Pune Live Indicator */}
-        <Link href="/" className="flex items-center gap-2.5 group apple-press shrink-0 min-h-[44px] apple-focus rounded-full pr-2">
-          <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-white font-semibold text-base shadow-md shadow-accent/25">
+        <Link href="/" className="flex items-center gap-2.5 group apple-press shrink-0 min-h-[44px] apple-focus rounded-xl pr-2">
+          <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center text-white font-semibold text-base shadow-md shadow-accent/25">
             R
           </div>
           <div className="flex flex-col">
             <span className="text-base font-semibold tracking-[-0.022em] text-fg flex items-center gap-2">
               RateIT
-              <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider px-2 py-0.5 bg-success/10 text-success border border-success/20 rounded-full font-semibold">
+              <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider px-2 py-0.5 bg-success/10 text-success border border-success/20 rounded-md font-semibold">
                 <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
                 Pune Live
               </span>
@@ -65,7 +65,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-3.5 py-1.5 rounded-full transition-colors duration-150 min-h-[32px] flex items-center apple-focus ${
+                className={`px-3 py-1.5 rounded-lg transition-colors duration-150 min-h-[32px] flex items-center apple-focus ${
                   isActive
                     ? "text-accent-link bg-accent-tint font-semibold"
                     : "text-fg-muted hover:text-fg hover:bg-surface-2"
@@ -83,11 +83,11 @@ export function Navbar() {
           <button
             type="button"
             onClick={openSearch}
-            className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-2 border border-hairline text-xs text-fg-muted hover:text-fg hover:bg-surface-3 transition-colors duration-150 apple-press cursor-pointer min-h-[36px] apple-focus"
+            className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-surface-2 border border-hairline text-xs text-fg-muted hover:text-fg hover:bg-surface-3 transition-colors duration-150 apple-press cursor-pointer min-h-[36px] apple-focus"
           >
             <Search className="w-3.5 h-3.5 text-accent-link" />
             <span>Search Pune...</span>
-            <kbd className="text-[10px] bg-surface-3 text-fg-subtle px-1.5 py-0.5 rounded-full font-mono">⌘K</kbd>
+            <kbd className="text-[10px] bg-surface-3 text-fg-subtle px-1.5 py-0.5 rounded-md font-mono">⌘K</kbd>
           </button>
 
           {/* Mobile Search Button */}
@@ -95,7 +95,7 @@ export function Navbar() {
             type="button"
             onClick={openSearch}
             aria-label="Search places"
-            className="sm:hidden p-2.5 rounded-full text-fg hover:bg-surface-2 border border-hairline apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
+            className="sm:hidden p-2.5 rounded-lg text-fg hover:bg-surface-2 border border-hairline apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
           >
             <Search className="w-4 h-4 text-accent-link" />
           </button>
@@ -104,7 +104,7 @@ export function Navbar() {
           <button
             type="button"
             onClick={() => openRateModal()}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-accent hover:bg-accent-hover text-white font-semibold text-xs transition-colors duration-150 shadow-md shadow-accent/20 apple-press cursor-pointer min-h-[36px] apple-focus"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover text-white font-semibold text-xs transition-colors duration-150 shadow-md shadow-accent/20 apple-press cursor-pointer min-h-[36px] apple-focus"
           >
             <Plus className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Rate Spot</span>
@@ -116,16 +116,16 @@ export function Navbar() {
             <div className="flex items-center gap-2">
               <Link
                 href="/profile"
-                className="flex items-center gap-2 p-1 pr-3 rounded-full bg-surface-2 border border-hairline text-fg hover:bg-surface-3 transition-colors duration-150 apple-press min-h-[36px] apple-focus"
+                className="flex items-center gap-2 p-1 pr-3 rounded-lg bg-surface-2 border border-hairline text-fg hover:bg-surface-3 transition-colors duration-150 apple-press min-h-[36px] apple-focus"
               >
                 {user.avatarUrl ? (
                   <img
                     src={user.avatarUrl}
                     alt={user.displayName || "User avatar"}
-                    className="w-6 h-6 rounded-full object-cover border border-hairline"
+                    className="w-6 h-6 rounded-lg object-cover border border-hairline"
                   />
                 ) : (
-                  <div className="w-6 h-6 rounded-full bg-accent-tint text-accent-link flex items-center justify-center text-xs font-semibold">
+                  <div className="w-6 h-6 rounded-lg bg-accent-tint text-accent-link flex items-center justify-center text-xs font-semibold">
                     {user.displayName ? user.displayName[0].toUpperCase() : "U"}
                   </div>
                 )}
@@ -136,7 +136,7 @@ export function Navbar() {
               <button
                 onClick={handleLogout}
                 title="Sign out"
-                className="p-2 rounded-full text-fg-subtle hover:text-danger hover:bg-surface-2 border border-transparent hover:border-hairline transition-colors duration-150 apple-press min-h-[36px] min-w-[36px] flex items-center justify-center apple-focus"
+                className="p-2 rounded-lg text-fg-subtle hover:text-danger hover:bg-surface-2 border border-transparent hover:border-hairline transition-colors duration-150 apple-press min-h-[36px] min-w-[36px] flex items-center justify-center apple-focus"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -144,7 +144,7 @@ export function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="px-4 py-2 rounded-full bg-surface-2 hover:bg-surface-3 border border-hairline text-xs font-semibold text-fg transition-colors duration-150 apple-press min-h-[36px] flex items-center apple-focus"
+              className="px-4 py-2 rounded-lg bg-surface-2 hover:bg-surface-3 border border-hairline text-xs font-semibold text-fg transition-colors duration-150 apple-press min-h-[36px] flex items-center apple-focus"
             >
               Sign In
             </Link>

@@ -12,7 +12,6 @@ import {
   CheckCircle2,
   Coffee,
   Wrench,
-  Sparkles,
   ArrowRight,
   ShieldCheck,
   Camera,
@@ -153,11 +152,11 @@ function HomePageContent() {
       {/* Background Ambient Mesh Light */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[480px] bg-gradient-to-b from-accent-link/10 via-accent/5 to-transparent blur-3xl pointer-events-none -z-10" />
 
-      {/* Hero Section: Apple Display Contrast */}
-      <section className="relative pt-12 pb-16 md:pt-24 md:pb-24 container mx-auto px-4 max-w-6xl">
+      {/* Hero Section */}
+      <section className="relative pt-12 pb-16 md:pt-20 md:pb-24 container mx-auto px-4 max-w-6xl">
         <div className="max-w-4xl mx-auto text-center space-y-6">
-          {/* Eyebrow Micro-Label */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-2 border border-hairline shadow-sm">
+          {/* Eyebrow Micro-Label: Rectangular rounded */}
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-2 border border-hairline shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-accent-link animate-pulse" />
             <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-fg">
               Dual-Signal Physical Verification
@@ -166,40 +165,40 @@ function HomePageContent() {
             <span className="text-[11px] font-medium text-fg-subtle">Pune V1</span>
           </div>
 
-          {/* Large Title: Semibold with negative tracking */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-semibold text-fg tracking-[-0.022em] leading-[1.02]">
-            Zero paid spam.<br />
+          {/* Clean, Non-Vague Headline */}
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold text-fg tracking-[-0.022em] leading-[1.05]">
+            Physically Verified Pune Reviews.<br />
             <span className="bg-gradient-to-b from-fg via-fg to-fg-subtle bg-clip-text text-transparent">
-              Every review physically verified.
+              Zero paid spam. Authentic local ratings.
             </span>
           </h1>
 
-          {/* Subdued Secondary Copy */}
-          <p className="text-base sm:text-lg md:text-xl text-fg-muted max-w-2xl mx-auto leading-relaxed font-normal">
-            Pune student hubs decoded with cryptographic location integrity: 200m GPS geofencing and camera EXIF timestamp verification.
+          {/* Direct, Specific Subcopy */}
+          <p className="text-base sm:text-lg text-fg-muted max-w-2xl mx-auto leading-relaxed font-normal">
+            Independent reviews for coaching centers, student PGs, hostels, and cafes across FC Road, Kothrud, Viman Nagar, and Hinjewadi. Every review is verified via 200m physical GPS geofencing and photo EXIF camera metadata.
           </p>
 
-          {/* Interactive Liquid Glass Search Bar */}
+          {/* Search Bar: Rectangular rounded (rounded-xl, NOT pill) */}
           <form onSubmit={handleHeroSearch} className="max-w-2xl mx-auto relative group pt-2">
-            <div className="relative flex items-center rounded-full bg-surface-2/80 backdrop-blur-2xl border border-hairline p-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.6)] focus-within:border-accent-link/60 focus-within:ring-2 focus-within:ring-accent-link/20 transition-all">
-              <MapPin className="w-5 h-5 text-accent-link ml-3.5 shrink-0" />
+            <div className="relative flex items-center rounded-xl bg-surface-2/80 backdrop-blur-2xl border border-hairline p-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.6)] focus-within:border-accent-link/60 focus-within:ring-2 focus-within:ring-accent-link/20 transition-all">
+              <MapPin className="w-5 h-5 text-accent-link ml-3 shrink-0" />
               <input
                 type="text"
                 value={heroSearchQuery}
                 onChange={(e) => setHeroSearchQuery(e.target.value)}
-                placeholder="Search IIT Coaching, FC Road Cafes, Hinjewadi PGs..."
-                className="w-full bg-transparent px-3 py-2.5 text-sm sm:text-base text-fg placeholder:text-fg-subtle focus:outline-none"
+                placeholder="Search FC Road Cafes, Kothrud Coaching, Hinjewadi PGs..."
+                className="w-full bg-transparent px-3 py-2 text-sm sm:text-base text-fg placeholder:text-fg-subtle focus:outline-none"
               />
               <button
                 type="submit"
-                className="bg-accent hover:bg-accent-hover text-white font-medium rounded-full px-6 py-2.5 shrink-0 transition-colors shadow-md shadow-accent/20 apple-press flex items-center gap-1.5 text-sm min-h-[44px]"
+                className="bg-accent hover:bg-accent-hover text-white font-medium rounded-lg px-5 py-2.5 shrink-0 transition-colors shadow-md shadow-accent/20 apple-press flex items-center gap-1.5 text-sm min-h-[44px]"
               >
                 <Search className="w-4 h-4" />
                 <span>Search</span>
               </button>
             </div>
 
-            {/* Quick Area Filter Chips (Pill buttons, min 44px touch) */}
+            {/* Hub Filter Chips: Rectangular rounded (rounded-lg, NOT pill) */}
             <div className="flex flex-wrap items-center justify-center gap-2 mt-4 text-xs">
               <span className="text-fg-subtle text-[11px] font-semibold uppercase tracking-[0.06em] mr-1">Hubs:</span>
               {[
@@ -212,7 +211,7 @@ function HomePageContent() {
                   key={idx}
                   type="button"
                   onClick={() => router.push(`/discover?search=${encodeURIComponent(chip.query)}`)}
-                  className="px-4 py-2 rounded-full bg-surface hover:bg-surface-2 border border-hairline text-fg-muted hover:text-fg transition-colors apple-press min-h-[36px]"
+                  className="px-3.5 py-1.5 rounded-lg bg-surface hover:bg-surface-2 border border-hairline text-fg-muted hover:text-fg transition-colors apple-press min-h-[36px]"
                 >
                   {chip.label}
                 </button>
@@ -220,11 +219,11 @@ function HomePageContent() {
             </div>
           </form>
 
-          {/* Bento Specs Bar: Fill contrast on black canvas */}
+          {/* Bento Specs Bar: Real specifications, no fake counters */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 max-w-3xl mx-auto">
             <div className="p-6 rounded-modal bg-surface text-left">
               <div className="text-3xl font-semibold text-fg tabular-nums tracking-tight">
-                {stats.totalReviews > 0 ? `${stats.totalReviews}+` : "200m"}
+                {stats.totalReviews > 0 ? `${stats.totalReviews}` : "200m"}
               </div>
               <div className="text-[11px] uppercase tracking-[0.06em] text-fg-subtle font-semibold mt-1">
                 {stats.totalReviews > 0 ? "Verified Reviews" : "GPS Geofence Radius"}
@@ -232,7 +231,7 @@ function HomePageContent() {
             </div>
             <div className="p-6 rounded-modal bg-surface text-left">
               <div className="text-3xl font-semibold text-fg tabular-nums tracking-tight">
-                {stats.totalPlaces > 0 ? `${stats.totalPlaces}+` : "EXIF + GPS"}
+                {stats.totalPlaces > 0 ? `${stats.totalPlaces}` : "EXIF + GPS"}
               </div>
               <div className="text-[11px] uppercase tracking-[0.06em] text-fg-subtle font-semibold mt-1">
                 {stats.totalPlaces > 0 ? "Pune Listed Venues" : "Dual-Check Verification"}
@@ -253,7 +252,7 @@ function HomePageContent() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
             <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-link mb-1">
-              Curated Architecture
+              Curated Directory
             </div>
             <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.022em] text-fg">
               Explore Categories
@@ -271,11 +270,11 @@ function HomePageContent() {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {[
-            { name: "Coaching Classes", slug: "coaching-classes", icon: GraduationCap, count: "48 Hubs", tag: "IIT / UPSC" },
-            { name: "PGs & Hostels", slug: "pgs-hostels", icon: Home, count: "32 Verified", tag: "Student Stay" },
-            { name: "Cafes", slug: "cafes", icon: Coffee, count: "24 Listed", tag: "FC Road & Viman" },
-            { name: "Restaurants", slug: "restaurants", icon: Utensils, count: "18 Listed", tag: "Mess & Dining" },
-            { name: "Local Services", slug: "local-services", icon: Wrench, count: "Verified Only", tag: "Study & Tech" },
+            { name: "Coaching Classes", slug: "coaching-classes", icon: GraduationCap, count: "Verified Listings", tag: "IIT / UPSC" },
+            { name: "PGs & Hostels", slug: "pgs-hostels", icon: Home, count: "Verified Listings", tag: "Student Stay" },
+            { name: "Cafes", slug: "cafes", icon: Coffee, count: "Verified Listings", tag: "FC Road & Viman" },
+            { name: "Restaurants", slug: "restaurants", icon: Utensils, count: "Verified Listings", tag: "Mess & Dining" },
+            { name: "Local Services", slug: "local-services", icon: Wrench, count: "Verified Listings", tag: "Study & Tech" },
           ].map((cat, index) => (
             <Link key={index} href={`/category/${cat.slug}`} className="apple-press">
               <div className="p-6 rounded-modal bg-surface hover:bg-surface-2 transition-colors h-full flex flex-col justify-between space-y-4 group">
@@ -300,7 +299,6 @@ function HomePageContent() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
             <div className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.08em] text-accent-link font-semibold mb-2">
-              <Sparkles className="w-3.5 h-3.5" />
               Verified Local Pune Spots
             </div>
             <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.022em] text-fg">
@@ -322,7 +320,7 @@ function HomePageContent() {
               <div className="p-6 rounded-modal bg-surface hover:bg-surface-2 transition-colors h-full flex flex-col justify-between group">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-semibold text-fg bg-surface-2 px-2.5 py-1 rounded-full">
+                    <span className="text-[10px] font-semibold text-fg bg-surface-2 px-2.5 py-1 rounded-md">
                       {place.tag}
                     </span>
                     <span className="text-xs text-fg-subtle font-mono">{place.price}</span>
@@ -353,7 +351,7 @@ function HomePageContent() {
                   </div>
 
                   {place.verifiedCheckin && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-success bg-success/10 px-2.5 py-0.5 rounded-full">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-success bg-success/10 px-2 py-0.5 rounded-md">
                       <CheckCircle2 className="w-3 h-3" />
                       GPS Verified
                     </span>
@@ -369,7 +367,7 @@ function HomePageContent() {
       <section className="container mx-auto px-4 py-16 border-t border-hairline max-w-6xl">
         <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
           <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-link">
-            Authentic Telemetry
+            Live Reviews
           </div>
           <h2 className="text-3xl sm:text-4xl font-semibold tracking-[-0.022em] text-fg">Real Pune Feedback</h2>
           <p className="text-fg-muted text-sm">Authenticated reviewers verified via physical coordinates</p>
@@ -385,7 +383,7 @@ function HomePageContent() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-9 h-9 rounded-full bg-surface-2 flex items-center justify-center text-xs font-semibold text-fg">
+                      <div className="w-9 h-9 rounded-lg bg-surface-2 flex items-center justify-center text-xs font-semibold text-fg">
                         {rev.user ? rev.user[0].toUpperCase() : "U"}
                       </div>
                       <div>
@@ -431,7 +429,7 @@ function HomePageContent() {
             </p>
             <Link
               href="/discover"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-accent hover:bg-accent-hover px-5 py-2.5 rounded-full transition-colors apple-press min-h-[44px]"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-accent hover:bg-accent-hover px-5 py-2.5 rounded-lg transition-colors apple-press min-h-[44px]"
             >
               Explore Pune Venues
             </Link>
@@ -443,7 +441,7 @@ function HomePageContent() {
       <section className="container mx-auto px-4 py-20 border-t border-hairline max-w-6xl">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
           <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-link">
-            Hardware-Grade Security
+            Security Architecture
           </div>
           <h2 className="text-3xl sm:text-5xl font-semibold tracking-[-0.022em] text-fg">
             Why RateIT is Unbreakable
@@ -553,13 +551,13 @@ function HomePageContent() {
             </div>
 
             <div className="flex flex-wrap items-center gap-2 pt-2">
-              <span className="text-[11px] font-semibold px-3 py-1 rounded-full bg-surface-2 text-fg">
+              <span className="text-[11px] font-semibold px-3 py-1 rounded-md bg-surface-2 text-fg">
                 Rule 3(2) IT Rules 2021
               </span>
-              <span className="text-[11px] font-semibold px-3 py-1 rounded-full bg-surface-2 text-fg">
+              <span className="text-[11px] font-semibold px-3 py-1 rounded-md bg-surface-2 text-fg">
                 DPDP 2023 Consent Flow
               </span>
-              <span className="text-[11px] font-semibold px-3 py-1 rounded-full bg-accent-tint text-accent-link">
+              <span className="text-[11px] font-semibold px-3 py-1 rounded-md bg-accent-tint text-accent-link">
                 IS 19000:2022 Verified
               </span>
             </div>

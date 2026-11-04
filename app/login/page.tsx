@@ -221,7 +221,7 @@ function LoginContent() {
 
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-tint text-accent-link text-[11px] font-semibold tracking-wider uppercase mb-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-accent-tint text-accent-link text-[11px] font-semibold tracking-wider uppercase mb-1">
             <Shield className="w-3.5 h-3.5" />
             <span>IS 19000 Verifiable Identity</span>
           </div>
@@ -249,7 +249,7 @@ function LoginContent() {
                 type="button"
                 onClick={() => handleOAuthSignIn("google")}
                 disabled={Boolean(oauthLoading) || isLoading}
-                className="w-full min-h-[48px] px-4 rounded-full bg-surface-2 hover:bg-surface-3 border border-hairline text-fg font-semibold text-xs flex items-center justify-center gap-3 transition-colors apple-press disabled:opacity-60 cursor-pointer"
+                className="w-full min-h-[48px] px-4 rounded-xl bg-surface-2 hover:bg-surface-3 border border-hairline text-fg font-semibold text-xs flex items-center justify-center gap-3 transition-colors apple-press disabled:opacity-60 cursor-pointer"
               >
                 {oauthLoading === "google" ? (
                   <div className="w-4 h-4 border-2 border-accent-link border-t-transparent rounded-full animate-spin" />
@@ -281,7 +281,7 @@ function LoginContent() {
                 type="button"
                 onClick={() => handleOAuthSignIn("github")}
                 disabled={Boolean(oauthLoading) || isLoading}
-                className="w-full min-h-[48px] px-4 rounded-full bg-surface-2 hover:bg-surface-3 border border-hairline text-fg font-semibold text-xs flex items-center justify-center gap-3 transition-colors apple-press disabled:opacity-60 cursor-pointer"
+                className="w-full min-h-[48px] px-4 rounded-xl bg-surface-2 hover:bg-surface-3 border border-hairline text-fg font-semibold text-xs flex items-center justify-center gap-3 transition-colors apple-press disabled:opacity-60 cursor-pointer"
               >
                 {oauthLoading === "github" ? (
                   <div className="w-4 h-4 border-2 border-accent-link border-t-transparent rounded-full animate-spin" />
@@ -304,7 +304,7 @@ function LoginContent() {
               </div>
 
               {/* Method Switcher Tabs */}
-              <div className="flex bg-surface-2 p-1 rounded-full border border-hairline">
+              <div className="flex bg-surface-2 p-1 rounded-xl border border-hairline">
                 <button
                   type="button"
                   onClick={() => {
@@ -312,7 +312,7 @@ function LoginContent() {
                     setError("")
                     setSuccess("")
                   }}
-                  className={`flex-1 py-2 text-xs font-medium rounded-full transition-colors flex items-center justify-center gap-1.5 min-h-[36px] apple-press ${
+                  className={`flex-1 py-2 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 min-h-[36px] apple-press ${
                     authMethod === "email"
                       ? "bg-surface-3 text-fg font-semibold shadow-sm"
                       : "text-fg-muted hover:text-fg"
@@ -329,7 +329,7 @@ function LoginContent() {
                     setError("")
                     setSuccess("")
                   }}
-                  className={`flex-1 py-2 text-xs font-medium rounded-full transition-colors flex items-center justify-center gap-1.5 min-h-[36px] apple-press ${
+                  className={`flex-1 py-2 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 min-h-[36px] apple-press ${
                     authMethod === "phone"
                       ? "bg-surface-3 text-fg font-semibold shadow-sm"
                       : "text-fg-muted hover:text-fg"
@@ -400,7 +400,7 @@ function LoginContent() {
               <Button
                 type="submit"
                 disabled={isLoading || !email}
-                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-full text-xs apple-press"
+                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl text-xs apple-press"
               >
                 {isLoading ? "Signing in..." : "Continue with Email"}
               </Button>
@@ -448,7 +448,7 @@ function LoginContent() {
               <Button
                 type="submit"
                 disabled={isLoading || phone.length < 10 || !turnstileToken}
-                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-full text-xs apple-press"
+                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl text-xs apple-press"
               >
                 {isLoading ? "Sending OTP..." : "Send Verification OTP"}
               </Button>
@@ -480,7 +480,7 @@ function LoginContent() {
               <Button
                 type="submit"
                 disabled={isLoading || otpCode.length < 6}
-                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-full text-xs apple-press"
+                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl text-xs apple-press"
               >
                 {isLoading ? "Verifying..." : "Verify & Sign In"}
               </Button>
@@ -505,7 +505,7 @@ function LoginContent() {
               <Button
                 type="submit"
                 disabled={!displayName.trim()}
-                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-full text-xs apple-press"
+                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl text-xs apple-press"
               >
                 Continue
               </Button>
@@ -545,7 +545,7 @@ function LoginContent() {
               <Button
                 onClick={handleConsent}
                 disabled={!consentChecked}
-                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-full text-xs apple-press"
+                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl text-xs apple-press"
               >
                 Accept & Enter RateIT
               </Button>

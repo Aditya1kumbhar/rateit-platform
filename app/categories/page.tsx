@@ -98,10 +98,10 @@ export default function CategoriesPage() {
             <div className="p-6 rounded-card bg-surface hover:bg-surface-2 transition-[background-color] duration-150 border-0 shadow-sm h-full flex flex-col justify-between space-y-4">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="w-11 h-11 rounded-full bg-accent-tint text-accent-link flex items-center justify-center">
+                  <div className="w-11 h-11 rounded-xl bg-accent-tint text-accent-link flex items-center justify-center">
                     <cat.icon className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-semibold text-accent-link bg-accent-tint px-2.5 py-0.5 rounded-full border border-accent-link/20">
+                  <span className="text-[10px] font-semibold text-accent-link bg-accent-tint px-2.5 py-0.5 rounded-md border border-accent-link/20">
                     {cat.tag}
                   </span>
                 </div>

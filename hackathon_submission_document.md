@@ -183,7 +183,7 @@ Our review submission is not a simple form. It is a guided, multi-step experienc
 
 **Step 1: Search** → User searches for a place from our database of Pune-based listings (coaching, PG, café, restaurant, local service)
 
-**Step 2: GPS Check-In** → The app requests the user's location and verifies they are within 50 meters of the place using the Haversine great-circle distance formula. If verified, the review gets a "✅ Check-in Verified" badge.
+**Step 2: GPS Check-In** → The app requests the user's location and verifies they are within 50 meters of the place using the Haversine great-circle distance formula. If verified, the review gets a "[Yes] Check-in Verified" badge.
 
 **Step 3: Blind Rating** → User gives a 1-5 star rating BEFORE seeing other reviews. This prevents bias from existing ratings.
 
@@ -287,16 +287,16 @@ Every user starts at a trust score of 50. The score goes up or down based on beh
 
 | Score Range | Tier | Review Weight | Badge |
 |:---|:---|:---|:---|
-| 70-100 | ✅ Trusted | 1.0x (full weight) | "Trusted Reviewer" |
-| 40-69 | 👤 Neutral | 0.8x | "Reviewer" |
-| 1-39 | ⚠️ Suspicious | 0.2x | "Under Review" |
-| 0 | 🚫 Banned | 0x (reviews hidden) | "Restricted" |
+| 70-100 | Trusted | 1.0x (full weight) | "Trusted Reviewer" |
+| 40-69 | Neutral | 0.8x | "Reviewer" |
+| 1-39 | Suspicious | 0.2x | "Under Review" |
+| 0 | Banned | 0x (reviews hidden) | "Restricted" |
 
 **Why this matters:** A trusted reviewer's 4-star rating counts 5x more than a suspicious reviewer's 4-star rating when calculating a place's average. This makes it very hard for fake review farms to influence overall scores.
 
 ### 7.3 Impossible Travel Detection (GPS Spoofing)
 
-If a user reviews a place in Kothrud, Pune at 2:00 PM and then reviews a place in Hinjewadi (15km away) at 2:10 PM — that is physically impossible without a car going 90 km/h in city traffic. If two reviews are >50km apart within 30 minutes, we flag it.
+If a user reviews a place in Kothrud, Pune at 2:00 PM and then reviews a place in Hinjewadi (15km away) at 2:10 PM: that is physically impossible without a car going 90 km/h in city traffic. If two reviews are >50km apart within 30 minutes, we flag it.
 
 The distance is calculated using the **Haversine formula**:
 
@@ -715,16 +715,16 @@ RateIT is fully compliant with India's **Digital Personal Data Protection Act, 2
 
 | Feature | Google Maps | Zomato | Justdial | **RateIT** |
 |:---|:---|:---|:---|:---|
-| Coaching class reviews | ❌ No | ❌ No | Minimal | ✅ Yes |
-| PG/Hostel reviews | ❌ No | ❌ No | Minimal | ✅ Yes |
-| Built-in fake review detection | ❌ No | Manual moderation | ❌ No | ✅ Automatic (math-based) |
-| GPS check-in verification | ❌ No | ❌ No | ❌ No | ✅ Yes (50m geofence) |
-| Photo EXIF cross-check | ❌ No | ❌ No | ❌ No | ✅ Yes |
-| Trust score per reviewer | ❌ No | ❌ No | ❌ No | ✅ Yes (0-100 score) |
-| Weighted ratings (trust-based) | ❌ No | ❌ No | ❌ No | ✅ Yes |
-| Blind rating (rate before seeing others) | ❌ No | ❌ No | ❌ No | ✅ Yes |
-| DPDP Act compliant | Partial | Partial | Unknown | ✅ Full |
-| Open source | ❌ No | ❌ No | ❌ No | ✅ Yes (MIT) |
+| Coaching class reviews | [No] No | [No] No | Minimal | [Yes] Yes |
+| PG/Hostel reviews | [No] No | [No] No | Minimal | [Yes] Yes |
+| Built-in fake review detection | [No] No | Manual moderation | [No] No | [Yes] Automatic (math-based) |
+| GPS check-in verification | [No] No | [No] No | [No] No | [Yes] Yes (50m geofence) |
+| Photo EXIF cross-check | [No] No | [No] No | [No] No | [Yes] Yes |
+| Trust score per reviewer | [No] No | [No] No | [No] No | [Yes] Yes (0-100 score) |
+| Weighted ratings (trust-based) | [No] No | [No] No | [No] No | [Yes] Yes |
+| Blind rating (rate before seeing others) | [No] No | [No] No | [No] No | [Yes] Yes |
+| DPDP Act compliant | Partial | Partial | Unknown | [Yes] Full |
+| Open source | [No] No | [No] No | [No] No | [Yes] Yes (MIT) |
 
 **Our edge:** We do not compete with Zomato for restaurant reviews. We own the categories nobody covers — coaching centers, PGs, local services — and we make every review verifiable. That is our moat.
 
@@ -821,13 +821,13 @@ cd ios && xcodebuild -workspace App.xcworkspace \
 ## 13. What We Will Do After Deployment
 
 ### Phase 1 — Hackathon (Current)
-- ✅ Core platform with 5 categories
-- ✅ Full fraud detection engine (Jaccard + velocity + burst + EXIF)
-- ✅ Trust score system with 4 tiers
-- ✅ GPS check-in verification
-- ✅ DPDP-compliant privacy policy
-- ✅ Supabase auth with phone OTP
-- ✅ Working codebase with Playwright tests
+- [Yes] Core platform with 5 categories
+- [Yes] Full fraud detection engine (Jaccard + velocity + burst + EXIF)
+- [Yes] Trust score system with 4 tiers
+- [Yes] GPS check-in verification
+- [Yes] DPDP-compliant privacy policy
+- [Yes] Supabase auth with phone OTP
+- [Yes] Working codebase with Playwright tests
 
 ### Phase 2 — Post-Hackathon (1-3 months)
 - AI-powered review summaries (aggregate what 50 reviewers said into one paragraph)

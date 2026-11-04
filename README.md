@@ -57,10 +57,10 @@ Both raw `avgRating` and `bayesianRating` are persisted, ensuring honest review 
 
 ## Verified Categories (Pune Focus)
 
-- 🎓 **Coaching Institutes**: FC Road, Kothrud, Karve Road engineering/civil service hubs.
-- 🏠 **PGs & Hostels**: Student accommodations in Kothrud, Viman Nagar, Hinjewadi Phase 1-3.
-- ☕ **Cafes & Study Spaces**: High-density youth workspaces.
-- 🛠️ **Local Services**: Verified local repair, laundry, and student essentials.
+- **Coaching Institutes**: FC Road, Kothrud, Karve Road engineering/civil service hubs.
+- **PGs & Hostels**: Student accommodations in Kothrud, Viman Nagar, Hinjewadi Phase 1-3.
+- **Cafes & Study Spaces**: High-density youth workspaces.
+- **Local Services**: Verified local repair, laundry, and student essentials.
 
 ---
 

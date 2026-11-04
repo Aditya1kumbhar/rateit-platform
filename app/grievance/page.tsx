@@ -97,7 +97,7 @@ export default function GrievancePage() {
                 key={item.title}
                 className="p-5 rounded-modal bg-surface space-y-2.5"
               >
-                <div className="w-9 h-9 rounded-full bg-accent-tint text-accent-link flex items-center justify-center">
+                <div className="w-9 h-9 rounded-lg bg-accent-tint text-accent-link flex items-center justify-center">
                   <item.icon className="w-5 h-5" />
                 </div>
                 <h3 className="font-semibold text-fg text-sm">{item.title}</h3>
@@ -135,13 +135,13 @@ export default function GrievancePage() {
                 key={item.step}
                 className="p-4 rounded-card bg-surface flex items-start gap-4"
               >
-                <div className="w-8 h-8 rounded-full bg-accent text-white font-semibold text-xs flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-accent text-white font-semibold text-xs flex items-center justify-center shrink-0">
                   {item.step}
                 </div>
                 <div className="flex-1 space-y-1">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <h3 className="font-semibold text-fg text-sm">{item.title}</h3>
-                    <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-accent-tint text-accent-link">
+                    <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-accent-tint text-accent-link">
                       {item.timeline}
                     </span>
                   </div>

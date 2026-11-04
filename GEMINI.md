@@ -20,5 +20,5 @@ You are engineering **RateIT**, an enterprise-grade Hyperlocal Verified Review P
 1. **PHYSICAL VERIFICATION & FRAUD RESILIENCE:** Reviews must be scored against GPS physical proximity and photo EXIF metadata to ensure genuine on-site reviews.
 2. **ZERO-TRUST SECURITY:** All API endpoints must enforce input validation (Zod schemas), parameterized database queries via Prisma, rate limiting (Upstash Redis), and server-side authorization checks. Never store sensitive credentials in localStorage.
 3. **APPLE-GRADE UI + EMIL MOTION LOCK:** All UI changes must strictly adhere to `.agents/rules/emil-apple-strict-lock.md`. Fluid transitions, instant pointerdown feedback, clean typography, hairline borders, and zero generic AI templates.
-4. **MANDATORY RECEIPTS:** Every response involving code, UI, or architecture must include the mandatory security receipt (`🔒 Security Gate Checked: ...`) and UI receipt where applicable.
+4. **MANDATORY RECEIPTS:** Every response involving code, UI, or architecture must include the mandatory security receipt (`[Security Gate Checked]: ...`) and UI receipt where applicable.
 

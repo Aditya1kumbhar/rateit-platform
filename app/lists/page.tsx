@@ -143,7 +143,7 @@ export default function ListsPage() {
 
         <button
           onClick={handleOpenCreateList}
-          className="self-start sm:self-auto px-5 py-2.5 rounded-full bg-accent hover:bg-accent-hover text-white font-semibold text-xs sm:text-sm flex items-center gap-2 shadow-md shadow-accent/20 apple-press apple-focus shrink-0"
+          className="self-start sm:self-auto px-5 py-2.5 rounded-lg bg-accent hover:bg-accent-hover text-white font-semibold text-xs sm:text-sm flex items-center gap-2 shadow-md shadow-accent/20 apple-press apple-focus shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>Create New List</span>
@@ -162,7 +162,7 @@ export default function ListsPage() {
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-full bg-accent-tint text-accent-link flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-accent-tint text-accent-link flex items-center justify-center">
                     <Bookmark className="w-5 h-5" />
                   </div>
                   <span className="text-[11px] font-semibold text-fg-subtle flex items-center gap-1">
@@ -194,7 +194,7 @@ export default function ListsPage() {
                 </span>
                 <Link
                   href="/discover"
-                  className="text-fg-subtle hover:text-fg flex items-center gap-1 font-medium transition-colors apple-focus rounded-full px-2 py-0.5"
+                  className="text-fg-subtle hover:text-fg flex items-center gap-1 font-medium transition-colors apple-focus rounded-md px-2 py-0.5"
                 >
                   <span>Explore spots</span>
                   <ChevronRight className="w-3.5 h-3.5" />
@@ -211,14 +211,14 @@ export default function ListsPage() {
           <div className="bg-surface border border-hairline rounded-modal w-full max-w-md p-6 shadow-[0_24px_70px_rgba(0,0,0,0.65)] relative space-y-5 text-fg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-full bg-accent-tint text-accent-link flex items-center justify-center">
+                <div className="w-9 h-9 rounded-lg bg-accent-tint text-accent-link flex items-center justify-center">
                   <Bookmark className="w-4 h-4" />
                 </div>
                 <h3 className="text-base font-semibold text-fg">Create New Collection</h3>
               </div>
               <button
                 onClick={() => setShowNewListModal(false)}
-                className="p-1.5 rounded-full text-fg-subtle hover:text-fg hover:bg-surface-2 transition-colors apple-focus"
+                className="p-1.5 rounded-lg text-fg-subtle hover:text-fg hover:bg-surface-2 transition-colors apple-focus"
                 aria-label="Close dialog"
               >
                 <X className="w-5 h-5" />
@@ -253,7 +253,7 @@ export default function ListsPage() {
                   <button
                     type="button"
                     onClick={() => setIsPrivate(false)}
-                    className={`flex-1 py-2 px-3 rounded-full text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 ${
+                    className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 ${
                       !isPrivate
                         ? "bg-accent text-white"
                         : "bg-surface-2 text-fg-muted hover:text-fg border border-hairline"
@@ -265,7 +265,7 @@ export default function ListsPage() {
                   <button
                     type="button"
                     onClick={() => setIsPrivate(true)}
-                    className={`flex-1 py-2 px-3 rounded-full text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 ${
+                    className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 ${
                       isPrivate
                         ? "bg-accent text-white"
                         : "bg-surface-2 text-fg-muted hover:text-fg border border-hairline"
@@ -281,14 +281,14 @@ export default function ListsPage() {
                 <button
                   type="button"
                   onClick={() => setShowNewListModal(false)}
-                  className="text-fg-subtle hover:text-fg text-xs px-3.5 py-1.5 rounded-full transition-colors apple-focus"
+                  className="text-fg-subtle hover:text-fg text-xs px-3.5 py-1.5 rounded-lg transition-colors apple-focus"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isCreating || !listName.trim()}
-                  className="bg-accent hover:bg-accent-hover text-white font-semibold text-xs rounded-full px-5 py-2 shadow-md shadow-accent/20 apple-press apple-focus disabled:opacity-50"
+                  className="bg-accent hover:bg-accent-hover text-white font-semibold text-xs rounded-lg px-5 py-2 shadow-md shadow-accent/20 apple-press apple-focus disabled:opacity-50"
                 >
                   {isCreating ? "Creating..." : "Create Collection"}
                 </button>

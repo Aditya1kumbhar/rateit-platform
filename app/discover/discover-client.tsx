@@ -209,8 +209,8 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
           </p>
         </div>
 
-        {/* Search Bar (Apple Pill Input) */}
-        <div className="relative flex items-center rounded-full bg-surface-2 border border-hairline p-1 shadow-sm focus-within:border-accent-link/60 focus-within:ring-2 focus-within:ring-accent-link/20 transition-[border-color] duration-150">
+        {/* Search Bar */}
+        <div className="relative flex items-center rounded-xl bg-surface-2 border border-hairline p-1 shadow-sm focus-within:border-accent-link/60 focus-within:ring-2 focus-within:ring-accent-link/20 transition-[border-color] duration-150">
           <Search className="w-4 h-4 text-accent-link ml-3.5 shrink-0" />
           <input
             type="text"
@@ -222,7 +222,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="p-1.5 mr-2 rounded-full text-fg-subtle hover:text-fg hover:bg-surface-3 transition-colors apple-focus"
+              className="p-1.5 mr-2 rounded-lg text-fg-subtle hover:text-fg hover:bg-surface-3 transition-colors apple-focus"
               aria-label="Clear search"
             >
               <X className="w-4 h-4" />
@@ -239,7 +239,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
         </div>
       )}
 
-      {/* Category Pills & Sort Selector */}
+      {/* Category Tabs & Sort Selector */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         {/* Horizontal Category Scroll */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
@@ -249,7 +249,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors duration-150 apple-press apple-focus min-h-[36px] ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-150 apple-press apple-focus min-h-[36px] ${
                   isSelected
                     ? "bg-accent text-white shadow-sm shadow-accent/20"
                     : "bg-surface-2 text-fg-muted hover:text-fg hover:bg-surface-3 border border-hairline"
@@ -265,7 +265,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
         <div className="flex items-center gap-2 shrink-0">
           <span className="text-xs text-fg-subtle font-medium hidden sm:inline">Sort:</span>
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-[180px] bg-surface-2 border-hairline text-fg text-xs rounded-full apple-focus">
+            <SelectTrigger className="w-[180px] bg-surface-2 border-hairline text-fg text-xs rounded-lg apple-focus">
               <SelectValue placeholder="Sort places" />
             </SelectTrigger>
             <SelectContent className="bg-surface border-hairline text-fg">
@@ -308,11 +308,11 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
                 {/* Header row: Category tag & exploration badge & bookmark */}
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-semibold text-fg-muted bg-surface-2 px-2.5 py-0.5 rounded-full border border-hairline">
+                    <span className="text-[10px] font-semibold text-fg-muted bg-surface-2 px-2.5 py-0.5 rounded-md border border-hairline">
                       {place.category.replace("_", " ")}
                     </span>
                     {place.isExploration && (
-                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-accent-link bg-accent-tint px-2.5 py-0.5 rounded-full border border-accent-link/20">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-accent-link bg-accent-tint px-2.5 py-0.5 rounded-md border border-accent-link/20">
                         <Sparkles className="w-3 h-3" />
                         Serendipity Pick
                       </span>
@@ -327,7 +327,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
                       setShowSaveModal(true)
                     }}
                     title="Save to list"
-                    className="p-1.5 rounded-full text-fg-subtle hover:text-danger hover:bg-surface-3 transition-colors apple-press apple-focus"
+                    className="p-1.5 rounded-lg text-fg-subtle hover:text-danger hover:bg-surface-3 transition-colors apple-press apple-focus"
                   >
                     <Heart className="w-4 h-4" />
                   </button>
@@ -380,7 +380,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
                   {place.tags.slice(0, 4).map((tag, tagIdx) => (
                     <span
                       key={tagIdx}
-                      className="text-[10px] font-medium text-fg-muted bg-surface-2 px-2.5 py-0.5 rounded-full border border-hairline"
+                      className="text-[10px] font-medium text-fg-muted bg-surface-2 px-2.5 py-0.5 rounded-md border border-hairline"
                     >
                       #{tag}
                     </span>
@@ -406,7 +406,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
                 setSearchQuery("")
                 setSelectedCategory("all")
               }}
-              className="mt-2 rounded-full border-hairline text-fg hover:bg-surface-2 apple-focus"
+              className="mt-2 rounded-lg border-hairline text-fg hover:bg-surface-2 apple-focus"
             >
               Reset filters
             </Button>

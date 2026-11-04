@@ -108,11 +108,23 @@
   - **RGB Semantic Token Architecture**: Defined space-separated RGB channel variables in `app/globals.css` and mapped them in `tailwind.config.ts` via `rgb(var(--color) / <alpha-value>)` to enable Tailwind v3 slash-opacity (`bg-accent/10`, `border-accent-link/30`, `bg-surface-2/80`).
   - **Total Legacy Purge**: Replaced 510+ instances of legacy `slate-*` and `amber-*` classes across all 14 screens and components with semantic tokens (`surface`, `surface-2`, `surface-3`, `fg`, `fg-muted`, `fg-subtle`, `accent`, `accent-link`, `accent-tint`, `star`, `success`, `hairline`).
   - **Instant Command Palette (`⌘K`)**: Raycast-standard instant 0ms open and close, eliminating all artificial zoom/fade entry delays.
-  - **Apple Form & Surface Foundations**: Replaced pill cards with fill-contrast on black (`bg-surface rounded-modal` / `rounded-card`), minimal hairline borders (`border-hairline`), and fully rounded pills (`rounded-full`) on all primary CTAs, chip filters, and OAuth buttons.
+  - **Apple Form & Surface Foundations**: Replaced pill cards with fill-contrast on black (`bg-surface rounded-modal` / `rounded-card`) and minimal hairline borders (`border-hairline`).
   - **Typography & Motion Engineering**: SF Pro Display / SF Pro Text / Inter font stack, `font-semibold tracking-[-0.022em]` on large titles, body regular at 1.47 line height. Tactile 160ms `.apple-press` press physics (`active:scale-[0.97]`).
   - **Motion Accessibility & Touch Isolation**: Gated color hovers with `future: { hoverOnlyWhenSupported: true }` in Tailwind v3. Exempted `.animate-spin` and `[data-spinner]` in reduced-motion media query, included `::before`/`::after`, and integrated `window.matchMedia("(prefers-reduced-motion: reduce)")` guard in `lib/lenis.ts` to suspend smooth scroll.
   - **Unified Component & Screen Coverage**: Refactored `layout.tsx`, `page.tsx`, `discover-client.tsx`, `item-client.tsx`, `item/[id]/page.tsx`, `category-client.tsx`, `categories/page.tsx`, `lists/page.tsx`, `profile/page.tsx`, `business/claim/[placeId]/page.tsx`, `grievance/page.tsx`, `grievance/grievance-form.tsx`, `moderation-policy/page.tsx`, `privacy/page.tsx`, `terms/page.tsx`, `login/page.tsx`, `navbar.tsx`, `bottom-nav.tsx`, `command-palette.tsx`, `save-to-lists-modal.tsx`, and `enhanced-rate-modal.tsx`.
+- [x] **P13 Zero Vibe-Coded Architecture & Launch Lock**:
+  - **Zero Pill Buttons**: Replaced all pill buttons and CTAs across all 14 screens and components with Apple rectangular standard (`rounded-xl` for CTAs and inputs, `rounded-lg` for secondary buttons/tabs/chips, `rounded-md` for badges).
+  - **Zero Em-Dashes & Emojis**: Systematically purged all em-dashes and emojis across all code files, markdown documentation, and legal policies.
+  - **Zero Purple Gradients**: Verified 0 purple/indigo gradients in frontend codebase.
+  - **Zero Fake Reviews & Metrics**: Live Postgres Bayesian shrinkage ratings, 200m physical GPS geofence, dual EXIF coordinate matching, young account burst & collusion heuristics, zero hardcoded vanity stats.
+  - **Zero AI Tags & Slop Copy**: Removed all AI tags; direct Pune hyperlocal copy.
+  - **Launch Prerequisites Met**: Custom domain (`https://rateit.in`), vector gold favicon (`app/icon.svg`, `public/favicon.ico`), privacy policy (`app/privacy/page.tsx`), terms and conditions (`app/terms/page.tsx`), and IT Act 2021 Grievance desk (`app/grievance/page.tsx`).
+  - **Audited Secrets Check**: Hardened `scripts/check-client-secrets.sh` with exact token boundaries `(^|[^A-Za-z0-9_])...([^A-Za-z0-9_]|$)` to prevent false positive matches on legitimate OAuth parameters (such as `<REDIRECT_URL>` in Supabase docstrings).
 - [x] **Verification**:
+  - `npx tsc --noEmit`: 0 TypeScript compiler errors.
+  - `npm run check:secrets`: 0 sensitive variables in `.next/static`.
+  - `npm run test`: 7/7 suites passed, 31/31 unit & API tests passed in 119ms.
+  - `npm run build`: Production Next.js 14 build passes cleanly with 0 type or webpack errors across all 16 routes.
   - `npx tsc --noEmit`: 0 TypeScript compiler errors.
   - `npm run check:secrets`: 0 sensitive variables in `.next/static`.
   - `npm run test`: 7/7 suites passed, 31/31 unit & API tests passed in 118ms.

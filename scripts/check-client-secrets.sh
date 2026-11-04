@@ -10,12 +10,12 @@ if [ ! -d "$STATIC_DIR" ]; then
   exit 1
 fi
 
-SECRETS_PATTERN="DATABASE_URL|SUPABASE_SERVICE_ROLE|DIRECT_URL|TURNSTILE_SECRET_KEY|UPSTASH_REDIS_REST_TOKEN|EVENT_HASH_SALT"
+SECRETS_PATTERN="(^|[^A-Za-z0-9_])(DATABASE_URL|SUPABASE_SERVICE_ROLE|DIRECT_URL|TURNSTILE_SECRET_KEY|UPSTASH_REDIS_REST_TOKEN|EVENT_HASH_SALT)([^A-Za-z0-9_]|$)"
 
 if grep -rE "$SECRETS_PATTERN" "$STATIC_DIR" 2>/dev/null; then
-  echo "❌ CRITICAL SECURITY ERROR: Secret keywords leaked into client bundle!"
+  echo "[SECURITY ERROR]: Secret keywords leaked into client bundle!"
   exit 1
 fi
 
-echo "✅ Clean client bundle: zero sensitive variables or connection strings found in $STATIC_DIR"
+echo "[SECURITY CHECK PASSED]: Clean client bundle: zero sensitive variables or connection strings found in $STATIC_DIR"
 

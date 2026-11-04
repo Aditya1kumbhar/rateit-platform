@@ -311,7 +311,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                 type="button"
                 onClick={goBack}
                 aria-label="Previous step"
-                className="p-2 hover:bg-surface-2 rounded-full transition-colors text-fg-subtle hover:text-fg apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
+                className="p-2 hover:bg-surface-2 rounded-lg transition-colors text-fg-subtle hover:text-fg apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
@@ -327,7 +327,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="p-2 hover:bg-surface-2 rounded-full transition-colors text-fg-subtle hover:text-fg apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
+            className="p-2 hover:bg-surface-2 rounded-lg transition-colors text-fg-subtle hover:text-fg apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
           >
             <X className="h-5 w-5" />
           </button>
@@ -352,7 +352,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   placeholder="Search coaching class, PG, café on FC Road or Kothrud..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-surface-2 border border-hairline rounded-full text-fg placeholder:text-fg-subtle focus:border-accent-link focus:outline-none text-sm apple-focus"
+                  className="w-full pl-10 pr-4 py-2.5 bg-surface-2 border border-hairline rounded-xl text-fg placeholder:text-fg-subtle focus:border-accent-link focus:outline-none text-sm apple-focus"
                 />
               </div>
 
@@ -372,7 +372,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   >
                     <div className="font-semibold text-fg text-sm">{place.name}</div>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-[10px] px-2.5 py-0.5 bg-accent-tint text-accent-link border border-accent-link/20 rounded-full font-medium">
+                      <span className="text-[10px] px-2.5 py-0.5 bg-accent-tint text-accent-link border border-accent-link/20 rounded-md font-medium">
                         {categoryLabels[place.category] || place.category}
                       </span>
                       <span className="text-xs text-fg-subtle truncate">{place.address}</span>
@@ -395,7 +395,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
           {currentStep === "checkin" && selectedPlace && (
             <div className="space-y-6">
               <div className="text-center space-y-2">
-                <div className="w-14 h-14 bg-accent-tint border border-accent-link/20 text-accent-link rounded-full flex items-center justify-center mx-auto">
+                <div className="w-14 h-14 bg-accent-tint border border-accent-link/20 text-accent-link rounded-xl flex items-center justify-center mx-auto">
                   <MapPin className="h-7 w-7" />
                 </div>
                 <h3 className="font-semibold text-fg text-lg">{selectedPlace.name}</h3>
@@ -409,7 +409,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   <Button
                     onClick={handleCheckin}
                     disabled={isLocating}
-                    className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-full font-semibold apple-press apple-focus"
+                    className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-xl font-semibold apple-press apple-focus"
                   >
                     {isLocating ? (
                       <>
@@ -443,7 +443,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   </p>
                   <Button
                     onClick={goNext}
-                    className="w-full mt-3 bg-accent hover:bg-accent-hover text-white py-2.5 rounded-full font-semibold apple-press apple-focus"
+                    className="w-full mt-3 bg-accent hover:bg-accent-hover text-white py-2.5 rounded-xl font-semibold apple-press apple-focus"
                   >
                     Proceed to Rating &rarr;
                   </Button>
@@ -459,7 +459,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   </p>
                   <Button
                     onClick={goNext}
-                    className="w-full mt-3 bg-accent hover:bg-accent-hover text-white py-2.5 rounded-full font-semibold apple-press apple-focus"
+                    className="w-full mt-3 bg-accent hover:bg-accent-hover text-white py-2.5 rounded-xl font-semibold apple-press apple-focus"
                   >
                     Continue to Rating &rarr;
                   </Button>
@@ -476,7 +476,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                       onClick={handleCheckin}
                       variant="outline"
                       size="sm"
-                      className="flex-1 border-hairline text-fg rounded-full apple-focus"
+                      className="flex-1 border-hairline text-fg rounded-xl apple-focus"
                     >
                       Retry GPS
                     </Button>
@@ -486,7 +486,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                         goNext()
                       }}
                       size="sm"
-                      className="flex-1 bg-accent hover:bg-accent-hover text-white font-semibold rounded-full apple-focus"
+                      className="flex-1 bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl apple-focus"
                     >
                       Skip & Rate
                     </Button>
@@ -546,7 +546,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                 <Button
                   onClick={handleBlindRatingSubmit}
                   disabled={rating === 0}
-                  className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-full font-semibold disabled:opacity-40 apple-press apple-focus"
+                  className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-xl font-semibold disabled:opacity-40 apple-press apple-focus"
                 >
                   Lock In My Blind Rating
                 </Button>
@@ -565,7 +565,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   </div>
                   <Button
                     onClick={goNext}
-                    className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-full font-semibold apple-press apple-focus"
+                    className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-xl font-semibold apple-press apple-focus"
                   >
                     Add Review Details &rarr;
                   </Button>
@@ -604,7 +604,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                       key={tag}
                       type="button"
                       onClick={() => toggleTag(tag)}
-                      className={`px-3 py-1 rounded-full text-xs font-medium transition-colors apple-press apple-focus ${
+                      className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors apple-press apple-focus ${
                         selectedTags.includes(tag)
                           ? "bg-accent text-white font-semibold"
                           : "bg-surface-2 text-fg-muted hover:text-fg border border-hairline"
@@ -666,7 +666,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                       key={vis}
                       type="button"
                       onClick={() => setVisibility(vis)}
-                      className={`flex-1 py-2 px-3 rounded-full text-xs font-semibold transition-colors apple-focus ${
+                      className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold transition-colors apple-focus ${
                         visibility === vis
                           ? "bg-accent text-white font-semibold"
                           : "bg-surface-2 text-fg-muted hover:text-fg border border-hairline"
@@ -680,7 +680,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
 
               <Button
                 onClick={goNext}
-                className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-full font-semibold apple-press apple-focus"
+                className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-xl font-semibold apple-press apple-focus"
               >
                 Review & Confirm &rarr;
               </Button>
@@ -744,7 +744,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
               <Button
                 onClick={handleSubmit}
                 disabled={!consentChecked || isSubmitting}
-                className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-full font-semibold disabled:opacity-40 apple-press apple-focus shadow-lg shadow-accent/20"
+                className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-xl font-semibold disabled:opacity-40 apple-press apple-focus shadow-lg shadow-accent/20"
               >
                 {isSubmitting ? (
                   <>

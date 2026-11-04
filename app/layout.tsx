@@ -55,7 +55,7 @@ export default function RootLayout({
               <div className="container mx-auto px-4 py-8">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-fg-subtle">
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-accent-tint text-accent-link flex items-center justify-center font-semibold text-xs">
+                    <div className="w-6 h-6 rounded-md bg-accent-tint text-accent-link flex items-center justify-center font-semibold text-xs">
                       R
                     </div>
                     <span className="font-semibold text-fg">RateIT Pune</span>

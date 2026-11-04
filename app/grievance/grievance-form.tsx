@@ -71,7 +71,7 @@ export function GrievanceForm() {
             setSubmittedRef(null)
             setDescription("")
           }}
-          className="mt-2 text-xs rounded-full border-hairline text-fg hover:bg-surface-2"
+          className="mt-2 text-xs rounded-lg border-hairline text-fg hover:bg-surface-2"
         >
           Submit another inquiry
         </Button>
@@ -165,7 +165,7 @@ export function GrievanceForm() {
       <Button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-accent hover:bg-accent-hover text-white rounded-full py-3 font-semibold text-xs apple-press min-h-[44px]"
+        className="w-full bg-accent hover:bg-accent-hover text-white rounded-xl py-3 font-semibold text-xs apple-press min-h-[44px]"
       >
         {isSubmitting ? (
           <>

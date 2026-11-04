@@ -88,7 +88,7 @@ export default function ProfilePage() {
   const handleShareProfile = () => {
     if (navigator.share) {
       navigator.share({
-        title: `${profile?.displayName || "Reviewer"} — RateIT Pune Profile`,
+        title: `${profile?.displayName || "Reviewer"}: RateIT Pune Profile`,
         text: `Check out verified Pune reviews by ${profile?.displayName || "this reviewer"}.`,
         url: window.location.href,
       }).catch(() => {})
@@ -207,7 +207,7 @@ export default function ProfilePage() {
               className="relative group cursor-pointer apple-press"
               onClick={() => setShowEditModal(true)}
             >
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-hairline shadow-xl overflow-hidden bg-surface-2 flex items-center justify-center">
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border border-hairline shadow-xl overflow-hidden bg-surface-2 flex items-center justify-center">
                 {profile?.avatarUrl ? (
                   <img
                     src={profile.avatarUrl}
@@ -220,7 +220,7 @@ export default function ProfilePage() {
                   </span>
                 )}
               </div>
-              <div className="absolute bottom-0 right-0 bg-accent text-white p-2 rounded-full shadow-lg">
+              <div className="absolute bottom-0 right-0 bg-accent text-white p-2 rounded-lg shadow-lg">
                 <Camera className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -231,11 +231,11 @@ export default function ProfilePage() {
                 <h1 className="text-2xl sm:text-3xl font-semibold text-fg tracking-[-0.022em]">
                   {profile?.displayName || "RateIT User"}
                 </h1>
-                <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${trustTier.color}`}>
+                <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-md border ${trustTier.color}`}>
                   {trustTier.label}
                 </span>
                 {profile?.phoneVerified && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-success bg-success/10 px-2.5 py-0.5 rounded-full border border-success/20">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-success bg-success/10 px-2.5 py-0.5 rounded-md border border-success/20">
                     <ShieldCheck className="w-3 h-3" /> Phone Verified
                   </span>
                 )}
@@ -270,21 +270,21 @@ export default function ProfilePage() {
           <div className="flex flex-wrap md:flex-col items-center gap-2.5 w-full md:w-auto">
             <button
               onClick={() => setShowEditModal(true)}
-              className="flex-1 md:flex-initial px-4 py-2 rounded-full bg-surface-2 hover:bg-surface-3 border border-hairline text-xs font-semibold text-fg flex items-center justify-center gap-2 transition-colors apple-press apple-focus"
+              className="flex-1 md:flex-initial px-4 py-2 rounded-lg bg-surface-2 hover:bg-surface-3 border border-hairline text-xs font-semibold text-fg flex items-center justify-center gap-2 transition-colors apple-press apple-focus"
             >
               <Edit3 className="w-3.5 h-3.5 text-accent-link" />
               <span>Edit Profile</span>
             </button>
             <button
               onClick={handleShareProfile}
-              className="flex-1 md:flex-initial px-4 py-2 rounded-full bg-surface-2 hover:bg-surface-3 border border-hairline text-xs font-semibold text-fg flex items-center justify-center gap-2 transition-colors apple-press apple-focus"
+              className="flex-1 md:flex-initial px-4 py-2 rounded-lg bg-surface-2 hover:bg-surface-3 border border-hairline text-xs font-semibold text-fg flex items-center justify-center gap-2 transition-colors apple-press apple-focus"
             >
               <Share2 className="w-3.5 h-3.5" />
               <span>Share</span>
             </button>
             <button
               onClick={handleLogout}
-              className="flex-1 md:flex-initial px-4 py-2 rounded-full bg-surface-2 hover:bg-danger/10 border border-hairline hover:border-danger/30 text-xs font-semibold text-fg-subtle hover:text-danger flex items-center justify-center gap-2 transition-colors apple-press apple-focus"
+              className="flex-1 md:flex-initial px-4 py-2 rounded-lg bg-surface-2 hover:bg-danger/10 border border-hairline hover:border-danger/30 text-xs font-semibold text-fg-subtle hover:text-danger flex items-center justify-center gap-2 transition-colors apple-press apple-focus"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Sign Out</span>
@@ -298,7 +298,7 @@ export default function ProfilePage() {
         <div className="flex items-center gap-2 border-b border-hairline pb-3 text-xs font-semibold">
           <button
             onClick={() => setActiveTab("grid")}
-            className={`px-4 py-1.5 rounded-full transition-colors apple-focus ${
+            className={`px-3.5 py-1.5 rounded-lg transition-colors apple-focus ${
               activeTab === "grid"
                 ? "bg-accent text-white font-semibold shadow-sm shadow-accent/20"
                 : "text-fg-muted hover:text-fg hover:bg-surface-2"
@@ -308,7 +308,7 @@ export default function ProfilePage() {
           </button>
           <button
             onClick={() => setActiveTab("saved")}
-            className={`px-4 py-1.5 rounded-full transition-colors apple-focus ${
+            className={`px-3.5 py-1.5 rounded-lg transition-colors apple-focus ${
               activeTab === "saved"
                 ? "bg-accent text-white font-semibold shadow-sm shadow-accent/20"
                 : "text-fg-muted hover:text-fg hover:bg-surface-2"
@@ -318,7 +318,7 @@ export default function ProfilePage() {
           </button>
           <button
             onClick={() => setActiveTab("badges")}
-            className={`px-4 py-1.5 rounded-full transition-colors apple-focus ${
+            className={`px-3.5 py-1.5 rounded-lg transition-colors apple-focus ${
               activeTab === "badges"
                 ? "bg-accent text-white font-semibold shadow-sm shadow-accent/20"
                 : "text-fg-muted hover:text-fg hover:bg-surface-2"
@@ -374,7 +374,7 @@ export default function ProfilePage() {
                 </p>
                 <Button
                   onClick={() => openRateModal()}
-                  className="bg-accent hover:bg-accent-hover text-white font-semibold rounded-full text-xs px-5 py-2 apple-press apple-focus"
+                  className="bg-accent hover:bg-accent-hover text-white font-semibold rounded-lg text-xs px-5 py-2 apple-press apple-focus"
                 >
                   Write First Review
                 </Button>
@@ -432,7 +432,7 @@ export default function ProfilePage() {
             <div className="p-6 rounded-card bg-surface space-y-4 border-0 shadow-sm">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-accent-tint text-accent-link flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-accent-tint text-accent-link flex items-center justify-center">
                     <ShieldCheck className="w-6 h-6" />
                   </div>
                   <div>
@@ -448,9 +448,9 @@ export default function ProfilePage() {
               </div>
 
               {/* Progress Bar */}
-              <div className="w-full bg-surface-2 rounded-full h-2.5 overflow-hidden">
+              <div className="w-full bg-surface-2 rounded-lg h-2.5 overflow-hidden">
                 <div
-                  className="h-full bg-accent transition-transform duration-500 rounded-full"
+                  className="h-full bg-accent transition-transform duration-500 rounded-lg"
                   style={{ width: `${Math.min(100, Math.max(0, trustScore))}%` }}
                 />
               </div>
@@ -485,7 +485,7 @@ export default function ProfilePage() {
                 size="sm"
                 onClick={handleDeletePersonalData}
                 disabled={isDeletingData}
-                className="mt-2 text-xs font-semibold rounded-full bg-danger hover:bg-danger/90 apple-press apple-focus"
+                className="mt-2 text-xs font-semibold rounded-lg bg-danger hover:bg-danger/90 apple-press apple-focus"
               >
                 <Trash2 className="w-3.5 h-3.5 mr-2" />
                 {isDeletingData ? "Erasing Data..." : "Withdraw Consent & Erase My Personal Data"}
@@ -503,7 +503,7 @@ export default function ProfilePage() {
               <h3 className="text-base font-semibold text-fg">Edit Profile</h3>
               <button
                 onClick={() => setShowEditModal(false)}
-                className="p-1.5 rounded-full text-fg-subtle hover:text-fg hover:bg-surface-2 transition-colors apple-focus"
+                className="p-1.5 rounded-lg text-fg-subtle hover:text-fg hover:bg-surface-2 transition-colors apple-focus"
                 aria-label="Close dialog"
               >
                 <X className="w-5 h-5" />
@@ -548,14 +548,14 @@ export default function ProfilePage() {
                 <button
                   type="button"
                   onClick={() => setShowEditModal(false)}
-                  className="text-fg-subtle hover:text-fg text-xs px-3.5 py-1.5 rounded-full transition-colors apple-focus"
+                  className="text-fg-subtle hover:text-fg text-xs px-3.5 py-1.5 rounded-lg transition-colors apple-focus"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSaving || !editName.trim()}
-                  className="bg-accent hover:bg-accent-hover text-white font-semibold text-xs rounded-full px-5 py-2 shadow-md shadow-accent/20 apple-press apple-focus disabled:opacity-50"
+                  className="bg-accent hover:bg-accent-hover text-white font-semibold text-xs rounded-lg px-5 py-2 shadow-md shadow-accent/20 apple-press apple-focus disabled:opacity-50"
                 >
                   {isSaving ? "Saving..." : "Save Changes"}
                 </button>
