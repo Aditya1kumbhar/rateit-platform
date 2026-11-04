@@ -6,29 +6,43 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({
-            request,
-          })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-  // Refresh auth tokens if expired - do not add logic between createServerClient and getUser
-  await supabase.auth.getUser()
+  // If Supabase environment variables are missing (e.g. on Vercel preview or before config),
+  // do not crash the routing middleware. Pass through cleanly.
+  if (!supabaseUrl || !supabaseKey) {
+    return supabaseResponse
+  }
+
+  try {
+    const supabase = createServerClient(
+      supabaseUrl,
+      supabaseKey,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll()
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+            supabaseResponse = NextResponse.next({
+              request,
+            })
+            cookiesToSet.forEach(({ name, value, options }) =>
+              supabaseResponse.cookies.set(name, value, options)
+            )
+          },
+        },
+      }
+    )
+
+    // Refresh auth tokens if expired - do not add logic between createServerClient and getUser
+    await supabase.auth.getUser()
+  } catch (error) {
+    // Prevent unhandled rejection in edge middleware from crashing the site
+    console.warn("Middleware Supabase updateSession non-fatal error:", error)
+  }
 
   return supabaseResponse
 }

@@ -166,6 +166,11 @@
   - **Light Segmented Control Thumb**: Styled `.glass-thumb` with subtle light-charcoal pill tint (`rgb(0 0 0 / 0.06)`) and specular top white highlight for crisp active tab contrast.
   - **Light Modal Scrims**: Updated modal and command palette overlays from harsh `bg-black/40` to Apple light mode `bg-stone-900/25 backdrop-blur-[2px]`.
   - **Clean Verification**: TypeScript check 0 errors, Vitest 31/31 passing, production Next.js 14 build 14/14 routes clean in 7.9s, clean client secret scan, dev server live on `http://localhost:3000`.
+- [x] **P18 Resilient Edge Middleware & Supabase Fallback Hardening**:
+  - **Middleware Exception Guard**: Wrapped root `middleware.ts` in defensive `try/catch` with fallback to `NextResponse.next({ request })` to eliminate `MIDDLEWARE_INVOCATION_FAILED` ("This page is unavailable") on edge routers.
+  - **Supabase Env Guard**: Added strict presence checks on `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `lib/supabase/middleware.ts`, `lib/supabase/client.ts`, and `lib/supabase/server.ts` to prevent missing production keys from crashing server requests.
+  - **Verification**: `npx tsc --noEmit` (0 errors), `npm run test` (31/31 passed), `npm run build` (14/14 static and dynamic routes compiled).
+
 
 
 
