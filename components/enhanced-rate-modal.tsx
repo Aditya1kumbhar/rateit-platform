@@ -284,7 +284,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
 
   if (isAuthenticated === null) {
     return (
-      <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+      <div className="fixed inset-0 bg-stone-900/25 backdrop-blur-[2px] flex items-center justify-center z-50 p-4">
         <div className="glass rounded-[28px] w-full max-w-sm p-8 flex flex-col items-center justify-center text-fg animate-in fade-in-0 zoom-in-[0.96] duration-200 ease-out origin-center">
           <Loader2 className="h-8 w-8 text-accent-link animate-spin mb-4" />
           <p className="text-sm font-medium text-fg-muted">Checking authentication...</p>
@@ -300,7 +300,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
-      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-stone-900/25 backdrop-blur-[2px] flex items-center justify-center z-50 p-4"
     >
       <div className="glass rounded-[28px] w-full max-w-lg max-h-[90vh] overflow-y-auto relative text-fg animate-in fade-in-0 zoom-in-[0.96] duration-200 ease-out origin-center">
         {/* Header */}

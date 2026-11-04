@@ -51,7 +51,7 @@ export function BottomNav({ onRateClick }: { onRateClick: () => void }) {
                   type="button"
                   onClick={item.action}
                   aria-label="Rate a place"
-                  className="relative -top-2.5 w-12 h-12 rounded-full bg-accent flex items-center justify-center border-2 border-surface glass-press min-h-[48px] min-w-[48px] apple-focus z-20"
+                  className="relative -top-2.5 w-12 h-12 rounded-full bg-accent flex items-center justify-center border-2 border-white shadow-sm glass-press min-h-[48px] min-w-[48px] apple-focus z-20"
                 >
                   <Plus className="w-5 h-5 stroke-[2.5] text-stone-950" />
                 </button>

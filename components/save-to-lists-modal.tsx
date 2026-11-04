@@ -177,7 +177,7 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
-      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-stone-900/25 backdrop-blur-[2px] flex items-center justify-center z-50 p-4"
     >
       <div className="glass rounded-[28px] w-full max-w-md max-h-[85vh] overflow-y-auto relative text-fg animate-in fade-in-0 zoom-in-[0.96] duration-200 ease-out origin-center">
         <div className="p-6 space-y-5">

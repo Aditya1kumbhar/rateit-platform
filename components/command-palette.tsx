@@ -151,7 +151,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/40"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-stone-900/25 backdrop-blur-[2px]"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
