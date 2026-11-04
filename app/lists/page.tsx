@@ -143,9 +143,9 @@ export default function ListsPage() {
 
         <button
           onClick={handleOpenCreateList}
-          className="self-start sm:self-auto inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus shrink-0 gap-2"
+          className="self-start sm:self-auto inline-flex items-center justify-center min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold shrink-0 gap-2"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 text-stone-950 stroke-[2.5]" />
           <span>Create New List</span>
         </button>
       </div>
@@ -207,8 +207,8 @@ export default function ListsPage() {
 
       {/* New List Modal */}
       {showNewListModal && (
-        <div className="fixed inset-0 bg-black/30 dark:bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
-          <div className="bg-surface border border-hairline/[0.08] rounded-[28px] shadow-[0_24px_70px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.6)] w-full max-w-md p-6 relative space-y-5 text-fg">
+        <div className="fixed inset-0 bg-black/25 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="bg-surface border border-hairline/[0.08] rounded-[28px] shadow-[0_24px_70px_rgba(0,0,0,0.12)] w-full max-w-md p-6 relative space-y-5 text-fg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="w-9 h-9 rounded-full bg-accent-link/[0.12] text-accent-link flex items-center justify-center">
@@ -253,9 +253,9 @@ export default function ListsPage() {
                   <button
                     type="button"
                     onClick={() => setIsPrivate(false)}
-                    className={`flex-1 h-9 px-4 rounded-full text-[12px] font-medium transition-colors flex items-center justify-center gap-1.5 apple-press apple-focus ${
+                    className={`flex-1 h-9 px-4 rounded-full text-[12px] font-semibold transition-colors flex items-center justify-center gap-1.5 apple-press apple-focus ${
                       !isPrivate
-                        ? "bg-accent text-white"
+                        ? "bg-accent text-stone-950 shadow-sm"
                         : "bg-surface-2 text-fg-muted hover:text-fg"
                     }`}
                   >
@@ -265,9 +265,9 @@ export default function ListsPage() {
                   <button
                     type="button"
                     onClick={() => setIsPrivate(true)}
-                    className={`flex-1 h-9 px-4 rounded-full text-[12px] font-medium transition-colors flex items-center justify-center gap-1.5 apple-press apple-focus ${
+                    className={`flex-1 h-9 px-4 rounded-full text-[12px] font-semibold transition-colors flex items-center justify-center gap-1.5 apple-press apple-focus ${
                       isPrivate
-                        ? "bg-accent text-white"
+                        ? "bg-accent text-stone-950 shadow-sm"
                         : "bg-surface-2 text-fg-muted hover:text-fg"
                     }`}
                   >
@@ -288,7 +288,7 @@ export default function ListsPage() {
                 <button
                   type="submit"
                   disabled={isCreating || !listName.trim()}
-                  className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus disabled:opacity-50"
+                  className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold disabled:opacity-50"
                 >
                   {isCreating ? "Creating..." : "Create Collection"}
                 </button>

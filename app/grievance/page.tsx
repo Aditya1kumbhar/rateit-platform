@@ -135,7 +135,7 @@ export default function GrievancePage() {
                 key={item.step}
                 className="p-4 rounded-card bg-surface flex items-start gap-4"
               >
-                <div className="w-8 h-8 rounded-lg bg-accent text-white font-semibold text-xs flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-accent text-stone-950 font-bold text-xs flex items-center justify-center shrink-0 shadow-sm">
                   {item.step}
                 </div>
                 <div className="flex-1 space-y-1">

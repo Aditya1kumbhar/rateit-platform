@@ -220,7 +220,7 @@ export default function ProfilePage() {
                   </span>
                 )}
               </div>
-              <div className="absolute bottom-0 right-0 bg-accent text-white p-2 rounded-full">
+              <div className="absolute bottom-0 right-0 bg-accent text-stone-950 p-2 rounded-full shadow-sm">
                 <Camera className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -298,9 +298,9 @@ export default function ProfilePage() {
         <div className="flex items-center gap-2 border-b border-hairline/[0.08] pb-3 text-xs font-semibold">
           <button
             onClick={() => setActiveTab("grid")}
-            className={`h-9 px-4 rounded-full text-[12px] font-medium transition-colors apple-focus ${
+            className={`h-9 px-4 rounded-full text-[12px] font-semibold transition-colors apple-focus ${
               activeTab === "grid"
-                ? "bg-accent text-white"
+                ? "bg-accent text-stone-950 shadow-sm"
                 : "bg-surface-2 text-fg-muted hover:text-fg"
             }`}
           >
@@ -308,9 +308,9 @@ export default function ProfilePage() {
           </button>
           <button
             onClick={() => setActiveTab("saved")}
-            className={`h-9 px-4 rounded-full text-[12px] font-medium transition-colors apple-focus ${
+            className={`h-9 px-4 rounded-full text-[12px] font-semibold transition-colors apple-focus ${
               activeTab === "saved"
-                ? "bg-accent text-white"
+                ? "bg-accent text-stone-950 shadow-sm"
                 : "bg-surface-2 text-fg-muted hover:text-fg"
             }`}
           >
@@ -318,9 +318,9 @@ export default function ProfilePage() {
           </button>
           <button
             onClick={() => setActiveTab("badges")}
-            className={`h-9 px-4 rounded-full text-[12px] font-medium transition-colors apple-focus ${
+            className={`h-9 px-4 rounded-full text-[12px] font-semibold transition-colors apple-focus ${
               activeTab === "badges"
-                ? "bg-accent text-white"
+                ? "bg-accent text-stone-950 shadow-sm"
                 : "bg-surface-2 text-fg-muted hover:text-fg"
             }`}
           >
@@ -374,7 +374,7 @@ export default function ProfilePage() {
                 </p>
                 <Button
                   onClick={() => openRateModal()}
-                  className="mt-2 inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus cursor-pointer"
+                  className="mt-2 inline-flex items-center justify-center min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold cursor-pointer"
                 >
                   Write First Review
                 </Button>
@@ -496,8 +496,8 @@ export default function ProfilePage() {
 
       {/* Edit Profile Modal */}
       {showEditModal && (
-        <div className="fixed inset-0 bg-black/30 dark:bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
-          <div className="bg-surface border border-hairline/[0.08] rounded-[28px] shadow-[0_24px_70px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.6)] w-full max-w-md p-6 relative space-y-5 text-fg">
+        <div className="fixed inset-0 bg-black/25 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="bg-surface border border-hairline/[0.08] rounded-[28px] shadow-[0_24px_70px_rgba(0,0,0,0.12)] w-full max-w-md p-6 relative space-y-5 text-fg">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-semibold text-fg">Edit Profile</h3>
               <button
@@ -554,7 +554,7 @@ export default function ProfilePage() {
                 <button
                   type="submit"
                   disabled={isSaving || !editName.trim()}
-                  className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus disabled:opacity-50"
+                  className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold disabled:opacity-50"
                 >
                   {isSaving ? "Saving..." : "Save Changes"}
                 </button>

@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    /* Apple MacBook Pro Light Hardware Theme (Default) */
+    /* Apple MacBook Pro Light Hardware Theme */
     --bg: 255 255 255;
     --bg-alt: 245 245 247;
     --surface: 245 245 247;
@@ -18,12 +18,13 @@
     --hairline: 0 0 0;
     --hairline-border: rgba(0, 0, 0, 0.08);
 
-    --accent: 0 113 227;
-    --accent-hover: 0 119 237;
-    --accent-link: 0 102 204;
+    /* Star Yellow Primary Palette */
+    --accent: 245 166 35;
+    --accent-hover: 235 152 20;
+    --accent-link: 180 115 0;
 
     --success: 40 167 69;
-    --warning: 255 149 0;
+    --warning: 245 166 35;
     --danger: 255 59 48;
     --star: 245 166 35;
 
@@ -52,60 +53,15 @@
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 211 100% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 38 92% 50%;
+    --primary-foreground: 24 24 27;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 211 100% 50%;
-  }
-
-  .dark, [data-theme="dark"] {
-    /* Apple Hardware Pro Dark Universe */
-    --bg: 0 0 0;
-    --bg-alt: 10 10 11;
-    --surface: 22 22 23;
-    --surface-2: 29 29 31;
-    --surface-3: 42 42 45;
-
-    --fg: 245 245 247;
-    --fg-muted: 161 161 166;
-    --fg-subtle: 134 134 139;
-
-    --hairline: 255 255 255;
-    --hairline-border: rgba(255, 255, 255, 0.08);
-
-    --accent: 0 113 227;
-    --accent-hover: 0 119 237;
-    --accent-link: 41 151 255;
-
-    --success: 48 209 88;
-    --warning: 255 159 10;
-    --danger: 255 69 58;
-    --star: 245 166 35;
-
-    --glass: rgba(22, 22, 23, 0.72);
-    --shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.65);
-    --shadow-dock: 0 16px 40px rgba(0, 0, 0, 0.7);
-
-    --background: 0 0% 0%;
-    --foreground: 240 5% 96%;
-    --card: 240 2% 9%;
-    --card-foreground: 240 5% 96%;
-    --popover: 240 2% 9%;
-    --popover-foreground: 240 5% 96%;
-    --primary: 211 100% 50%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 240 2% 12%;
-    --secondary-foreground: 240 5% 96%;
-    --muted: 240 2% 14%;
-    --muted-foreground: 240 2% 54%;
-    --border: 240 3% 14%;
-    --input: 240 3% 14%;
-    --ring: 211 100% 58%;
+    --ring: 38 92% 50%;
   }
 }
 
@@ -119,9 +75,6 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     background-color: rgb(var(--bg));
-  }
-  html.dark, html[data-theme="dark"] {
-    color-scheme: dark;
   }
   body {
     @apply bg-canvas text-fg antialiased;
@@ -137,27 +90,30 @@
   }
 }
 
-/* Universal Accessible Focus Ring (Works in both Dark and Light) */
+/* Universal Accessible Focus Ring */
 .apple-focus {
   @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-link focus-visible:ring-offset-2 focus-visible:ring-offset-canvas;
 }
 
 /* Apple WWDC Fluid Press Feedback (160ms ease-out) */
 .apple-press {
-  transition: transform var(--dur-press) var(--ease-out);
+  transition: transform var(--dur-press) var(--ease-out), filter var(--dur-press) var(--ease-out);
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 .apple-press:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
+  filter: brightness(0.95);
 }
 
-/* Translucent Glass Navigation Surfaces (Navbar, bottom nav, filter bar) */
+/* Apple iOS 27.2 / Fluid Liquid Glass Effects */
 .glass,
 .liquid-glass {
-  background: rgb(var(--surface) / 0.7);
-  backdrop-filter: saturate(150%) blur(24px);
-  -webkit-backdrop-filter: saturate(150%) blur(24px);
-  border-bottom: 1px solid rgb(var(--hairline) / 0.08);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02);
 }
 @supports not (backdrop-filter: blur(1px)) {
   .glass,
@@ -166,7 +122,47 @@
   }
 }
 
-/* Minimalist Apple Bento Surfaces (Fill contrast over heavy borders) */
+.liquid-glass-btn {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 100%), rgb(var(--accent));
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.12),
+    0 4px 14px -2px rgba(245, 166, 35, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #0c0a09;
+  font-weight: 600;
+  transition: transform var(--dur-press) var(--ease-out), filter var(--dur-press) var(--ease-out), box-shadow var(--dur-press) var(--ease-out);
+  touch-action: manipulation;
+}
+.liquid-glass-btn:hover {
+  filter: brightness(1.04);
+  box-shadow: 
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.12),
+    0 6px 20px -2px rgba(245, 166, 35, 0.5);
+}
+.liquid-glass-btn:active {
+  transform: scale(0.96);
+  filter: brightness(0.93);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(0, 0, 0, 0.15),
+    0 2px 6px -1px rgba(245, 166, 35, 0.25);
+}
+
+.liquid-glass-surface {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.8),
+    0 8px 32px -4px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+/* Minimalist Apple Bento Surfaces */
 .surface-card {
   background-color: rgb(var(--surface));
   border-radius: var(--radius-card);
@@ -175,6 +171,48 @@
 @media (hover: hover) and (pointer: fine) {
   .surface-card:hover {
     background-color: rgb(var(--surface-2));
+  }
+}
+
+.surface-modal {
+  background-color: rgb(var(--surface));
+  border: 1px solid rgb(var(--hairline) / 0.08);
+  border-radius: var(--radius-modal);
+  box-shadow: var(--shadow-modal);
+}
+
+/* Minimum 44x44px Click Target */
+.touch-target-44 {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Mobile Safe Area Insets */
+.pb-safe {
+  padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+}
+.pt-safe {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+/* Scrollbar Cleanliness */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Reduced Motion with Spinner Exemption */
+@media (prefers-reduced-motion: reduce) {
+  *:not(.animate-spin):not([data-spinner]),
+  *:not(.animate-spin):not([data-spinner])::before,
+  *:not(.animate-spin):not([data-spinner])::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

@@ -151,13 +151,13 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/30 dark:bg-black/80 backdrop-blur-md"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/25 backdrop-blur-md"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
     >
       {/* 0ms instantaneous open per Emil Kowalski 100+/day keyboard standard */}
-      <div className="w-full max-w-xl rounded-[22px] bg-surface border border-hairline/[0.08] shadow-[0_24px_70px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col text-fg">
+      <div className="w-full max-w-xl rounded-[22px] bg-surface border border-hairline/[0.08] shadow-[0_24px_70px_rgba(0,0,0,0.12)] overflow-hidden flex flex-col text-fg">
         {/* Search Input Bar */}
         <div className="relative flex items-center px-4 py-3.5 border-b border-hairline/[0.08]">
           <Search className="w-5 h-5 text-accent-link shrink-0 mr-3" />

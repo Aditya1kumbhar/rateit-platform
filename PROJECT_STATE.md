@@ -35,7 +35,7 @@
 - `discover/`: Server Component querying Prisma places with `discover-client.tsx` and live `/api/feed` integration.
 - `item/[id]/`: Place profile with live reviews, reviewer trust badges, business replies, and similar places cards with `item-client.tsx`.
 - `grievance/`: Official Grievance Officer desk with `grievance-form.tsx`.
-- `privacy/`, `terms/`, `moderation-policy/`: Indian IT Act 2000 & 2021 compliance documents.
+- `terms/`: Indian IT Act 2000 & 2021 compliance document (Privacy & Moderation Policy removed per user direction).
 
 ### Core Logic & Libraries (`lib/`)
 - `personalization-config.ts`: Central configuration for all weights, decay rates, rate limits, Bayesian hyperparameters, and fraud thresholds.
@@ -146,5 +146,11 @@
   - `npm run check:secrets`: 0 sensitive variables in `.next/static`.
   - `npm run test`: 7/7 suites passed, 31/31 unit & API tests passed in 110ms.
   - `npm run build`: Production Next.js 14 build passes cleanly with 0 type or webpack errors across all 16 routes in 9s.
+- [x] **P15 Pure Apple MacBook Pro Light Theme, Rating Star Yellow Accent & Liquid Glass Lock**:
+  - **Complete Dark Theme Mode Purge**: Removed `.dark, [data-theme="dark"]` rules from `app/globals.css`, removed `darkMode: ["class"]` from `tailwind.config.ts`, removed theme toggle `<ThemeToggle />` component and deleted `components/theme-toggle.tsx`, removed theme script from `<head>` in `app/layout.tsx`. Pure Apple `#ffffff` canvas with `#f5f5f7` card surfaces.
+  - **Rating Star Yellow Accent Palette**: Swapped blue accent with rating star yellow (`rgb(245, 166, 35)` / `#f5a623`) across `--accent`, `--accent-hover` (`235 152 20`), and high-contrast amber `--accent-link` (`180 115 0`). All primary buttons updated with luxury dark text (`text-stone-950 font-semibold`) for 10:1+ contrast.
+  - **Apple iOS 27.2 Fluid Liquid Glass & Motion**: Added `.liquid-glass-btn` with specular top edge highlight, blur/saturation filters, `.apple-press` fluid 160ms click physics with brightness dip, and `.liquid-glass` navigation bars.
+  - **Full Deletion of Privacy & Trust/Moderation Policies**: Permanently deleted `app/privacy/page.tsx` and `app/moderation-policy/page.tsx` files, and removed all navigation and footer links across `app/layout.tsx`, `components/navbar.tsx`, and `app/login/page.tsx`.
+  - **Verification**: `npx tsc --noEmit` (0 errors), `npm run test` (31/31 passing), `npm run build` (14/14 routes generating cleanly), and live dev server returning 200 OK across all routes.
 
 

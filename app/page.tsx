@@ -188,9 +188,9 @@ function HomePageContent() {
               />
               <button
                 type="submit"
-                className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus gap-1.5"
+                className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold gap-1.5"
               >
-                <Search className="w-4 h-4" />
+                <Search className="w-4 h-4 stroke-[2.5]" />
                 <span>Search</span>
               </button>
             </div>
@@ -426,7 +426,7 @@ function HomePageContent() {
             </p>
             <Link
               href="/discover"
-              className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus"
+              className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold"
             >
               Explore Pune Venues
             </Link>

@@ -177,9 +177,9 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
-      className="fixed inset-0 bg-black/30 dark:bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black/25 backdrop-blur-md flex items-center justify-center z-50 p-4"
     >
-      <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-md max-h-[85vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.6)] relative text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
+      <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-md max-h-[85vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.12)] relative text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
         <div className="p-6 space-y-5">
           {/* Header */}
           <div className="flex items-center justify-between">
@@ -222,7 +222,7 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
                     <div
                       className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${
                         isSelected
-                          ? "bg-accent border-accent text-white"
+                          ? "bg-accent border-accent text-stone-950 font-bold"
                           : "border-hairline/[0.2] bg-surface-3"
                       }`}
                     >
@@ -277,7 +277,7 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
                     onClick={() => setNewListPrivacy("public")}
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       newListPrivacy === "public"
-                        ? "bg-accent text-white font-semibold"
+                        ? "bg-accent text-stone-950 font-semibold"
                         : "bg-surface-3 text-fg-muted hover:text-fg"
                     }`}
                   >
@@ -288,7 +288,7 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
                     onClick={() => setNewListPrivacy("private")}
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       newListPrivacy === "private"
-                        ? "bg-accent text-white font-semibold"
+                        ? "bg-accent text-stone-950 font-semibold"
                         : "bg-surface-3 text-fg-muted hover:text-fg"
                     }`}
                   >
@@ -307,7 +307,7 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
                     type="button"
                     onClick={handleCreateNewList}
                     disabled={isSubmitting || !newListName.trim()}
-                    className="bg-accent hover:bg-accent-hover text-white font-semibold text-xs px-4 py-1.5 rounded-full apple-press apple-focus disabled:opacity-50"
+                    className="liquid-glass-btn text-xs px-4 py-1.5 rounded-full disabled:opacity-50"
                   >
                     Create
                   </button>
@@ -329,7 +329,7 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
               type="button"
               onClick={handleSave}
               disabled={isSubmitting || selectedLists.length === 0}
-              className="min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white font-semibold text-xs transition-[background-color,transform] duration-150 apple-press apple-focus disabled:opacity-50"
+              className="min-h-[44px] px-6 rounded-full liquid-glass-btn text-xs font-semibold disabled:opacity-50"
             >
               Save to {selectedLists.length || ""} List{selectedLists.length === 1 ? "" : "s"}
             </button>

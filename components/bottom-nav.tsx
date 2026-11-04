@@ -17,7 +17,7 @@ export function BottomNav({ onRateClick }: { onRateClick: () => void }) {
 
   return (
     <div className="fixed bottom-[max(1rem,calc(env(safe-area-inset-bottom)+0.5rem))] inset-x-0 z-40 flex justify-center pointer-events-none md:hidden px-4 select-none">
-      <nav className="pointer-events-auto flex items-center justify-around gap-1 px-3 py-1.5 rounded-full bg-surface/80 backdrop-blur-xl backdrop-saturate-150 border border-hairline/[0.08] shadow-[0_12px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.7)] w-full max-w-sm">
+      <nav className="pointer-events-auto flex items-center justify-around gap-1 px-3 py-1.5 rounded-full bg-surface/85 backdrop-blur-2xl backdrop-saturate-180 border border-hairline/[0.08] shadow-[0_12px_32px_rgba(0,0,0,0.08)] w-full max-w-sm">
         {navItems.map((item, idx) => {
           if (item.isAction) {
             return (
@@ -25,9 +25,9 @@ export function BottomNav({ onRateClick }: { onRateClick: () => void }) {
                 key={idx}
                 onClick={item.action}
                 aria-label="Rate a place"
-                className="relative -top-2.5 w-12 h-12 rounded-full bg-accent hover:bg-accent-hover text-white flex items-center justify-center border-2 border-surface apple-press min-h-[48px] min-w-[48px] apple-focus"
+                className="relative -top-2.5 w-12 h-12 rounded-full liquid-glass-btn flex items-center justify-center border-2 border-surface apple-focus min-h-[48px] min-w-[48px]"
               >
-                <Plus className="w-5 h-5 stroke-[2.5]" />
+                <Plus className="w-5 h-5 stroke-[2.5] text-stone-950" />
               </button>
             )
           }

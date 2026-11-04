@@ -251,7 +251,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`h-9 px-4 rounded-full text-[12px] font-medium whitespace-nowrap transition-[background-color,color] duration-150 apple-press apple-focus inline-flex items-center justify-center ${
                   isSelected
-                    ? "bg-accent text-white"
+                    ? "bg-accent text-stone-950 font-semibold shadow-sm"
                     : "bg-surface-2 text-fg-muted hover:text-fg hover:bg-surface-3"
                 }`}
               >

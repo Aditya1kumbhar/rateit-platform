@@ -57,7 +57,7 @@ export default function BusinessClaimPage({ params }: { params: { placeId: strin
         </div>
 
         {/* Card */}
-        <div className="p-6 sm:p-8 rounded-[28px] bg-surface border border-hairline/[0.08] shadow-[0_24px_70px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.6)] text-fg">
+        <div className="p-6 sm:p-8 rounded-[28px] bg-surface border border-hairline/[0.08] shadow-[0_24px_70px_rgba(0,0,0,0.12)] text-fg">
           {step === "intro" && (
             <div className="space-y-6">
               <div className="bg-accent-link/[0.08] p-4 rounded-[14px] flex gap-3 text-xs">
@@ -73,7 +73,7 @@ export default function BusinessClaimPage({ params }: { params: { placeId: strin
               <button
                 type="button"
                 onClick={() => setStep("verify")}
-                className="w-full inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus cursor-pointer"
+                className="w-full inline-flex items-center justify-center min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold cursor-pointer"
               >
                 Begin Automated Verification &rarr;
               </button>
@@ -104,7 +104,7 @@ export default function BusinessClaimPage({ params }: { params: { placeId: strin
                 type="button"
                 onClick={handleAutoVerify}
                 disabled={isLoading}
-                className="w-full inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus cursor-pointer disabled:opacity-50"
+                className="w-full inline-flex items-center justify-center min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold cursor-pointer disabled:opacity-50"
               >
                 {isLoading ? "Validating Records..." : "Verify Record Match"}
               </button>
@@ -142,7 +142,7 @@ export default function BusinessClaimPage({ params }: { params: { placeId: strin
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="flex-1 inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus disabled:opacity-50"
+                  className="flex-1 inline-flex items-center justify-center min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold disabled:opacity-50"
                 >
                   {isLoading ? "Submitting..." : "Submit Claim"}
                 </button>
@@ -162,7 +162,7 @@ export default function BusinessClaimPage({ params }: { params: { placeId: strin
               <Link href={`/item/${params.placeId}`} className="block pt-2">
                 <button
                   type="button"
-                  className="w-full inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus cursor-pointer"
+                  className="w-full inline-flex items-center justify-center min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold cursor-pointer"
                 >
                   Return to Place Listing
                 </button>

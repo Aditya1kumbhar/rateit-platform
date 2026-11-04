@@ -81,8 +81,8 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
             The spot you are looking for does not exist in our Pune database or may have been removed.
           </p>
           <Link href="/discover" className="block pt-2">
-            <Button className="w-full min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus">
-              <Compass className="w-4 h-4 mr-2" />
+            <Button className="w-full min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold">
+              <Compass className="w-4 h-4 mr-2 text-stone-950" />
               Discover Pune Places
             </Button>
           </Link>

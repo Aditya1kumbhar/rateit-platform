@@ -6,7 +6,6 @@ import { usePathname, useRouter } from "next/navigation"
 import { Search, User, Shield, Plus, Sparkles, MapPin, LogOut } from "lucide-react"
 import { userSession, type AuthUser } from "@/lib/userAuth"
 import { useUI } from "@/components/ui-provider"
-import { ThemeToggle } from "@/components/theme-toggle"
 
 export function Navbar() {
   const pathname = usePathname()
@@ -36,7 +35,6 @@ export function Navbar() {
     { href: "/category/pgs-hostels", label: "PGs & Hostels" },
     { href: "/category/cafes", label: "Cafes" },
     { href: "/lists", label: "Lists" },
-    { href: "/moderation-policy", label: "Trust Policy" },
   ]
 
   return (
@@ -44,7 +42,7 @@ export function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
         {/* Logo & Pune Live Indicator */}
         <Link href="/" className="flex items-center gap-2.5 group apple-press shrink-0 min-h-[44px] apple-focus rounded-xl pr-2">
-          <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center text-white font-semibold text-base">
+          <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center text-stone-950 font-bold text-base shadow-sm">
             R
           </div>
           <div className="flex flex-col">
@@ -105,15 +103,12 @@ export function Navbar() {
           <button
             type="button"
             onClick={() => openRateModal()}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-accent hover:bg-accent-hover text-white font-semibold text-xs transition-[background-color,transform] duration-150 apple-press cursor-pointer min-h-[36px] apple-focus"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full liquid-glass-btn text-xs cursor-pointer min-h-[36px] apple-focus"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-3.5 h-3.5 text-stone-950 stroke-[2.5]" />
             <span className="hidden sm:inline">Rate Spot</span>
             <span className="sm:hidden">Rate</span>
           </button>
-
-          {/* Apple Light/Dark Theme Toggle */}
-          <ThemeToggle />
 
           {/* User State */}
           {user ? (

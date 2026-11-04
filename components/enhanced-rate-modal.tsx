@@ -284,8 +284,8 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
 
   if (isAuthenticated === null) {
     return (
-      <div className="fixed inset-0 bg-black/30 dark:bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
-        <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-sm p-8 flex flex-col items-center justify-center shadow-[0_24px_70px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.6)] text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
+      <div className="fixed inset-0 bg-black/25 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-sm p-8 flex flex-col items-center justify-center shadow-[0_24px_70px_rgba(0,0,0,0.12)] text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
           <Loader2 className="h-8 w-8 text-accent-link animate-spin mb-4" />
           <p className="text-sm font-medium text-fg-muted">Checking authentication...</p>
         </div>
@@ -300,9 +300,9 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
-      className="fixed inset-0 bg-black/30 dark:bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black/25 backdrop-blur-md flex items-center justify-center z-50 p-4"
     >
-      <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.6)] relative text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
+      <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.12)] relative text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
         {/* Header */}
         <div className="sticky top-0 bg-surface/95 backdrop-blur-2xl border-b border-hairline/[0.08] p-4 flex items-center justify-between z-10">
           <div className="flex items-center gap-3">
@@ -409,7 +409,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   <Button
                     onClick={handleCheckin}
                     disabled={isLocating}
-                    className="w-full min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus"
+                    className="w-full min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold"
                   >
                     {isLocating ? (
                       <>
@@ -443,7 +443,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   </p>
                   <Button
                     onClick={goNext}
-                    className="w-full mt-3 min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus"
+                    className="w-full mt-3 min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold"
                   >
                     Proceed to Rating &rarr;
                   </Button>
@@ -459,7 +459,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   </p>
                   <Button
                     onClick={goNext}
-                    className="w-full mt-3 min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus"
+                    className="w-full mt-3 min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold"
                   >
                     Continue to Rating &rarr;
                   </Button>
@@ -486,7 +486,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                         goNext()
                       }}
                       size="sm"
-                      className="flex-1 min-h-[44px] rounded-full bg-accent hover:bg-accent-hover text-white text-xs font-semibold apple-focus apple-press"
+                      className="flex-1 min-h-[44px] rounded-full liquid-glass-btn text-xs font-semibold"
                     >
                       Skip & Rate
                     </Button>
@@ -546,7 +546,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                 <Button
                   onClick={handleBlindRatingSubmit}
                   disabled={rating === 0}
-                  className="w-full min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold disabled:opacity-40 transition-[background-color,transform] duration-150 apple-press apple-focus"
+                  className="w-full min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold disabled:opacity-40"
                 >
                   Lock In My Blind Rating
                 </Button>
@@ -565,7 +565,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   </div>
                   <Button
                     onClick={goNext}
-                    className="w-full min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus"
+                    className="w-full min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold"
                   >
                     Add Review Details &rarr;
                   </Button>
@@ -604,9 +604,9 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                       key={tag}
                       type="button"
                       onClick={() => toggleTag(tag)}
-                      className={`px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-[background-color,color] duration-150 apple-press apple-focus ${
+                      className={`px-3.5 py-1.5 rounded-full text-[12px] font-semibold transition-[background-color,color] duration-150 apple-press apple-focus ${
                         selectedTags.includes(tag)
-                          ? "bg-accent text-white"
+                          ? "bg-accent text-stone-950 font-bold"
                           : "bg-surface-2 text-fg-muted hover:text-fg"
                       }`}
                     >
@@ -668,7 +668,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                       onClick={() => setVisibility(vis)}
                       className={`flex-1 min-h-[40px] py-2 px-3 rounded-full text-xs font-semibold transition-[background-color,color] duration-150 apple-focus apple-press ${
                         visibility === vis
-                          ? "bg-accent text-white"
+                          ? "bg-accent text-stone-950 font-bold"
                           : "bg-surface-2 text-fg-muted hover:text-fg"
                       }`}
                     >
@@ -680,7 +680,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
 
               <Button
                 onClick={goNext}
-                className="w-full min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus"
+                className="w-full min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold"
               >
                 Review & Confirm &rarr;
               </Button>
@@ -744,7 +744,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
               <Button
                 onClick={handleSubmit}
                 disabled={!consentChecked || isSubmitting}
-                className="w-full min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold disabled:opacity-40 transition-[background-color,transform] duration-150 apple-press apple-focus"
+                className="w-full min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold disabled:opacity-40"
               >
                 {isSubmitting ? (
                   <>

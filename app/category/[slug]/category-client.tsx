@@ -100,7 +100,7 @@ export function CategoryClient({ categoryName, places }: CategoryClientProps) {
               onClick={() => setSortBy(sort.id)}
               className={`h-9 px-4 rounded-full text-[12px] font-medium transition-[background-color,color] duration-150 apple-press apple-focus ${
                 sortBy === sort.id
-                  ? "bg-accent text-white"
+                  ? "bg-accent text-stone-950 font-semibold shadow-sm"
                   : "bg-surface-2 text-fg-muted hover:text-fg"
               }`}
             >
@@ -200,7 +200,7 @@ export function CategoryClient({ categoryName, places }: CategoryClientProps) {
             </p>
             <Button
               onClick={() => openRateModal()}
-              className="mt-2 inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus cursor-pointer"
+              className="mt-2 inline-flex items-center justify-center min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold cursor-pointer"
             >
               Add First Spot
             </Button>

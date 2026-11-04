@@ -400,7 +400,7 @@ function LoginContent() {
               <Button
                 type="submit"
                 disabled={isLoading || !email}
-                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl text-xs apple-press"
+                className="w-full min-h-[44px] liquid-glass-btn text-stone-950 font-semibold rounded-xl text-xs"
               >
                 {isLoading ? "Signing in..." : "Continue with Email"}
               </Button>
@@ -434,7 +434,7 @@ function LoginContent() {
                 <Turnstile
                   siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA"}
                   onSuccess={(token) => setTurnstileToken(token)}
-                  options={{ theme: "dark" }}
+                  options={{ theme: "light" }}
                 />
               </div>
 
@@ -448,7 +448,7 @@ function LoginContent() {
               <Button
                 type="submit"
                 disabled={isLoading || phone.length < 10 || !turnstileToken}
-                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl text-xs apple-press"
+                className="w-full min-h-[44px] liquid-glass-btn text-stone-950 font-semibold rounded-xl text-xs"
               >
                 {isLoading ? "Sending OTP..." : "Send Verification OTP"}
               </Button>
@@ -480,7 +480,7 @@ function LoginContent() {
               <Button
                 type="submit"
                 disabled={isLoading || otpCode.length < 6}
-                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl text-xs apple-press"
+                className="w-full min-h-[44px] liquid-glass-btn text-stone-950 font-semibold rounded-xl text-xs"
               >
                 {isLoading ? "Verifying..." : "Verify & Sign In"}
               </Button>
@@ -505,7 +505,7 @@ function LoginContent() {
               <Button
                 type="submit"
                 disabled={!displayName.trim()}
-                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl text-xs apple-press"
+                className="w-full min-h-[44px] liquid-glass-btn text-stone-950 font-semibold rounded-xl text-xs"
               >
                 Continue
               </Button>
@@ -533,10 +533,6 @@ function LoginContent() {
                   I agree to the{" "}
                   <Link href="/terms" className="text-accent-link hover:underline">
                     Terms of Service
-                  </Link>{" "}
-                  and{" "}
-                  <Link href="/privacy" className="text-accent-link hover:underline">
-                    Privacy Policy
                   </Link>
                   .
                 </span>
@@ -545,7 +541,7 @@ function LoginContent() {
               <Button
                 onClick={handleConsent}
                 disabled={!consentChecked}
-                className="w-full min-h-[44px] bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl text-xs apple-press"
+                className="w-full min-h-[44px] liquid-glass-btn text-stone-950 font-semibold rounded-xl text-xs"
               >
                 Accept & Enter RateIT
               </Button>

@@ -25,10 +25,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#000000' },
-  ],
+  themeColor: '#ffffff',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
@@ -41,15 +38,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`light ${GeistSans.variable} ${GeistMono.variable}`} data-theme="light" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('rateit-theme');if(t==='dark'){document.documentElement.classList.remove('light');document.documentElement.classList.add('dark');document.documentElement.setAttribute('data-theme','dark');}else{document.documentElement.classList.remove('dark');document.documentElement.classList.add('light');document.documentElement.setAttribute('data-theme','light');}}catch(e){}})()`,
-          }}
-        />
-      </head>
-      <body className="bg-canvas text-fg flex flex-col min-h-screen selection:bg-accent-link selection:text-white antialiased font-sans" suppressHydrationWarning>
+    <html lang="en" className={`light ${GeistSans.variable} ${GeistMono.variable}`} data-theme="light">
+      <body className="bg-canvas text-fg flex flex-col min-h-screen selection:bg-accent/30 selection:text-fg antialiased font-sans">
         <LenisProvider>
           <UIProvider>
             {/* Universal Sticky Glass Header */}
@@ -65,7 +55,7 @@ export default function RootLayout({
               <div className="container mx-auto px-4 py-8">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-fg-subtle">
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-md bg-accent-tint text-accent-link flex items-center justify-center font-semibold text-xs">
+                    <div className="w-6 h-6 rounded-md bg-accent/20 text-accent-link flex items-center justify-center font-semibold text-xs">
                       R
                     </div>
                     <span className="font-semibold text-fg">RateIT Pune</span>
@@ -76,12 +66,6 @@ export default function RootLayout({
                   <nav className="flex flex-wrap items-center justify-center gap-5 text-fg-subtle">
                     <Link href="/terms" className="hover:text-accent-link transition-colors">
                       Terms of Service
-                    </Link>
-                    <Link href="/privacy" className="hover:text-accent-link transition-colors">
-                      Privacy & DPDP
-                    </Link>
-                    <Link href="/moderation-policy" className="hover:text-accent-link transition-colors">
-                      Moderation Policy
                     </Link>
                     <Link href="/grievance" className="hover:text-accent-link transition-colors flex items-center gap-1 text-accent-link">
                       <ShieldCheck className="w-3.5 h-3.5" />
@@ -94,12 +78,12 @@ export default function RootLayout({
 
             {/* Sonner Toaster */}
             <Toaster
-              theme="dark"
+              theme="light"
               position="top-center"
               richColors
               closeButton
               toastOptions={{
-                className: 'border border-hairline bg-surface-2 text-fg shadow-2xl rounded-modal',
+                className: 'border border-hairline bg-surface text-fg shadow-xl rounded-modal',
               }}
             />
           </UIProvider>
