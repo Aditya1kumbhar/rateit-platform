@@ -151,15 +151,15 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/25 backdrop-blur-md"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/40"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
     >
       {/* 0ms instantaneous open per Emil Kowalski 100+/day keyboard standard */}
-      <div className="w-full max-w-xl rounded-[22px] bg-surface border border-hairline/[0.08] shadow-[0_24px_70px_rgba(0,0,0,0.12)] overflow-hidden flex flex-col text-fg">
+      <div className="w-full max-w-xl rounded-[22px] glass glass-refract overflow-hidden flex flex-col text-fg">
         {/* Search Input Bar */}
-        <div className="relative flex items-center px-4 py-3.5 border-b border-hairline/[0.08]">
+        <div className="relative flex items-center px-4 py-3.5 border-b border-white/[0.08]">
           <Search className="w-5 h-5 text-accent-link shrink-0 mr-3" />
           <input
             ref={inputRef}
@@ -168,18 +168,18 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search Pune coaching, cafes, PGs, restaurants..."
-            className="w-full bg-transparent text-base sm:text-sm text-fg placeholder:text-fg-subtle focus:outline-none"
+            className="w-full bg-transparent text-base sm:text-sm text-fg placeholder:text-fg-muted focus:outline-none"
           />
           {query ? (
             <button
               onClick={() => setQuery("")}
-              className="p-1.5 rounded-lg text-fg-subtle hover:text-fg hover:bg-surface-2 mr-2 apple-press min-h-[36px] min-w-[36px] flex items-center justify-center apple-focus"
+              className="p-1.5 rounded-lg text-fg-muted hover:text-fg hover:bg-surface-2 mr-2 apple-press min-h-[36px] min-w-[36px] flex items-center justify-center apple-focus"
               aria-label="Clear search"
             >
               <X className="w-4 h-4" />
             </button>
           ) : null}
-          <kbd className="hidden sm:inline-block text-[10px] font-mono bg-surface-2 text-fg-subtle border border-hairline/[0.08] px-2 py-0.5 rounded-md">
+          <kbd className="hidden sm:inline-block text-[10px] font-mono bg-surface-2 text-fg-muted border border-hairline/[0.08] px-2 py-0.5 rounded-md">
             ESC
           </kbd>
         </div>
@@ -307,7 +307,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         </div>
 
         {/* Footer shortcuts */}
-        <div className="px-4 py-2.5 bg-surface-2 border-t border-hairline/[0.08] flex items-center justify-between text-[11px] text-fg-subtle">
+        <div className="px-4 py-2.5 bg-surface-2 border-t border-hairline/[0.08] flex items-center justify-between text-[11px] text-fg-muted">
           <span className="flex items-center gap-1.5">
             <Sparkles className="w-3 h-3 text-accent-link" />
             <span>RateIT Hyperlocal Search</span>

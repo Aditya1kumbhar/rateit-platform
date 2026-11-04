@@ -38,8 +38,8 @@ export function Navbar() {
   ]
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-surface/70 backdrop-blur-xl backdrop-saturate-150 border-b border-hairline/[0.08] transition-[background-color,border-color] duration-150">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-40 w-full pointer-events-none md:pt-3 md:px-4">
+      <div className="pointer-events-auto glass w-full md:max-w-5xl md:mx-auto md:rounded-full rounded-none border-b md:border-b-0 border-hairline/[0.08] shadow-none md:shadow-[0_8px_32px_rgb(0_0_0_/_0.25)] px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Logo & Pune Live Indicator */}
         <Link href="/" className="flex items-center gap-2.5 group apple-press shrink-0 min-h-[44px] apple-focus rounded-xl pr-2">
           <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center text-stone-950 font-bold text-base shadow-sm">

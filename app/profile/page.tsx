@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation"
 import { userSession } from "@/lib/userAuth"
 import { toast } from "sonner"
 import { useUI } from "@/components/ui-provider"
+import { getGlassLevel, setGlassLevel } from "@/lib/glass"
 
 export default function ProfilePage() {
   const router = useRouter()
@@ -33,6 +34,9 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<"grid" | "saved" | "badges">("grid")
+
+  // iOS 27 Liquid Glass Intensity State
+  const [glassLevel, setGlassLevelState] = useState(0.5)
 
   // Edit Modal State
   const [showEditModal, setShowEditModal] = useState(false)
@@ -46,6 +50,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     let active = true
+    setGlassLevelState(getGlassLevel())
 
     const loadProfile = async () => {
       const loggedIn = await userSession.isLoggedIn()
@@ -96,6 +101,12 @@ export default function ProfilePage() {
       navigator.clipboard.writeText(window.location.href)
       toast.success("Profile link copied to clipboard")
     }
+  }
+
+  const handleGlassChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseFloat(e.target.value)
+    setGlassLevelState(val)
+    setGlassLevel(val)
   }
 
   const handleSaveProfile = async (e: React.FormEvent) => {
@@ -469,6 +480,43 @@ export default function ProfilePage() {
                   <p className="text-fg-muted">Hardware EXIF stripped. Explicit consent withdrawal supported below.</p>
                 </div>
               </div>
+            </div>
+
+            {/* iOS 27 Liquid Glass Intensity Setting */}
+            <div className="p-6 rounded-[22px] bg-surface space-y-4 border-0">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-base font-semibold text-fg">Liquid Glass Intensity</h4>
+                  <p className="text-xs text-fg-muted">
+                    Adjust navigation and modal frosted glass translucency in real-time.
+                  </p>
+                </div>
+                <span className="text-xs font-mono font-semibold text-fg bg-surface-2 px-2.5 py-1 rounded-md tabular-nums">
+                  {Math.round(glassLevel * 100)}%
+                </span>
+              </div>
+
+              {/* Glass Slider */}
+              <div className="space-y-2 pt-1">
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={glassLevel}
+                  onChange={handleGlassChange}
+                  aria-label="Liquid Glass Intensity"
+                  className="w-full h-1 rounded-full bg-surface-3 appearance-none cursor-pointer accent-white [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-[0_2px_8px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-black/10 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:shadow-[0_2px_8px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:border-none"
+                />
+                <div className="flex justify-between text-[12px] text-fg-subtle font-medium">
+                  <span>Clear</span>
+                  <span>Frosted</span>
+                </div>
+              </div>
+
+              <p className="text-[11px] text-fg-subtle border-t border-hairline/[0.08] pt-3">
+                Follows your device&apos;s Reduce Transparency setting.
+              </p>
             </div>
 
             {/* DPDP 2023 Data Erasure Zone */}

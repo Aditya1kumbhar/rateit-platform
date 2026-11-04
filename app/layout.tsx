@@ -39,6 +39,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`light ${GeistSans.variable} ${GeistMono.variable}`} data-theme="light">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var l=localStorage.getItem('glass-level');if(l!==null){document.documentElement.style.setProperty('--glass-level',l);}}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body className="bg-canvas text-fg flex flex-col min-h-screen selection:bg-accent/30 selection:text-fg antialiased font-sans">
         <LenisProvider>
           <UIProvider>

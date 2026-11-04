@@ -152,5 +152,12 @@
   - **Apple iOS 27.2 Fluid Liquid Glass & Motion**: Added `.liquid-glass-btn` with specular top edge highlight, blur/saturation filters, `.apple-press` fluid 160ms click physics with brightness dip, and `.liquid-glass` navigation bars.
   - **Full Deletion of Privacy & Trust/Moderation Policies**: Permanently deleted `app/privacy/page.tsx` and `app/moderation-policy/page.tsx` files, and removed all navigation and footer links across `app/layout.tsx`, `components/navbar.tsx`, and `app/login/page.tsx`.
   - **Verification**: `npx tsc --noEmit` (0 errors), `npm run test` (31/31 passing), `npm run build` (14/14 routes generating cleanly), and live dev server returning 200 OK across all routes.
+- [x] **P16 Apple iOS 27 Liquid Glass Architecture Lock (G1–G6)**:
+  - **G1 Multi-Layer Glass CSS**: Implemented exact WWDC 2026 Liquid Glass CSS in `app/globals.css` with `--glass-level` (0 to 1), `--glass-tint: 28 28 30`, `--glass-alpha`, `--glass-blur`, inset specular highlights (`inset 0 1px 0 rgb(255 255 255 / 0.28)`), gradient rim `::before`, static top sheen `::after`, tactile `.glass-press`, sliding `.glass-thumb`, mobile blur optimization, and accessibility fallbacks (`prefers-reduced-transparency`, `forced-colors`).
+  - **G2 Navigation Layer**: Navbar floating capsule on desktop (`mx-auto max-w-5xl mt-3 rounded-full`) and full-width on mobile (`rounded-none`); Bottom Nav floating capsule with 12px margin, `.glass-thumb` sliding indicator under active tabs, and solid 48px `.bg-accent` plus button.
+  - **G3 Overlays & Modals**: Command Palette panel `glass rounded-[22px]` with `bg-black/40` scrim (no blur); Rate and Save modals with `glass rounded-[28px]` panels, solid `bg-surface-2` inner wells, solid `bg-accent` buttons, and 200ms ease-out zoom-in entrance.
+  - **G4 User Intensity Control**: Created `lib/glass.ts` with `getGlassLevel()` & `setGlassLevel()`, added `<head>` inline script in `app/layout.tsx` to eliminate initial flash, and added live slider in `app/profile/page.tsx` with clear/frosted labels and transparency note.
+  - **G5 Chromium SVG Refraction**: Injected hidden `<svg>` filter `#glass-refract` in bottom nav with `@supports` scoping to Chromium only.
+  - **G6 Verification**: 0 `.glass` classes on content cards, 31/31 Vitest tests passing, 0 type errors, 0 secret leaks, production build passing (14/14 routes).
 
 

@@ -284,8 +284,8 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
 
   if (isAuthenticated === null) {
     return (
-      <div className="fixed inset-0 bg-black/25 backdrop-blur-md flex items-center justify-center z-50 p-4">
-        <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-sm p-8 flex flex-col items-center justify-center shadow-[0_24px_70px_rgba(0,0,0,0.12)] text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
+      <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+        <div className="glass rounded-[28px] w-full max-w-sm p-8 flex flex-col items-center justify-center text-fg animate-in fade-in-0 zoom-in-[0.96] duration-200 ease-out origin-center">
           <Loader2 className="h-8 w-8 text-accent-link animate-spin mb-4" />
           <p className="text-sm font-medium text-fg-muted">Checking authentication...</p>
         </div>
@@ -300,25 +300,25 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
-      className="fixed inset-0 bg-black/25 backdrop-blur-md flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
     >
-      <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.12)] relative text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
+      <div className="glass rounded-[28px] w-full max-w-lg max-h-[90vh] overflow-y-auto relative text-fg animate-in fade-in-0 zoom-in-[0.96] duration-200 ease-out origin-center">
         {/* Header */}
-        <div className="sticky top-0 bg-surface/95 backdrop-blur-2xl border-b border-hairline/[0.08] p-4 flex items-center justify-between z-10">
+        <div className="sticky top-0 bg-transparent border-b border-white/[0.08] p-4 flex items-center justify-between z-10">
           <div className="flex items-center gap-3">
             {currentStepIndex > 0 && (
               <button
                 type="button"
                 onClick={goBack}
                 aria-label="Previous step"
-                className="p-2 hover:bg-surface-2 rounded-full transition-colors text-fg-subtle hover:text-fg apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
+                className="p-2 hover:bg-surface-2 rounded-full transition-colors text-fg-muted hover:text-fg apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
             )}
             <div>
               <h2 className="text-base font-semibold text-fg tracking-tight">{stepLabels[currentStep]}</h2>
-              <p className="text-xs text-fg-subtle tabular-nums">
+              <p className="text-xs text-fg-muted tabular-nums">
                 Step {currentStepIndex + 1} of {steps.length}
               </p>
             </div>
@@ -327,7 +327,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="p-2 hover:bg-surface-2 rounded-full transition-colors text-fg-subtle hover:text-fg apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
+            className="p-2 hover:bg-surface-2 rounded-full transition-colors text-fg-muted hover:text-fg apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
           >
             <X className="h-5 w-5" />
           </button>

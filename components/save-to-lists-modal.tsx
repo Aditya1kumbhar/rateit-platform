@@ -177,9 +177,9 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
-      className="fixed inset-0 bg-black/25 backdrop-blur-md flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
     >
-      <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-md max-h-[85vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.12)] relative text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
+      <div className="glass rounded-[28px] w-full max-w-md max-h-[85vh] overflow-y-auto relative text-fg animate-in fade-in-0 zoom-in-[0.96] duration-200 ease-out origin-center">
         <div className="p-6 space-y-5">
           {/* Header */}
           <div className="flex items-center justify-between">
@@ -197,7 +197,7 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded-full text-fg-subtle hover:text-fg hover:bg-surface-2 transition-colors apple-focus"
+              className="p-1.5 rounded-full text-fg-muted hover:text-fg hover:bg-surface-2 transition-colors apple-focus"
               aria-label="Close dialog"
             >
               <X className="w-5 h-5" />
