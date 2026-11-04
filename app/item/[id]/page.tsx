@@ -71,17 +71,17 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
 
   if (!place) {
     return (
-      <div className="container mx-auto px-4 py-20 flex items-center justify-center">
-        <div className="text-center max-w-md p-8 rounded-modal bg-surface space-y-4 shadow-2xl">
-          <div className="w-14 h-14 rounded-2xl bg-accent-tint text-accent-link flex items-center justify-center mx-auto">
+      <div className="container mx-auto px-4 py-20 flex items-center justify-center min-h-[60vh]">
+        <div className="text-center max-w-md p-8 rounded-[28px] bg-surface space-y-4">
+          <div className="w-14 h-14 rounded-full bg-surface-2 text-accent-link flex items-center justify-center mx-auto">
             <MapPin className="w-7 h-7" />
           </div>
-          <h2 className="text-2xl font-semibold text-fg">Place not found</h2>
+          <h2 className="text-2xl font-semibold text-fg tracking-[-0.022em]">Place not found</h2>
           <p className="text-fg-muted text-sm leading-relaxed">
             The spot you are looking for does not exist in our Pune database or may have been removed.
           </p>
           <Link href="/discover" className="block pt-2">
-            <Button className="w-full bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl py-2.5 apple-press apple-focus">
+            <Button className="w-full min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus">
               <Compass className="w-4 h-4 mr-2" />
               Discover Pune Places
             </Button>

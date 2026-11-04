@@ -71,13 +71,13 @@ export default function CategoriesPage() {
       </nav>
 
       {/* Header */}
-      <div className="p-6 sm:p-8 rounded-modal bg-surface border-0 relative overflow-hidden shadow-sm">
+      <div className="p-6 sm:p-8 rounded-[28px] bg-surface border-0 relative overflow-hidden">
         <div className="space-y-2">
           <div className="inline-flex items-center gap-1.5 text-xs text-accent-link font-semibold uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5" />
             Pune Directory
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold text-fg tracking-[-0.022em]">
+          <h1 className="text-[28px] sm:text-[40px] font-semibold text-fg tracking-[-0.022em]">
             Pune Categories Directory
           </h1>
           <p className="text-fg-muted text-sm max-w-2xl leading-relaxed">
@@ -92,16 +92,16 @@ export default function CategoriesPage() {
           <Link
             key={idx}
             href={`/category/${cat.slug}`}
-            className="apple-press group apple-focus rounded-card"
+            className="apple-press group apple-focus rounded-[22px]"
             style={{ animationDelay: `${Math.min(idx * 40, 240)}ms` }}
           >
-            <div className="p-6 rounded-card bg-surface hover:bg-surface-2 transition-[background-color] duration-150 border-0 shadow-sm h-full flex flex-col justify-between space-y-4">
+            <div className="p-6 rounded-[22px] bg-surface hover:bg-surface-2 transition-[background-color] duration-150 border-0 h-full flex flex-col justify-between space-y-4">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="w-11 h-11 rounded-xl bg-accent-tint text-accent-link flex items-center justify-center">
+                  <div className="w-11 h-11 rounded-[14px] bg-accent-link/[0.12] text-accent-link flex items-center justify-center">
                     <cat.icon className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-semibold text-accent-link bg-accent-tint px-2.5 py-0.5 rounded-md border border-accent-link/20">
+                  <span className="inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium text-accent-link bg-accent-link/[0.12]">
                     {cat.tag}
                   </span>
                 </div>
@@ -118,7 +118,7 @@ export default function CategoriesPage() {
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-hairline flex items-center justify-between text-xs text-accent-link font-semibold">
+              <div className="pt-3 border-t border-hairline/[0.08] flex items-center justify-between text-xs text-accent-link font-semibold">
                 <span>Explore spots</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </div>

@@ -51,36 +51,35 @@ export function GrievanceForm() {
 
   if (submittedRef) {
     return (
-      <div className="bg-success/10 border border-success/20 rounded-modal p-6 text-center space-y-3">
+      <div className="bg-success/10 rounded-[28px] p-6 text-center space-y-3 border-0">
         <CheckCircle2 className="h-10 w-10 text-success mx-auto" />
         <h3 className="text-lg font-semibold text-fg">Grievance Registered Successfully</h3>
         <p className="text-xs text-fg-muted">
           Your official complaint has been logged into the compliance audit ledger and assigned to the Grievance Officer.
         </p>
-        <div className="bg-surface-2 border border-hairline px-4 py-2.5 rounded-card inline-block">
+        <div className="bg-surface-2 px-4 py-2.5 rounded-[14px] inline-block border-0">
           <span className="text-[11px] text-fg-subtle block">Ticket Reference ID:</span>
           <p className="font-mono text-sm font-semibold text-accent-link">{submittedRef}</p>
         </div>
         <p className="text-[11px] text-fg-subtle mt-2">
           Under IT Rules 2021, receipt acknowledgment will be dispatched to {email} within 24 hours.
         </p>
-        <Button
-          variant="outline"
-          size="sm"
+        <button
+          type="button"
           onClick={() => {
             setSubmittedRef(null)
             setDescription("")
           }}
-          className="mt-2 text-xs rounded-lg border-hairline text-fg hover:bg-surface-2"
+          className="mt-2 inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-surface-2 hover:bg-surface-3 text-fg text-[14px] font-medium transition-[background-color,transform] duration-150 apple-press apple-focus"
         >
           Submit another inquiry
-        </Button>
+        </button>
       </div>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="p-6 sm:p-8 rounded-modal bg-surface space-y-4 text-xs">
+    <form onSubmit={handleSubmit} className="p-6 sm:p-8 rounded-[28px] bg-surface border border-hairline/[0.08] space-y-4 text-xs">
       <div>
         <h3 className="text-base font-semibold text-fg">File an Official Grievance or Appeal</h3>
         <p className="text-xs text-fg-muted mt-0.5">
@@ -96,7 +95,7 @@ export function GrievanceForm() {
             onChange={(e) => setName(e.target.value)}
             placeholder="Your legal name"
             required
-            className="rounded-input bg-surface-2 border-hairline text-fg placeholder:text-fg-subtle text-xs apple-focus"
+            className="h-11 w-full rounded-[14px] bg-surface-2 border border-hairline/[0.08] px-4 text-[14px] text-fg placeholder:text-fg-subtle focus-visible:border-accent-link focus-visible:ring-2 focus-visible:ring-accent-link/30 outline-none"
           />
         </div>
         <div>
@@ -107,7 +106,7 @@ export function GrievanceForm() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@domain.com"
             required
-            className="rounded-input bg-surface-2 border-hairline text-fg placeholder:text-fg-subtle text-xs apple-focus"
+            className="h-11 w-full rounded-[14px] bg-surface-2 border border-hairline/[0.08] px-4 text-[14px] text-fg placeholder:text-fg-subtle focus-visible:border-accent-link focus-visible:ring-2 focus-visible:ring-accent-link/30 outline-none"
           />
         </div>
       </div>
@@ -120,16 +119,16 @@ export function GrievanceForm() {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="+91..."
-            className="rounded-input bg-surface-2 border-hairline text-fg placeholder:text-fg-subtle text-xs apple-focus"
+            className="h-11 w-full rounded-[14px] bg-surface-2 border border-hairline/[0.08] px-4 text-[14px] text-fg placeholder:text-fg-subtle focus-visible:border-accent-link focus-visible:ring-2 focus-visible:ring-accent-link/30 outline-none"
           />
         </div>
         <div>
           <label className="font-medium text-fg-muted mb-1 block">Grievance Category</label>
           <Select value={reportType} onValueChange={setReportType}>
-            <SelectTrigger className="rounded-input bg-surface-2 border-hairline text-fg text-xs apple-focus">
+            <SelectTrigger className="h-11 w-full rounded-[14px] bg-surface-2 border border-hairline/[0.08] px-4 text-[14px] text-fg focus-visible:border-accent-link focus-visible:ring-2 focus-visible:ring-accent-link/30 outline-none">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-surface-2 border-hairline text-fg">
+            <SelectContent className="bg-surface-2 border border-hairline/[0.08] text-fg rounded-[14px]">
               <SelectItem value="content_complaint">Content / Defamation Complaint</SelectItem>
               <SelectItem value="moderation_appeal">Moderation Appeal (Hidden Review)</SelectItem>
               <SelectItem value="data_rights">DPDP 2023 Data Erasure / Rights</SelectItem>
@@ -145,7 +144,7 @@ export function GrievanceForm() {
           value={targetReviewId}
           onChange={(e) => setTargetReviewId(e.target.value)}
           placeholder="UUID of review if appealing a specific post"
-          className="rounded-input bg-surface-2 border-hairline text-fg placeholder:text-fg-subtle font-mono text-xs apple-focus"
+          className="h-11 w-full rounded-[14px] bg-surface-2 border border-hairline/[0.08] px-4 text-[14px] text-fg placeholder:text-fg-subtle font-mono focus-visible:border-accent-link focus-visible:ring-2 focus-visible:ring-accent-link/30 outline-none"
         />
       </div>
 
@@ -158,14 +157,14 @@ export function GrievanceForm() {
           rows={4}
           required
           minLength={10}
-          className="rounded-input bg-surface-2 border-hairline text-fg placeholder:text-fg-subtle text-xs leading-relaxed apple-focus"
+          className="w-full p-3.5 bg-surface-2 border border-hairline/[0.08] rounded-[14px] text-[14px] text-fg placeholder:text-fg-subtle focus-visible:border-accent-link focus-visible:ring-2 focus-visible:ring-accent-link/30 outline-none leading-relaxed"
         />
       </div>
 
-      <Button
+      <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-accent hover:bg-accent-hover text-white rounded-xl py-3 font-semibold text-xs apple-press min-h-[44px]"
+        className="w-full inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus disabled:opacity-50"
       >
         {isSubmitting ? (
           <>
@@ -176,7 +175,7 @@ export function GrievanceForm() {
             <Send className="h-4 w-4 mr-2" /> Submit Formal Grievance
           </>
         )}
-      </Button>
+      </button>
     </form>
   )
 }

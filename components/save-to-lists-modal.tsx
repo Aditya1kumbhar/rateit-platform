@@ -179,12 +179,12 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
       }}
       className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
     >
-      <div className="bg-surface border border-hairline rounded-modal w-full max-w-md max-h-[85vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.65)] relative text-fg">
+      <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-md max-h-[85vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.6)] relative text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
         <div className="p-6 space-y-5">
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-lg bg-accent-tint text-accent-link flex items-center justify-center">
+              <div className="w-9 h-9 rounded-lg bg-accent-link/[0.12] text-accent-link flex items-center justify-center">
                 <Bookmark className="w-4 h-4" />
               </div>
               <div>
@@ -197,7 +197,7 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-fg-subtle hover:text-fg hover:bg-surface-2 transition-colors apple-focus"
+              className="p-1.5 rounded-full text-fg-subtle hover:text-fg hover:bg-surface-2 transition-colors apple-focus"
               aria-label="Close dialog"
             >
               <X className="w-5 h-5" />
@@ -212,10 +212,10 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
                 <div
                   key={list.id}
                   onClick={() => toggleList(list.id)}
-                  className={`p-3.5 rounded-card cursor-pointer transition-[background-color,border-color] duration-150 flex items-center justify-between apple-press ${
+                  className={`p-3.5 rounded-[22px] cursor-pointer transition-[background-color,transform] duration-150 flex items-center justify-between apple-press ${
                     isSelected
-                      ? "bg-accent-tint border border-accent-link/30"
-                      : "bg-surface-2 hover:bg-surface-3 border border-transparent"
+                      ? "bg-accent-link/[0.12]"
+                      : "bg-surface-2 hover:bg-surface-3"
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -223,7 +223,7 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
                       className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${
                         isSelected
                           ? "bg-accent border-accent text-white"
-                          : "border-hairline bg-surface-3"
+                          : "border-hairline/[0.2] bg-surface-3"
                       }`}
                     >
                       {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
@@ -254,13 +254,13 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
           {!showNewListForm ? (
             <button
               onClick={() => setShowNewListForm(true)}
-              className="w-full py-2.5 rounded-xl border border-dashed border-hairline hover:border-accent-link/50 text-fg-muted hover:text-fg text-xs font-semibold flex items-center justify-center gap-2 transition-colors apple-press apple-focus"
+              className="w-full py-2.5 rounded-full border border-dashed border-hairline/[0.16] hover:border-accent-link/50 text-fg-muted hover:text-fg text-xs font-semibold flex items-center justify-center gap-2 transition-colors apple-press apple-focus"
             >
               <Plus className="w-4 h-4 text-accent-link" />
               <span>Create New Pune List</span>
             </button>
           ) : (
-            <div className="p-4 rounded-card bg-surface-2 border border-hairline space-y-3">
+            <div className="p-4 rounded-[22px] bg-surface-2 space-y-3">
               <h4 className="text-xs font-semibold text-fg uppercase tracking-wider">
                 New List Details
               </h4>
@@ -268,14 +268,14 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
                 value={newListName}
                 onChange={(e) => setNewListName(e.target.value)}
                 placeholder="e.g., Best Study Cafes on FC Road"
-                className="bg-surface-3 border-hairline text-fg text-xs rounded-input placeholder:text-fg-subtle apple-focus"
+                className="h-11 rounded-[14px] bg-surface-3 border-hairline/[0.08] text-fg text-sm placeholder:text-fg-subtle focus-visible:border-accent-link focus-visible:ring-2 focus-visible:ring-accent-link/30 outline-none"
               />
               <div className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-1.5">
                   <button
                     type="button"
                     onClick={() => setNewListPrivacy("public")}
-                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       newListPrivacy === "public"
                         ? "bg-accent text-white font-semibold"
                         : "bg-surface-3 text-fg-muted hover:text-fg"
@@ -286,7 +286,7 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
                   <button
                     type="button"
                     onClick={() => setNewListPrivacy("private")}
-                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       newListPrivacy === "private"
                         ? "bg-accent text-white font-semibold"
                         : "bg-surface-3 text-fg-muted hover:text-fg"
@@ -299,7 +299,7 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
                   <button
                     type="button"
                     onClick={() => setShowNewListForm(false)}
-                    className="text-fg-subtle hover:text-fg text-xs px-2.5 py-1 rounded-lg"
+                    className="text-fg-subtle hover:text-fg text-xs px-2.5 py-1 rounded-full"
                   >
                     Cancel
                   </button>
@@ -307,7 +307,7 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
                     type="button"
                     onClick={handleCreateNewList}
                     disabled={isSubmitting || !newListName.trim()}
-                    className="bg-accent hover:bg-accent-hover text-white font-semibold text-xs px-4 py-1.5 rounded-lg apple-press apple-focus disabled:opacity-50"
+                    className="bg-accent hover:bg-accent-hover text-white font-semibold text-xs px-4 py-1.5 rounded-full apple-press apple-focus disabled:opacity-50"
                   >
                     Create
                   </button>
@@ -317,11 +317,11 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
           )}
 
           {/* Action Buttons */}
-          <div className="pt-3 flex items-center justify-end gap-2 border-t border-hairline">
+          <div className="pt-3 flex items-center justify-end gap-2 border-t border-hairline/[0.08]">
             <button
               type="button"
               onClick={onClose}
-              className="text-fg-subtle hover:text-fg text-xs px-4 py-2 rounded-lg transition-colors apple-focus"
+              className="text-fg-subtle hover:text-fg text-xs px-4 py-2 rounded-full transition-colors apple-focus"
             >
               Cancel
             </button>
@@ -329,7 +329,7 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
               type="button"
               onClick={handleSave}
               disabled={isSubmitting || selectedLists.length === 0}
-              className="rounded-lg bg-accent hover:bg-accent-hover text-white font-semibold text-xs px-5 py-2.5 shadow-md shadow-accent/20 apple-press apple-focus disabled:opacity-50"
+              className="min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white font-semibold text-xs transition-[background-color,transform] duration-150 apple-press apple-focus disabled:opacity-50"
             >
               Save to {selectedLists.length || ""} List{selectedLists.length === 1 ? "" : "s"}
             </button>

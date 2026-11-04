@@ -5,27 +5,27 @@
 @layer base {
   :root {
     /* Apple Hardware Pro Dark Universe (Default): Space-separated RGB for Tailwind alpha support */
-    --bg: 0 0 0;                  /* #000000 pitch-black canvas */
-    --bg-alt: 10 10 11;           /* #0a0a0b */
-    --surface: 22 22 23;          /* #161617 bento card */
-    --surface-2: 29 29 31;        /* #1d1d1f elevated inputs/hover */
-    --surface-3: 42 42 45;        /* #2a2a2d pressed/selected */
+    --bg: 0 0 0;
+    --bg-alt: 10 10 11;
+    --surface: 22 22 23;
+    --surface-2: 29 29 31;
+    --surface-3: 42 42 45;
 
-    --fg: 245 245 247;            /* #f5f5f7 crisp off-white */
-    --fg-muted: 161 161 166;      /* #a1a1a6 10-12px micro-labels & badges (contrast >= 5.5:1) */
-    --fg-subtle: 134 134 139;     /* #86868b 14px+ captions, placeholders */
+    --fg: 245 245 247;
+    --fg-muted: 161 161 166;
+    --fg-subtle: 134 134 139;
 
-    --hairline: 255 255 255;      /* hairline alpha channel */
+    --hairline: 255 255 255;
     --hairline-border: rgba(255, 255, 255, 0.08);
 
-    --accent: 0 113 227;          /* #0071e3 Science Blue */
-    --accent-hover: 0 119 237;    /* #0077ed */
-    --accent-link: 41 151 255;    /* #2997ff Action Blue */
+    --accent: 0 113 227;
+    --accent-hover: 0 119 237;
+    --accent-link: 41 151 255;
 
-    --success: 48 209 88;         /* #30d158 verified check-in, trusted resident */
-    --warning: 255 159 10;        /* #ff9f0a warnings */
-    --danger: 255 69 58;          /* #ff453a errors, destructive */
-    --star: 245 166 35;           /* #f5a623 star ratings */
+    --success: 48 209 88;
+    --warning: 255 159 10;
+    --danger: 255 69 58;
+    --star: 245 166 35;
 
     --glass: rgba(22, 22, 23, 0.72);
 
@@ -114,12 +114,11 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    background-color: #000000;
+    background-color: rgb(var(--bg));
   }
   body {
-    background-color: #000000;
-    color: #f5f5f7;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, var(--font-sans), system-ui, sans-serif;
+    @apply bg-canvas text-fg antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, system-ui, sans-serif;
     letter-spacing: -0.015em;
     line-height: 1.47;
     touch-action: manipulation;
@@ -127,7 +126,7 @@
   h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
     letter-spacing: -0.022em;
-    color: #f5f5f7;
+    color: rgb(var(--fg));
   }
 }
 
@@ -145,14 +144,16 @@
   transform: scale(0.97);
 }
 
-/* Translucent Glass Navigation Surfaces */
+/* Translucent Glass Navigation Surfaces (Navbar, bottom nav, filter bar) */
+.glass,
 .liquid-glass {
-  background: var(--glass);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgb(var(--surface) / 0.7);
+  backdrop-filter: saturate(150%) blur(24px);
+  -webkit-backdrop-filter: saturate(150%) blur(24px);
+  border-bottom: 1px solid rgb(var(--hairline) / 0.08);
 }
 @supports not (backdrop-filter: blur(1px)) {
+  .glass,
   .liquid-glass {
     background: rgb(var(--surface));
   }

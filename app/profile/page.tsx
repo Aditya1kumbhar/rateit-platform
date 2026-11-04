@@ -163,7 +163,7 @@ export default function ProfilePage() {
     return (
       <div className="container mx-auto px-4 py-20 flex items-center justify-center">
         <div className="text-center space-y-3">
-          <div className="w-10 h-10 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
+          <div className="h-5 w-5 rounded-full border-2 border-accent-link border-t-transparent animate-spin mx-auto" />
           <p className="text-fg-muted text-sm font-medium">Loading RateIT Profile...</p>
         </div>
       </div>
@@ -182,10 +182,10 @@ export default function ProfilePage() {
   const trustScore = profile?.trustScore || 85
   const trustTier =
     trustScore >= 75
-      ? { label: "Trusted Resident", color: "text-success bg-success/10 border-success/20" }
+      ? { label: "Trusted Resident", color: "text-success bg-success/10" }
       : trustScore >= 40
-      ? { label: "Verified Visitor", color: "text-accent-link bg-accent-tint border-accent-link/20" }
-      : { label: "Community Member", color: "text-fg-muted bg-surface-2 border-hairline" }
+      ? { label: "Verified Visitor", color: "text-accent-link bg-accent-link/[0.12]" }
+      : { label: "Community Member", color: "text-fg-muted bg-surface-2" }
 
   return (
     <div className="container mx-auto px-4 py-6 max-w-5xl space-y-6">
@@ -199,7 +199,7 @@ export default function ProfilePage() {
       </nav>
 
       {/* Profile Header Card */}
-      <div className="p-6 md:p-8 rounded-modal bg-surface border-0 relative overflow-hidden shadow-sm">
+      <div className="p-6 md:p-8 rounded-[28px] bg-surface border-0 relative overflow-hidden">
         <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-6 text-center md:text-left">
             {/* Avatar */}
@@ -207,7 +207,7 @@ export default function ProfilePage() {
               className="relative group cursor-pointer apple-press"
               onClick={() => setShowEditModal(true)}
             >
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border border-hairline shadow-xl overflow-hidden bg-surface-2 flex items-center justify-center">
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-[22px] overflow-hidden bg-surface-2 flex items-center justify-center">
                 {profile?.avatarUrl ? (
                   <img
                     src={profile.avatarUrl}
@@ -220,7 +220,7 @@ export default function ProfilePage() {
                   </span>
                 )}
               </div>
-              <div className="absolute bottom-0 right-0 bg-accent text-white p-2 rounded-lg shadow-lg">
+              <div className="absolute bottom-0 right-0 bg-accent text-white p-2 rounded-full">
                 <Camera className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -231,18 +231,18 @@ export default function ProfilePage() {
                 <h1 className="text-2xl sm:text-3xl font-semibold text-fg tracking-[-0.022em]">
                   {profile?.displayName || "RateIT User"}
                 </h1>
-                <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-md border ${trustTier.color}`}>
+                <span className={`inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium ${trustTier.color}`}>
                   {trustTier.label}
                 </span>
                 {profile?.phoneVerified && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-success bg-success/10 px-2.5 py-0.5 rounded-md border border-success/20">
+                  <span className="inline-flex h-6 px-2.5 items-center gap-1 rounded-full text-[11px] font-medium text-success bg-success/10">
                     <ShieldCheck className="w-3 h-3" /> Phone Verified
                   </span>
                 )}
               </div>
 
               <p className="text-xs sm:text-sm text-fg-muted max-w-md leading-relaxed">
-                {profile?.bio || "Verified Pune student & community reviewer on RateIT."}
+                {profile?.bio || "Verified Pune student and community reviewer on RateIT."}
               </p>
 
               {/* Stats Bar */}
@@ -270,21 +270,21 @@ export default function ProfilePage() {
           <div className="flex flex-wrap md:flex-col items-center gap-2.5 w-full md:w-auto">
             <button
               onClick={() => setShowEditModal(true)}
-              className="flex-1 md:flex-initial px-4 py-2 rounded-lg bg-surface-2 hover:bg-surface-3 border border-hairline text-xs font-semibold text-fg flex items-center justify-center gap-2 transition-colors apple-press apple-focus"
+              className="flex-1 md:flex-initial min-h-[44px] px-5 rounded-full bg-surface-2 hover:bg-surface-3 text-fg text-[14px] font-medium flex items-center justify-center gap-2 transition-[background-color,transform] duration-150 apple-press apple-focus"
             >
               <Edit3 className="w-3.5 h-3.5 text-accent-link" />
               <span>Edit Profile</span>
             </button>
             <button
               onClick={handleShareProfile}
-              className="flex-1 md:flex-initial px-4 py-2 rounded-lg bg-surface-2 hover:bg-surface-3 border border-hairline text-xs font-semibold text-fg flex items-center justify-center gap-2 transition-colors apple-press apple-focus"
+              className="flex-1 md:flex-initial min-h-[44px] px-5 rounded-full bg-surface-2 hover:bg-surface-3 text-fg text-[14px] font-medium flex items-center justify-center gap-2 transition-[background-color,transform] duration-150 apple-press apple-focus"
             >
               <Share2 className="w-3.5 h-3.5" />
               <span>Share</span>
             </button>
             <button
               onClick={handleLogout}
-              className="flex-1 md:flex-initial px-4 py-2 rounded-lg bg-surface-2 hover:bg-danger/10 border border-hairline hover:border-danger/30 text-xs font-semibold text-fg-subtle hover:text-danger flex items-center justify-center gap-2 transition-colors apple-press apple-focus"
+              className="flex-1 md:flex-initial min-h-[44px] px-5 rounded-full bg-surface-2 hover:bg-danger/10 text-fg-subtle hover:text-danger text-[14px] font-medium flex items-center justify-center gap-2 transition-[background-color,color,transform] duration-150 apple-press apple-focus"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Sign Out</span>
@@ -295,33 +295,33 @@ export default function ProfilePage() {
 
       {/* Tabs */}
       <div className="space-y-6">
-        <div className="flex items-center gap-2 border-b border-hairline pb-3 text-xs font-semibold">
+        <div className="flex items-center gap-2 border-b border-hairline/[0.08] pb-3 text-xs font-semibold">
           <button
             onClick={() => setActiveTab("grid")}
-            className={`px-3.5 py-1.5 rounded-lg transition-colors apple-focus ${
+            className={`h-9 px-4 rounded-full text-[12px] font-medium transition-colors apple-focus ${
               activeTab === "grid"
-                ? "bg-accent text-white font-semibold shadow-sm shadow-accent/20"
-                : "text-fg-muted hover:text-fg hover:bg-surface-2"
+                ? "bg-accent text-white"
+                : "bg-surface-2 text-fg-muted hover:text-fg"
             }`}
           >
             My Reviews ({profile?.reviewsCount || 0})
           </button>
           <button
             onClick={() => setActiveTab("saved")}
-            className={`px-3.5 py-1.5 rounded-lg transition-colors apple-focus ${
+            className={`h-9 px-4 rounded-full text-[12px] font-medium transition-colors apple-focus ${
               activeTab === "saved"
-                ? "bg-accent text-white font-semibold shadow-sm shadow-accent/20"
-                : "text-fg-muted hover:text-fg hover:bg-surface-2"
+                ? "bg-accent text-white"
+                : "bg-surface-2 text-fg-muted hover:text-fg"
             }`}
           >
             Saved Collections ({profile?.listsCount || 0})
           </button>
           <button
             onClick={() => setActiveTab("badges")}
-            className={`px-3.5 py-1.5 rounded-lg transition-colors apple-focus ${
+            className={`h-9 px-4 rounded-full text-[12px] font-medium transition-colors apple-focus ${
               activeTab === "badges"
-                ? "bg-accent text-white font-semibold shadow-sm shadow-accent/20"
-                : "text-fg-muted hover:text-fg hover:bg-surface-2"
+                ? "bg-accent text-white"
+                : "bg-surface-2 text-fg-muted hover:text-fg"
             }`}
           >
             Trust & DPDP Privacy
@@ -335,7 +335,7 @@ export default function ProfilePage() {
               profile.reviews.map((rev: any) => (
                 <div
                   key={rev.id}
-                  className="p-5 rounded-card bg-surface space-y-3 border-0 shadow-sm"
+                  className="p-5 rounded-[22px] bg-surface space-y-3 border-0"
                 >
                   <div className="flex items-center justify-between">
                     <div>
@@ -355,7 +355,7 @@ export default function ProfilePage() {
                     &ldquo;{rev.text}&rdquo;
                   </p>
 
-                  <div className="pt-2 border-t border-hairline flex items-center justify-between text-xs text-fg-subtle">
+                  <div className="pt-2 border-t border-hairline/[0.08] flex items-center justify-between text-xs text-fg-subtle">
                     <span>{new Date(rev.publishDate).toLocaleDateString()}</span>
                     {rev.checkinVerified && (
                       <span className="text-success font-medium flex items-center gap-1">
@@ -366,7 +366,7 @@ export default function ProfilePage() {
                 </div>
               ))
             ) : (
-              <div className="py-16 text-center rounded-modal bg-surface space-y-3 border-0">
+              <div className="py-16 text-center rounded-[28px] bg-surface space-y-3 border-0">
                 <Star className="w-10 h-10 text-fg-subtle mx-auto" />
                 <h3 className="text-base font-semibold text-fg">No reviews posted yet</h3>
                 <p className="text-xs text-fg-muted max-w-sm mx-auto">
@@ -374,7 +374,7 @@ export default function ProfilePage() {
                 </p>
                 <Button
                   onClick={() => openRateModal()}
-                  className="bg-accent hover:bg-accent-hover text-white font-semibold rounded-lg text-xs px-5 py-2 apple-press apple-focus"
+                  className="mt-2 inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus cursor-pointer"
                 >
                   Write First Review
                 </Button>
@@ -400,7 +400,7 @@ export default function ProfilePage() {
                 profile.lists.map((l: any) => (
                   <div
                     key={l.id}
-                    className="p-5 rounded-card bg-surface hover:bg-surface-2 transition-[background-color] duration-150 space-y-2 border-0 shadow-sm"
+                    className="p-5 rounded-[22px] bg-surface hover:bg-surface-2 transition-[background-color,transform] duration-150 space-y-2 border-0 apple-press"
                   >
                     <div className="flex items-center justify-between">
                       <h4 className="text-sm font-semibold text-fg">{l.name}</h4>
@@ -417,7 +417,7 @@ export default function ProfilePage() {
                   </div>
                 ))
               ) : (
-                <div className="col-span-full py-12 text-center text-fg-muted rounded-modal bg-surface border-0">
+                <div className="col-span-full py-12 text-center text-fg-muted rounded-[28px] bg-surface border-0">
                   No saved collections yet. Visit <Link href="/lists" className="text-accent-link underline">Lists</Link> to create one.
                 </div>
               )}
@@ -429,10 +429,10 @@ export default function ProfilePage() {
         {activeTab === "badges" && (
           <div className="space-y-6">
             {/* Trust Engine Card */}
-            <div className="p-6 rounded-card bg-surface space-y-4 border-0 shadow-sm">
+            <div className="p-6 rounded-[22px] bg-surface space-y-4 border-0">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-accent-tint text-accent-link flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-[14px] bg-accent-link/[0.12] text-accent-link flex items-center justify-center">
                     <ShieldCheck className="w-6 h-6" />
                   </div>
                   <div>
@@ -448,21 +448,21 @@ export default function ProfilePage() {
               </div>
 
               {/* Progress Bar */}
-              <div className="w-full bg-surface-2 rounded-lg h-2.5 overflow-hidden">
+              <div className="w-full bg-surface-2 rounded-full h-2.5 overflow-hidden">
                 <div
-                  className="h-full bg-accent transition-transform duration-500 rounded-lg"
+                  className="h-full bg-accent transition-transform duration-500 rounded-full"
                   style={{ width: `${Math.min(100, Math.max(0, trustScore))}%` }}
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
-                <div className="p-3.5 rounded-card bg-surface-2 border border-hairline space-y-1">
+                <div className="p-3.5 rounded-[14px] bg-surface-2 space-y-1 border-0">
                   <span className="font-semibold text-success flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5" /> IS 19000:2022 Compliant
                   </span>
                   <p className="text-fg-muted">Verifiable reviewer identity without invasive biometric KYC.</p>
                 </div>
-                <div className="p-3.5 rounded-card bg-surface-2 border border-hairline space-y-1">
+                <div className="p-3.5 rounded-[14px] bg-surface-2 space-y-1 border-0">
                   <span className="font-semibold text-accent-link flex items-center gap-1.5">
                     <Shield className="w-3.5 h-3.5" /> DPDP Act 2023 Enforced
                   </span>
@@ -472,7 +472,7 @@ export default function ProfilePage() {
             </div>
 
             {/* DPDP 2023 Data Erasure Zone */}
-            <div className="p-6 rounded-card bg-danger/5 border border-danger/20 space-y-3">
+            <div className="p-6 rounded-[22px] bg-danger/5 border border-danger/20 space-y-3">
               <div className="flex items-center gap-2 text-danger font-semibold text-sm">
                 <AlertTriangle className="w-4 h-4" />
                 <span>Digital Personal Data Protection (DPDP) Act 2023 Rights</span>
@@ -480,16 +480,15 @@ export default function ProfilePage() {
               <p className="text-xs text-fg-muted leading-relaxed">
                 Under Section 12 of the Indian DPDP Act 2023, you have the right to withdraw data processing consent and demand the permanent erasure of all personal data, telemetry logs, and search history from our PostgreSQL database.
               </p>
-              <Button
-                variant="destructive"
-                size="sm"
+              <button
+                type="button"
                 onClick={handleDeletePersonalData}
                 disabled={isDeletingData}
-                className="mt-2 text-xs font-semibold rounded-lg bg-danger hover:bg-danger/90 apple-press apple-focus"
+                className="mt-2 inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-danger/10 text-danger hover:bg-danger/20 text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus disabled:opacity-50"
               >
                 <Trash2 className="w-3.5 h-3.5 mr-2" />
                 {isDeletingData ? "Erasing Data..." : "Withdraw Consent & Erase My Personal Data"}
-              </Button>
+              </button>
             </div>
           </div>
         )}
@@ -498,12 +497,12 @@ export default function ProfilePage() {
       {/* Edit Profile Modal */}
       {showEditModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
-          <div className="bg-surface border border-hairline rounded-modal w-full max-w-md p-6 shadow-[0_24px_70px_rgba(0,0,0,0.65)] relative space-y-5 text-fg">
+          <div className="bg-surface border border-hairline/[0.08] rounded-[28px] shadow-[0_24px_70px_rgba(0,0,0,0.6)] w-full max-w-md p-6 relative space-y-5 text-fg">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-semibold text-fg">Edit Profile</h3>
               <button
                 onClick={() => setShowEditModal(false)}
-                className="p-1.5 rounded-lg text-fg-subtle hover:text-fg hover:bg-surface-2 transition-colors apple-focus"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-fg-subtle hover:text-fg hover:bg-surface-2 transition-colors apple-focus"
                 aria-label="Close dialog"
               >
                 <X className="w-5 h-5" />
@@ -519,7 +518,7 @@ export default function ProfilePage() {
                   onChange={(e) => setEditName(e.target.value)}
                   placeholder="e.g. Aditya Kulkarni"
                   required
-                  className="w-full px-3.5 py-2.5 bg-surface-2 border border-hairline rounded-input text-fg placeholder:text-fg-subtle focus:border-accent-link focus:outline-none text-xs apple-focus"
+                  className="h-11 w-full rounded-[14px] bg-surface-2 border border-hairline/[0.08] px-4 text-[14px] text-fg placeholder:text-fg-subtle focus-visible:border-accent-link focus-visible:ring-2 focus-visible:ring-accent-link/30 outline-none"
                 />
               </div>
 
@@ -529,7 +528,7 @@ export default function ProfilePage() {
                   value={editBio}
                   onChange={(e) => setEditBio(e.target.value)}
                   placeholder="Tell students what you review in Pune (e.g., Kothrud cafes, Hinjewadi PGs)..."
-                  className="w-full px-3.5 py-2.5 bg-surface-2 border border-hairline rounded-input text-fg placeholder:text-fg-subtle resize-none h-20 focus:border-accent-link focus:outline-none text-xs apple-focus"
+                  className="w-full p-3.5 bg-surface-2 border border-hairline/[0.08] rounded-[14px] text-fg placeholder:text-fg-subtle resize-none h-24 focus-visible:border-accent-link focus-visible:ring-2 focus-visible:ring-accent-link/30 outline-none text-[14px]"
                 />
               </div>
 
@@ -540,22 +539,22 @@ export default function ProfilePage() {
                   value={editAvatar}
                   onChange={(e) => setEditAvatar(e.target.value)}
                   placeholder="https://..."
-                  className="w-full px-3.5 py-2.5 bg-surface-2 border border-hairline rounded-input text-fg placeholder:text-fg-subtle focus:border-accent-link focus:outline-none text-xs apple-focus"
+                  className="h-11 w-full rounded-[14px] bg-surface-2 border border-hairline/[0.08] px-4 text-[14px] text-fg placeholder:text-fg-subtle focus-visible:border-accent-link focus-visible:ring-2 focus-visible:ring-accent-link/30 outline-none"
                 />
               </div>
 
-              <div className="pt-3 flex justify-end gap-2 border-t border-hairline">
+              <div className="pt-3 flex justify-end gap-2 border-t border-hairline/[0.08]">
                 <button
                   type="button"
                   onClick={() => setShowEditModal(false)}
-                  className="text-fg-subtle hover:text-fg text-xs px-3.5 py-1.5 rounded-lg transition-colors apple-focus"
+                  className="min-h-[44px] px-5 rounded-full text-fg-muted hover:text-fg text-[14px] font-medium transition-colors apple-focus"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSaving || !editName.trim()}
-                  className="bg-accent hover:bg-accent-hover text-white font-semibold text-xs rounded-lg px-5 py-2 shadow-md shadow-accent/20 apple-press apple-focus disabled:opacity-50"
+                  className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus disabled:opacity-50"
                 >
                   {isSaving ? "Saving..." : "Save Changes"}
                 </button>

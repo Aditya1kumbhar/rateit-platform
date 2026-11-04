@@ -209,20 +209,20 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
           </p>
         </div>
 
-        {/* Search Bar */}
-        <div className="relative flex items-center rounded-xl bg-surface-2 border border-hairline p-1 shadow-sm focus-within:border-accent-link/60 focus-within:ring-2 focus-within:ring-accent-link/20 transition-[border-color] duration-150">
-          <Search className="w-4 h-4 text-accent-link ml-3.5 shrink-0" />
+        {/* Search Bar (rounded-full with Input styling) */}
+        <div className="relative flex items-center h-11 w-full rounded-full bg-surface-2 border border-hairline/[0.08] px-4 shadow-sm focus-within:border-accent-link focus-within:ring-2 focus-within:ring-accent-link/30 transition-[border-color,box-shadow] duration-150">
+          <Search className="w-4 h-4 text-accent-link shrink-0" />
           <input
             type="text"
             placeholder="Search Pune venues, coaching, FC Road cafes, PGs..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-transparent px-3 py-2 text-sm text-fg placeholder:text-fg-subtle focus:outline-none"
+            className="w-full bg-transparent pl-2.5 pr-2 text-[14px] text-fg placeholder:text-fg-subtle focus:outline-none"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="p-1.5 mr-2 rounded-lg text-fg-subtle hover:text-fg hover:bg-surface-3 transition-colors apple-focus"
+              className="p-1.5 rounded-full text-fg-subtle hover:text-fg hover:bg-surface-3 transition-colors apple-focus"
               aria-label="Clear search"
             >
               <X className="w-4 h-4" />
@@ -233,7 +233,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
 
       {/* Search Fallback Notice Banner */}
       {searchFallbackNotice && (
-        <div className="flex items-center gap-2 p-3 rounded-card bg-accent-tint border border-accent-link/20 text-xs text-accent-link">
+        <div className="flex items-center gap-2 p-3.5 rounded-[18px] bg-accent-link/[0.12] text-xs text-accent-link">
           <Info className="w-4 h-4 text-accent-link shrink-0" />
           <span>{searchFallbackNotice}</span>
         </div>
@@ -241,7 +241,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
 
       {/* Category Tabs & Sort Selector */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-        {/* Horizontal Category Scroll */}
+        {/* Horizontal Category Scroll (Pills) */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
           {categories.map((cat) => {
             const isSelected = selectedCategory === cat.id
@@ -249,10 +249,10 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors duration-150 apple-press apple-focus min-h-[36px] ${
+                className={`h-9 px-4 rounded-full text-[12px] font-medium whitespace-nowrap transition-[background-color,color] duration-150 apple-press apple-focus inline-flex items-center justify-center ${
                   isSelected
-                    ? "bg-accent text-white shadow-sm shadow-accent/20"
-                    : "bg-surface-2 text-fg-muted hover:text-fg hover:bg-surface-3 border border-hairline"
+                    ? "bg-accent text-white"
+                    : "bg-surface-2 text-fg-muted hover:text-fg hover:bg-surface-3"
                 }`}
               >
                 {cat.label}
@@ -265,10 +265,10 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
         <div className="flex items-center gap-2 shrink-0">
           <span className="text-xs text-fg-subtle font-medium hidden sm:inline">Sort:</span>
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-[180px] bg-surface-2 border-hairline text-fg text-xs rounded-lg apple-focus">
+            <SelectTrigger className="w-[180px] bg-surface-2 border border-hairline/[0.08] text-fg text-xs rounded-full apple-focus">
               <SelectValue placeholder="Sort places" />
             </SelectTrigger>
-            <SelectContent className="bg-surface border-hairline text-fg">
+            <SelectContent className="bg-surface border border-hairline/[0.08] text-fg">
               <SelectItem value="personalized">Top Picks For You</SelectItem>
               <SelectItem value="rating">Highest Rated</SelectItem>
               <SelectItem value="reviews">Most Reviews</SelectItem>
@@ -297,27 +297,28 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
       {/* Places Feed Cards (Apple Minimal Border + Fill Contrast) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredAndSortedPlaces.map((place, idx) => (
-          <Link
+          <div
             key={place.id}
-            href={`/item/${place.id}`}
-            className="block apple-press group apple-focus rounded-card"
+            className="animate-in fade-in slide-in-from-bottom-2 duration-200 fill-mode-both"
             style={{ animationDelay: `${Math.min(idx * 40, 240)}ms` }}
           >
-            <div className="p-5 rounded-card bg-surface hover:bg-surface-2 transition-[background-color] duration-150 h-full flex flex-col justify-between border-0 shadow-sm">
+            <Link
+              href={`/item/${place.id}`}
+              className="block bg-surface rounded-[22px] p-5 transition-[background-color,transform] duration-150 hover:bg-surface-2 apple-press group apple-focus h-full flex flex-col justify-between"
+            >
               <div className="space-y-3">
-                {/* Header row: Category tag & exploration badge & bookmark */}
+                {/* Header row: Max ONE badge per card & bookmark */}
                 <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-semibold text-fg-muted bg-surface-2 px-2.5 py-0.5 rounded-md border border-hairline">
+                  {place.isExploration ? (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-accent-link bg-accent-link/[0.12] px-2.5 py-0.5 rounded-full">
+                      <Sparkles className="w-3 h-3" />
+                      Serendipity Pick
+                    </span>
+                  ) : (
+                    <span className="text-[11px] font-medium text-fg-muted bg-surface-2 px-2.5 py-0.5 rounded-full">
                       {place.category.replace("_", " ")}
                     </span>
-                    {place.isExploration && (
-                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-accent-link bg-accent-tint px-2.5 py-0.5 rounded-md border border-accent-link/20">
-                        <Sparkles className="w-3 h-3" />
-                        Serendipity Pick
-                      </span>
-                    )}
-                  </div>
+                  )}
 
                   <button
                     onClick={(e) => {
@@ -327,7 +328,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
                       setShowSaveModal(true)
                     }}
                     title="Save to list"
-                    className="p-1.5 rounded-lg text-fg-subtle hover:text-danger hover:bg-surface-3 transition-colors apple-press apple-focus"
+                    className="p-1.5 rounded-full text-fg-subtle hover:text-danger hover:bg-surface-3 transition-colors apple-press apple-focus"
                   >
                     <Heart className="w-4 h-4" />
                   </button>
@@ -335,7 +336,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
 
                 {/* Place Name & Rating */}
                 <div>
-                  <h3 className="text-lg font-semibold text-fg tracking-[-0.022em] group-hover:text-accent-link transition-colors">
+                  <h3 className="text-[17px] font-semibold text-fg tracking-[-0.022em] group-hover:text-accent-link transition-colors">
                     {place.name}
                   </h3>
                   <div className="flex items-center gap-3 text-xs mt-1">
@@ -344,7 +345,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
                       {place.avgRating ? place.avgRating.toFixed(1) : "0.0"}
                     </div>
                     <span className="text-fg-subtle">•</span>
-                    <span className="text-fg-subtle tabular-nums">{place.reviewCount} reviews</span>
+                    <span className="text-[12px] text-fg-subtle tabular-nums">{place.reviewCount} reviews</span>
                     {place.priceRange && (
                       <>
                         <span className="text-fg-subtle">•</span>
@@ -354,7 +355,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
                     {place.distanceKm !== undefined && (
                       <>
                         <span className="text-fg-subtle">•</span>
-                        <span className="text-success font-medium tabular-nums">{place.distanceKm.toFixed(1)} km</span>
+                        <span className="text-[12px] text-fg-subtle tabular-nums">{place.distanceKm.toFixed(1)} km</span>
                       </>
                     )}
                   </div>
@@ -376,24 +377,24 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
 
               {/* Tags footer */}
               {place.tags && place.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 pt-4 mt-3 border-t border-hairline">
+                <div className="flex flex-wrap gap-1.5 pt-4 mt-3 border-t border-hairline/[0.08]">
                   {place.tags.slice(0, 4).map((tag, tagIdx) => (
                     <span
                       key={tagIdx}
-                      className="text-[10px] font-medium text-fg-muted bg-surface-2 px-2.5 py-0.5 rounded-md border border-hairline"
+                      className="text-[10px] font-medium text-fg-muted bg-surface-2 px-2.5 py-0.5 rounded-full"
                     >
                       #{tag}
                     </span>
                   ))}
                 </div>
               )}
-            </div>
-          </Link>
+            </Link>
+          </div>
         ))}
 
         {/* Empty state */}
         {filteredAndSortedPlaces.length === 0 && (
-          <div className="col-span-full py-16 text-center rounded-modal bg-surface space-y-3">
+          <div className="col-span-full py-16 text-center rounded-[28px] bg-surface space-y-3">
             <Compass className="w-10 h-10 text-fg-subtle mx-auto" />
             <h3 className="text-base font-semibold text-fg">No Pune spots found</h3>
             <p className="text-xs text-fg-muted max-w-sm mx-auto">
@@ -406,7 +407,7 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
                 setSearchQuery("")
                 setSelectedCategory("all")
               }}
-              className="mt-2 rounded-lg border-hairline text-fg hover:bg-surface-2 apple-focus"
+              className="mt-2 min-h-[44px] px-6 rounded-full bg-surface-2 hover:bg-surface-3 text-fg text-[14px] font-semibold border-0 apple-press apple-focus"
             >
               Reset filters
             </Button>
@@ -435,7 +436,7 @@ export function DiscoverClient({ initialPlaces }: DiscoverClientProps) {
       fallback={
         <div className="min-h-screen bg-canvas flex items-center justify-center">
           <div className="text-center space-y-3">
-            <div className="w-10 h-10 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
+            <div className="h-5 w-5 border-2 border-accent-link border-t-transparent rounded-full animate-spin mx-auto" />
             <p className="text-fg-muted text-sm font-medium">Loading Discover Feed...</p>
           </div>
         </div>

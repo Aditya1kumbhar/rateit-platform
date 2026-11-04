@@ -120,14 +120,31 @@
   - **Zero AI Tags & Slop Copy**: Removed all AI tags; direct Pune hyperlocal copy.
   - **Launch Prerequisites Met**: Custom domain (`https://rateit.in`), vector gold favicon (`app/icon.svg`, `public/favicon.ico`), privacy policy (`app/privacy/page.tsx`), terms and conditions (`app/terms/page.tsx`), and IT Act 2021 Grievance desk (`app/grievance/page.tsx`).
   - **Audited Secrets Check**: Hardened `scripts/check-client-secrets.sh` with exact token boundaries `(^|[^A-Za-z0-9_])...([^A-Za-z0-9_]|$)` to prevent false positive matches on legitimate OAuth parameters (such as `<REDIRECT_URL>` in Supabase docstrings).
+- [x] **P14 Apple UI Prompt Pack Complete Execution (Steps 1-10)**:
+  - **Step 1 Foundation**: Defined all RGB token channels in `app/globals.css`, mapped in `tailwind.config.ts`, tuned `lib/lenis.ts` with reduced-motion guard.
+  - **Step 2 Codemod Plan**: Audited all legacy classes and approved replacement matrix.
+  - **Step 3 Command Palette**: Instant open, modal recipe, accent row highlights.
+  - **Step 4 Rate Modal**: Modal recipe, step crossfades, GPU progress bar, Star token strictly on ratings.
+  - **Step 5 Save Modal & Navigation**: Navbar & BottomNav `.glass` recipe, zero colored drop-shadows.
+  - **Step 6 Discover**: Feed cards `rounded-[22px]`, zero borders, tabular-nums ratings, pill category chips.
+  - **Step 7 Place Profile (`app/item/[id]/item-client.tsx`)**: Hero card `rounded-[28px]`, "Rate this spot" primary button, reviews without borders, gold star ratings.
+  - **Step 8 Categories, Lists, Profile**:
+    - `app/category/[slug]/category-client.tsx`: Hero `rounded-[28px]`, pill sort controls, cards `rounded-[22px]`.
+    - `app/categories/page.tsx`: Directory grid cards `rounded-[22px]`, icon wrappers `rounded-[14px]`.
+    - `app/lists/page.tsx`: Saved collections cards `rounded-[22px]`, create modal `rounded-[28px]`.
+    - `app/profile/page.tsx`: Profile header `rounded-[28px]`, tabs pills `rounded-full`, DPDP consent zone `rounded-[22px]`.
+  - **Step 9 Forms**:
+    - `app/business/claim/[placeId]/page.tsx`: Form container `rounded-[28px]`, primary submit CTA `rounded-full`, upload dropzone `rounded-[22px]`.
+    - `app/grievance/grievance-form.tsx`: Statutory form container `rounded-[28px]`, inputs per recipe `rounded-[14px]`.
+  - **Step 10 Audit & Verification**:
+    - Purged all ambient background mesh gradients and text gradient clips from `app/page.tsx`.
+    - Modernized `app/error.tsx` to pitch black Apple canvas with primary button.
+    - Verified strict `star` token scoping (used only on star ratings and reviewer trust scores).
+    - Passed complete typecheck, Vitest test battery (31/31), secrets scan, and Next.js 14 production build (16/16 routes).
 - [x] **Verification**:
   - `npx tsc --noEmit`: 0 TypeScript compiler errors.
   - `npm run check:secrets`: 0 sensitive variables in `.next/static`.
-  - `npm run test`: 7/7 suites passed, 31/31 unit & API tests passed in 119ms.
-  - `npm run build`: Production Next.js 14 build passes cleanly with 0 type or webpack errors across all 16 routes.
-  - `npx tsc --noEmit`: 0 TypeScript compiler errors.
-  - `npm run check:secrets`: 0 sensitive variables in `.next/static`.
-  - `npm run test`: 7/7 suites passed, 31/31 unit & API tests passed in 118ms.
-  - `npm run build`: Production Next.js 14 build passes cleanly with 0 type or webpack errors across all 16 routes.
+  - `npm run test`: 7/7 suites passed, 31/31 unit & API tests passed in 110ms.
+  - `npm run build`: Production Next.js 14 build passes cleanly with 0 type or webpack errors across all 16 routes in 9s.
 
 

@@ -149,14 +149,11 @@ function HomePageContent() {
 
   return (
     <div className="relative overflow-x-hidden bg-canvas text-fg">
-      {/* Background Ambient Mesh Light */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[480px] bg-gradient-to-b from-accent-link/10 via-accent/5 to-transparent blur-3xl pointer-events-none -z-10" />
-
       {/* Hero Section */}
       <section className="relative pt-12 pb-16 md:pt-20 md:pb-24 container mx-auto px-4 max-w-6xl">
         <div className="max-w-4xl mx-auto text-center space-y-6">
-          {/* Eyebrow Micro-Label: Rectangular rounded */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-2 border border-hairline shadow-sm">
+          {/* Eyebrow Micro-Label */}
+          <div className="inline-flex items-center gap-2 h-7 px-3 rounded-full bg-surface-2 text-fg-subtle text-[11px] font-medium">
             <span className="w-1.5 h-1.5 rounded-full bg-accent-link animate-pulse" />
             <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-fg">
               Dual-Signal Physical Verification
@@ -165,10 +162,10 @@ function HomePageContent() {
             <span className="text-[11px] font-medium text-fg-subtle">Pune V1</span>
           </div>
 
-          {/* Clean, Non-Vague Headline */}
+          {/* Clean Headline */}
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold text-fg tracking-[-0.022em] leading-[1.05]">
             Physically Verified Pune Reviews.<br />
-            <span className="bg-gradient-to-b from-fg via-fg to-fg-subtle bg-clip-text text-transparent">
+            <span className="text-fg-muted">
               Zero paid spam. Authentic local ratings.
             </span>
           </h1>
@@ -178,9 +175,9 @@ function HomePageContent() {
             Independent reviews for coaching centers, student PGs, hostels, and cafes across FC Road, Kothrud, Viman Nagar, and Hinjewadi. Every review is verified via 200m physical GPS geofencing and photo EXIF camera metadata.
           </p>
 
-          {/* Search Bar: Rectangular rounded (rounded-xl, NOT pill) */}
+          {/* Search Bar */}
           <form onSubmit={handleHeroSearch} className="max-w-2xl mx-auto relative group pt-2">
-            <div className="relative flex items-center rounded-xl bg-surface-2/80 backdrop-blur-2xl border border-hairline p-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.6)] focus-within:border-accent-link/60 focus-within:ring-2 focus-within:ring-accent-link/20 transition-all">
+            <div className="relative flex items-center rounded-full bg-surface-2 border border-hairline/[0.08] p-1.5 focus-within:border-accent-link focus-within:ring-2 focus-within:ring-accent-link/30 transition-[border-color,box-shadow] duration-150">
               <MapPin className="w-5 h-5 text-accent-link ml-3 shrink-0" />
               <input
                 type="text"
@@ -191,14 +188,14 @@ function HomePageContent() {
               />
               <button
                 type="submit"
-                className="bg-accent hover:bg-accent-hover text-white font-medium rounded-lg px-5 py-2.5 shrink-0 transition-colors shadow-md shadow-accent/20 apple-press flex items-center gap-1.5 text-sm min-h-[44px]"
+                className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus gap-1.5"
               >
                 <Search className="w-4 h-4" />
                 <span>Search</span>
               </button>
             </div>
 
-            {/* Hub Filter Chips: Rectangular rounded (rounded-lg, NOT pill) */}
+            {/* Hub Filter Chips */}
             <div className="flex flex-wrap items-center justify-center gap-2 mt-4 text-xs">
               <span className="text-fg-subtle text-[11px] font-semibold uppercase tracking-[0.06em] mr-1">Hubs:</span>
               {[
@@ -211,7 +208,7 @@ function HomePageContent() {
                   key={idx}
                   type="button"
                   onClick={() => router.push(`/discover?search=${encodeURIComponent(chip.query)}`)}
-                  className="px-3.5 py-1.5 rounded-lg bg-surface hover:bg-surface-2 border border-hairline text-fg-muted hover:text-fg transition-colors apple-press min-h-[36px]"
+                  className="h-9 px-4 rounded-full text-[12px] font-medium bg-surface-2 text-fg-muted hover:text-fg transition-colors apple-press"
                 >
                   {chip.label}
                 </button>
@@ -219,9 +216,9 @@ function HomePageContent() {
             </div>
           </form>
 
-          {/* Bento Specs Bar: Real specifications, no fake counters */}
+          {/* Bento Specs Bar */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 max-w-3xl mx-auto">
-            <div className="p-6 rounded-modal bg-surface text-left">
+            <div className="p-6 rounded-[22px] bg-surface text-left border-0">
               <div className="text-3xl font-semibold text-fg tabular-nums tracking-tight">
                 {stats.totalReviews > 0 ? `${stats.totalReviews}` : "200m"}
               </div>
@@ -229,7 +226,7 @@ function HomePageContent() {
                 {stats.totalReviews > 0 ? "Verified Reviews" : "GPS Geofence Radius"}
               </div>
             </div>
-            <div className="p-6 rounded-modal bg-surface text-left">
+            <div className="p-6 rounded-[22px] bg-surface text-left border-0">
               <div className="text-3xl font-semibold text-fg tabular-nums tracking-tight">
                 {stats.totalPlaces > 0 ? `${stats.totalPlaces}` : "EXIF + GPS"}
               </div>
@@ -237,7 +234,7 @@ function HomePageContent() {
                 {stats.totalPlaces > 0 ? "Pune Listed Venues" : "Dual-Check Verification"}
               </div>
             </div>
-            <div className="p-6 rounded-modal bg-surface text-left">
+            <div className="p-6 rounded-[22px] bg-surface text-left border-0">
               <div className="text-3xl font-semibold text-accent-link tracking-tight">Bayesian</div>
               <div className="text-[11px] uppercase tracking-[0.06em] text-fg-subtle font-semibold mt-1">
                 Shrinkage Rating Engine
@@ -248,7 +245,7 @@ function HomePageContent() {
       </section>
 
       {/* Categories Modular Bento Grid */}
-      <section className="container mx-auto px-4 py-16 border-t border-hairline max-w-6xl">
+      <section className="container mx-auto px-4 py-16 border-t border-hairline/[0.08] max-w-6xl">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
             <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-link mb-1">
@@ -277,8 +274,8 @@ function HomePageContent() {
             { name: "Local Services", slug: "local-services", icon: Wrench, count: "Verified Listings", tag: "Study & Tech" },
           ].map((cat, index) => (
             <Link key={index} href={`/category/${cat.slug}`} className="apple-press">
-              <div className="p-6 rounded-modal bg-surface hover:bg-surface-2 transition-colors h-full flex flex-col justify-between space-y-4 group">
-                <div className="w-12 h-12 rounded-card bg-surface-2 text-accent-link flex items-center justify-center group-hover:scale-105 transition-transform">
+              <div className="p-6 rounded-[22px] bg-surface hover:bg-surface-2 transition-[background-color,transform] duration-150 h-full flex flex-col justify-between space-y-4 group border-0">
+                <div className="w-12 h-12 rounded-[14px] bg-accent-link/[0.12] text-accent-link flex items-center justify-center">
                   <cat.icon className="h-6 w-6" />
                 </div>
                 <div>
@@ -295,7 +292,7 @@ function HomePageContent() {
       </section>
 
       {/* Pune Verified Places Spotlight */}
-      <section className="container mx-auto px-4 py-16 border-t border-hairline max-w-6xl">
+      <section className="container mx-auto px-4 py-16 border-t border-hairline/[0.08] max-w-6xl">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
             <div className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.08em] text-accent-link font-semibold mb-2">
@@ -317,10 +314,10 @@ function HomePageContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {highlights.map((place) => (
             <Link key={place.id} href={`/item/${place.id}`} className="apple-press">
-              <div className="p-6 rounded-modal bg-surface hover:bg-surface-2 transition-colors h-full flex flex-col justify-between group">
+              <div className="p-6 rounded-[22px] bg-surface hover:bg-surface-2 transition-[background-color,transform] duration-150 h-full flex flex-col justify-between group border-0">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-semibold text-fg bg-surface-2 px-2.5 py-1 rounded-md">
+                    <span className="inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium text-fg-muted bg-surface-2">
                       {place.tag}
                     </span>
                     <span className="text-xs text-fg-subtle font-mono">{place.price}</span>
@@ -341,17 +338,17 @@ function HomePageContent() {
                   </p>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-hairline flex items-center justify-between text-xs">
+                <div className="pt-4 mt-4 border-t border-hairline/[0.08] flex items-center justify-between text-xs">
                   <div className="flex items-center gap-1.5">
                     <div className="flex items-center text-star font-semibold tabular-nums">
-                      <Star className="w-3.5 h-3.5 fill-star mr-1" />
+                      <Star className="w-3.5 h-3.5 fill-star text-star mr-1" />
                       {place.rating}
                     </div>
                     <span className="text-fg-subtle">({place.reviews})</span>
                   </div>
 
                   {place.verifiedCheckin && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-success bg-success/10 px-2 py-0.5 rounded-md">
+                    <span className="inline-flex h-6 px-2.5 items-center gap-1 rounded-full text-[11px] font-medium text-success bg-success/10">
                       <CheckCircle2 className="w-3 h-3" />
                       GPS Verified
                     </span>
@@ -364,7 +361,7 @@ function HomePageContent() {
       </section>
 
       {/* Community Verified Reviews Feed */}
-      <section className="container mx-auto px-4 py-16 border-t border-hairline max-w-6xl">
+      <section className="container mx-auto px-4 py-16 border-t border-hairline/[0.08] max-w-6xl">
         <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
           <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-link">
             Live Reviews
@@ -378,12 +375,12 @@ function HomePageContent() {
             {liveReviews.map((rev) => (
               <div
                 key={rev.id}
-                className="p-6 rounded-modal bg-surface flex flex-col justify-between space-y-4"
+                className="p-6 rounded-[22px] bg-surface flex flex-col justify-between space-y-4 border-0"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-9 h-9 rounded-lg bg-surface-2 flex items-center justify-center text-xs font-semibold text-fg">
+                      <div className="w-9 h-9 rounded-full bg-surface-2 flex items-center justify-center text-xs font-semibold text-accent-link">
                         {rev.user ? rev.user[0].toUpperCase() : "U"}
                       </div>
                       <div>
@@ -394,7 +391,7 @@ function HomePageContent() {
                       </div>
                     </div>
                     <div className="flex items-center text-star text-xs font-semibold tabular-nums">
-                      <Star className="w-3 h-3 fill-star mr-1" />
+                      <Star className="w-3 h-3 fill-star text-star mr-1" />
                       {Number(rev.rating).toFixed(1)}
                     </div>
                   </div>
@@ -410,7 +407,7 @@ function HomePageContent() {
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-hairline flex items-center justify-between text-[11px] text-fg-subtle">
+                <div className="pt-3 border-t border-hairline/[0.08] flex items-center justify-between text-[11px] text-fg-subtle">
                   <span>{new Date(rev.createdAt).toLocaleDateString("en-IN", { month: "short", day: "numeric" })}</span>
                   <span className="inline-flex items-center gap-1 text-success">
                     <ShieldCheck className="w-3 h-3" />
@@ -421,7 +418,7 @@ function HomePageContent() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 px-6 max-w-md mx-auto rounded-modal bg-surface space-y-4">
+          <div className="text-center py-12 px-6 max-w-md mx-auto rounded-[28px] bg-surface space-y-4 border-0">
             <ShieldCheck className="w-10 h-10 text-accent-link mx-auto" />
             <h3 className="text-base font-semibold text-fg">Be the First Verified Reviewer</h3>
             <p className="text-xs text-fg-muted leading-relaxed">
@@ -429,7 +426,7 @@ function HomePageContent() {
             </p>
             <Link
               href="/discover"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-accent hover:bg-accent-hover px-5 py-2.5 rounded-lg transition-colors apple-press min-h-[44px]"
+              className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus"
             >
               Explore Pune Venues
             </Link>
@@ -438,7 +435,7 @@ function HomePageContent() {
       </section>
 
       {/* Bento Grid Architecture: Why RateIT is Unbreakable */}
-      <section className="container mx-auto px-4 py-20 border-t border-hairline max-w-6xl">
+      <section className="container mx-auto px-4 py-20 border-t border-hairline/[0.08] max-w-6xl">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
           <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-link">
             Security Architecture
@@ -452,9 +449,9 @@ function HomePageContent() {
         {/* Modular Bento Grid: 2 Large Span-2 cards + 2 Compact Span-1 cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Bento Card 1: Wide Span 2 - Physical GPS Geofence */}
-          <div className="md:col-span-2 p-8 rounded-modal bg-surface flex flex-col justify-between space-y-6 relative overflow-hidden group">
+          <div className="md:col-span-2 p-8 rounded-[22px] bg-surface flex flex-col justify-between space-y-6 relative overflow-hidden group border-0">
             <div className="space-y-3 max-w-md z-10">
-              <div className="w-12 h-12 rounded-card bg-surface-2 text-success flex items-center justify-center">
+              <div className="w-12 h-12 rounded-[14px] bg-surface-2 text-success flex items-center justify-center">
                 <MapPin className="h-6 w-6" />
               </div>
               <div className="text-[11px] uppercase tracking-[0.08em] font-semibold text-fg-subtle">
@@ -469,7 +466,7 @@ function HomePageContent() {
             </div>
 
             {/* Radar Spec Visualizer */}
-            <div className="p-4 rounded-card bg-surface-2 flex items-center justify-between text-xs font-mono text-fg-subtle z-10">
+            <div className="p-4 rounded-[14px] bg-surface-2 flex items-center justify-between text-xs font-mono text-fg-subtle z-10 border-0">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-success animate-ping" />
                 <span className="text-fg">FC Road Hub: 18.5204° N, 73.8567° E</span>
@@ -479,9 +476,9 @@ function HomePageContent() {
           </div>
 
           {/* Bento Card 2: Span 1 - Hardware EXIF Extraction */}
-          <div className="p-8 rounded-modal bg-surface flex flex-col justify-between space-y-6 group">
+          <div className="p-8 rounded-[22px] bg-surface flex flex-col justify-between space-y-6 group border-0">
             <div className="space-y-3">
-              <div className="w-12 h-12 rounded-card bg-surface-2 text-accent-link flex items-center justify-center">
+              <div className="w-12 h-12 rounded-[14px] bg-surface-2 text-accent-link flex items-center justify-center">
                 <Camera className="h-6 w-6" />
               </div>
               <div className="text-[11px] uppercase tracking-[0.08em] font-semibold text-fg-subtle">
@@ -496,11 +493,11 @@ function HomePageContent() {
             </div>
 
             <div className="space-y-1.5 pt-2 text-xs font-mono text-fg-subtle">
-              <div className="flex justify-between py-1 border-b border-hairline">
+              <div className="flex justify-between py-1 border-b border-hairline/[0.08]">
                 <span>Aperture:</span>
                 <span className="text-fg">f/1.8</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-hairline">
+              <div className="flex justify-between py-1 border-b border-hairline/[0.08]">
                 <span>Exposure:</span>
                 <span className="text-fg">1/120s</span>
               </div>
@@ -512,9 +509,9 @@ function HomePageContent() {
           </div>
 
           {/* Bento Card 3: Span 1 - Bayesian Shrinkage Mathematics */}
-          <div className="p-8 rounded-modal bg-surface flex flex-col justify-between space-y-6 group">
+          <div className="p-8 rounded-[22px] bg-surface flex flex-col justify-between space-y-6 group border-0">
             <div className="space-y-3">
-              <div className="w-12 h-12 rounded-card bg-surface-2 text-star flex items-center justify-center">
+              <div className="w-12 h-12 rounded-[14px] bg-surface-2 text-accent-link flex items-center justify-center">
                 <Cpu className="h-6 w-6" />
               </div>
               <div className="text-[11px] uppercase tracking-[0.08em] font-semibold text-fg-subtle">
@@ -528,15 +525,15 @@ function HomePageContent() {
               </p>
             </div>
 
-            <div className="p-3.5 rounded-card bg-surface-2 text-center font-mono text-xs text-star">
+            <div className="p-3.5 rounded-[14px] bg-surface-2 text-center font-mono text-xs text-accent-link border-0">
               {"(v / (v + m)) · R + (m / (v + m)) · C"}
             </div>
           </div>
 
           {/* Bento Card 4: Wide Span 2 - Collusion Network & Legal Safe Harbour */}
-          <div className="md:col-span-2 p-8 rounded-modal bg-surface flex flex-col justify-between space-y-6 group">
+          <div className="md:col-span-2 p-8 rounded-[22px] bg-surface flex flex-col justify-between space-y-6 group border-0">
             <div className="space-y-3 max-w-lg">
-              <div className="w-12 h-12 rounded-card bg-surface-2 text-accent-link flex items-center justify-center">
+              <div className="w-12 h-12 rounded-[14px] bg-surface-2 text-accent-link flex items-center justify-center">
                 <Shield className="h-6 w-6" />
               </div>
               <div className="text-[11px] uppercase tracking-[0.08em] font-semibold text-fg-subtle">
@@ -551,13 +548,13 @@ function HomePageContent() {
             </div>
 
             <div className="flex flex-wrap items-center gap-2 pt-2">
-              <span className="text-[11px] font-semibold px-3 py-1 rounded-md bg-surface-2 text-fg">
+              <span className="inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium bg-surface-2 text-fg">
                 Rule 3(2) IT Rules 2021
               </span>
-              <span className="text-[11px] font-semibold px-3 py-1 rounded-md bg-surface-2 text-fg">
+              <span className="inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium bg-surface-2 text-fg">
                 DPDP 2023 Consent Flow
               </span>
-              <span className="text-[11px] font-semibold px-3 py-1 rounded-md bg-accent-tint text-accent-link">
+              <span className="inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium bg-accent-link/[0.12] text-accent-link">
                 IS 19000:2022 Verified
               </span>
             </div>
@@ -574,7 +571,7 @@ export default function HomePage() {
       fallback={
         <div className="min-h-screen bg-canvas flex items-center justify-center">
           <div className="text-center space-y-3">
-            <div className="w-10 h-10 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
+            <div className="h-5 w-5 rounded-full border-2 border-accent-link border-t-transparent animate-spin mx-auto" />
             <p className="text-fg-muted text-sm font-medium">Loading RateIT Pune...</p>
           </div>
         </div>

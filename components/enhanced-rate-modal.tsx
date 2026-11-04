@@ -285,7 +285,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
   if (isAuthenticated === null) {
     return (
       <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
-        <div className="bg-surface border border-hairline rounded-card w-full max-w-sm p-8 flex flex-col items-center justify-center shadow-2xl text-fg">
+        <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-sm p-8 flex flex-col items-center justify-center shadow-[0_24px_70px_rgba(0,0,0,0.6)] text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
           <Loader2 className="h-8 w-8 text-accent-link animate-spin mb-4" />
           <p className="text-sm font-medium text-fg-muted">Checking authentication...</p>
         </div>
@@ -302,16 +302,16 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
       }}
       className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
     >
-      <div className="bg-surface border border-hairline rounded-modal w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.65)] relative text-fg">
+      <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.6)] relative text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
         {/* Header */}
-        <div className="sticky top-0 bg-surface/95 backdrop-blur-2xl border-b border-hairline p-4 flex items-center justify-between z-10">
+        <div className="sticky top-0 bg-surface/95 backdrop-blur-2xl border-b border-hairline/[0.08] p-4 flex items-center justify-between z-10">
           <div className="flex items-center gap-3">
             {currentStepIndex > 0 && (
               <button
                 type="button"
                 onClick={goBack}
                 aria-label="Previous step"
-                className="p-2 hover:bg-surface-2 rounded-lg transition-colors text-fg-subtle hover:text-fg apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
+                className="p-2 hover:bg-surface-2 rounded-full transition-colors text-fg-subtle hover:text-fg apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
@@ -327,14 +327,14 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="p-2 hover:bg-surface-2 rounded-lg transition-colors text-fg-subtle hover:text-fg apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
+            className="p-2 hover:bg-surface-2 rounded-full transition-colors text-fg-subtle hover:text-fg apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* GPU Composited Progress bar */}
-        <div className="h-1 bg-surface-2 overflow-hidden">
+        {/* Progress bar (full-width bg-surface-3 h-1 rounded-full track) */}
+        <div className="w-full bg-surface-3 h-1 rounded-full overflow-hidden">
           <div
             className="h-full bg-accent origin-left transition-transform duration-200 ease-out"
             style={{ transform: `scaleX(${(currentStepIndex + 1) / steps.length})` }}
@@ -344,15 +344,15 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
         <div className="p-6">
           {/* STEP 1: Search/Select Place */}
           {currentStep === "search" && (
-            <div className="space-y-4">
+            <div className="space-y-4 animate-in fade-in duration-150">
               <div className="relative">
-                <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-accent-link" />
+                <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-accent-link pointer-events-none" />
                 <input
                   type="text"
                   placeholder="Search coaching class, PG, café on FC Road or Kothrud..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-surface-2 border border-hairline rounded-xl text-fg placeholder:text-fg-subtle focus:border-accent-link focus:outline-none text-sm apple-focus"
+                  className="h-11 w-full pl-10 pr-4 rounded-[14px] bg-surface-2 border border-hairline/[0.08] text-[14px] text-fg placeholder:text-fg-subtle focus-visible:border-accent-link focus-visible:ring-2 focus-visible:ring-accent-link/30 outline-none transition-[border-color,box-shadow] duration-150"
                 />
               </div>
 
@@ -364,15 +364,15 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                       setSelectedPlace(place as any)
                       goNext()
                     }}
-                    className={`w-full text-left p-3.5 rounded-card border transition-[background-color,border-color] duration-150 apple-press apple-focus ${
+                    className={`w-full text-left p-4 rounded-[22px] transition-[background-color,transform] duration-150 apple-press apple-focus ${
                       selectedPlace?.id === place.id
-                        ? "border-accent-link/40 bg-accent-tint"
-                        : "border-transparent bg-surface-2 hover:bg-surface-3"
+                        ? "bg-accent-link/[0.12] text-fg"
+                        : "bg-surface-2 hover:bg-surface-3 text-fg"
                     }`}
                   >
                     <div className="font-semibold text-fg text-sm">{place.name}</div>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-[10px] px-2.5 py-0.5 bg-accent-tint text-accent-link border border-accent-link/20 rounded-md font-medium">
+                      <span className="text-[11px] px-2.5 py-0.5 bg-surface-3 text-accent-link rounded-full font-medium">
                         {categoryLabels[place.category] || place.category}
                       </span>
                       <span className="text-xs text-fg-subtle truncate">{place.address}</span>
@@ -393,9 +393,9 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
 
           {/* STEP 2: Geofence Check-In */}
           {currentStep === "checkin" && selectedPlace && (
-            <div className="space-y-6">
+            <div className="space-y-6 animate-in fade-in duration-150">
               <div className="text-center space-y-2">
-                <div className="w-14 h-14 bg-accent-tint border border-accent-link/20 text-accent-link rounded-xl flex items-center justify-center mx-auto">
+                <div className="w-14 h-14 bg-surface-2 text-accent-link rounded-[18px] flex items-center justify-center mx-auto">
                   <MapPin className="h-7 w-7" />
                 </div>
                 <h3 className="font-semibold text-fg text-lg">{selectedPlace.name}</h3>
@@ -409,7 +409,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   <Button
                     onClick={handleCheckin}
                     disabled={isLocating}
-                    className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-xl font-semibold apple-press apple-focus"
+                    className="w-full min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus"
                   >
                     {isLocating ? (
                       <>
@@ -435,7 +435,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
               )}
 
               {checkinStatus === "verified" && (
-                <div className="bg-success/10 border border-success/20 rounded-card p-4 text-center space-y-2">
+                <div className="bg-success/10 rounded-[22px] p-4 text-center space-y-2">
                   <CheckCircle className="h-8 w-8 text-success mx-auto" />
                   <p className="font-semibold text-success text-sm">Location Verified On-Site</p>
                   <p className="text-xs text-fg-muted">
@@ -443,7 +443,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   </p>
                   <Button
                     onClick={goNext}
-                    className="w-full mt-3 bg-accent hover:bg-accent-hover text-white py-2.5 rounded-xl font-semibold apple-press apple-focus"
+                    className="w-full mt-3 min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus"
                   >
                     Proceed to Rating &rarr;
                   </Button>
@@ -451,7 +451,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
               )}
 
               {checkinStatus === "unverified" && (
-                <div className="bg-warning/10 border border-warning/20 rounded-card p-4 text-center space-y-2">
+                <div className="bg-warning/10 rounded-[22px] p-4 text-center space-y-2">
                   <AlertTriangle className="h-8 w-8 text-warning mx-auto" />
                   <p className="font-semibold text-warning text-sm">Off-site / Distance Mismatch</p>
                   <p className="text-xs text-fg-muted">
@@ -459,7 +459,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   </p>
                   <Button
                     onClick={goNext}
-                    className="w-full mt-3 bg-accent hover:bg-accent-hover text-white py-2.5 rounded-xl font-semibold apple-press apple-focus"
+                    className="w-full mt-3 min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus"
                   >
                     Continue to Rating &rarr;
                   </Button>
@@ -467,7 +467,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
               )}
 
               {checkinStatus === "error" && (
-                <div className="bg-danger/10 border border-danger/20 rounded-card p-4 text-center space-y-2">
+                <div className="bg-danger/10 rounded-[22px] p-4 text-center space-y-2">
                   <AlertTriangle className="h-8 w-8 text-danger mx-auto" />
                   <p className="font-semibold text-danger text-sm">Location Access Unavailable</p>
                   <p className="text-xs text-fg-muted">{locationError}</p>
@@ -476,7 +476,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                       onClick={handleCheckin}
                       variant="outline"
                       size="sm"
-                      className="flex-1 border-hairline text-fg rounded-xl apple-focus"
+                      className="flex-1 min-h-[44px] rounded-full bg-surface-2 hover:bg-surface-3 text-fg text-xs font-semibold border-0 apple-focus apple-press"
                     >
                       Retry GPS
                     </Button>
@@ -486,7 +486,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                         goNext()
                       }}
                       size="sm"
-                      className="flex-1 bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl apple-focus"
+                      className="flex-1 min-h-[44px] rounded-full bg-accent hover:bg-accent-hover text-white text-xs font-semibold apple-focus apple-press"
                     >
                       Skip & Rate
                     </Button>
@@ -498,7 +498,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
 
           {/* STEP 3: Blind Rating */}
           {currentStep === "blind-rating" && (
-            <div className="space-y-6">
+            <div className="space-y-6 animate-in fade-in duration-150">
               <div className="text-center space-y-2">
                 <div className="flex items-center justify-center gap-2">
                   {showOtherRatings ? (
@@ -525,8 +525,8 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                       key={star}
                       className={`h-11 w-11 cursor-pointer transition-transform duration-150 ${
                         star <= rating
-                          ? "text-star fill-star scale-110 drop-shadow-[0_0_8px_rgba(245,166,35,0.4)]"
-                          : "text-surface-3 hover:text-fg-subtle"
+                          ? "fill-star text-star scale-105"
+                          : "text-fg-subtle hover:text-fg"
                       } ${hasSubmittedBlindRating ? "pointer-events-none" : ""}`}
                       onClick={() => !hasSubmittedBlindRating && setRating(star)}
                     />
@@ -546,13 +546,13 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                 <Button
                   onClick={handleBlindRatingSubmit}
                   disabled={rating === 0}
-                  className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-xl font-semibold disabled:opacity-40 apple-press apple-focus"
+                  className="w-full min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold disabled:opacity-40 transition-[background-color,transform] duration-150 apple-press apple-focus"
                 >
                   Lock In My Blind Rating
                 </Button>
               ) : (
                 <div className="space-y-4">
-                  <div className="p-4 rounded-card bg-surface-2 border border-hairline space-y-2 text-xs">
+                  <div className="p-4 rounded-[22px] bg-surface-2 space-y-2 text-xs">
                     <div className="flex items-center justify-between">
                       <span className="text-fg-muted">Pune Aggregate Rating:</span>
                       <span className="text-star font-semibold tabular-nums flex items-center gap-1">
@@ -565,7 +565,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   </div>
                   <Button
                     onClick={goNext}
-                    className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-xl font-semibold apple-press apple-focus"
+                    className="w-full min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus"
                   >
                     Add Review Details &rarr;
                   </Button>
@@ -576,7 +576,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
 
           {/* STEP 4: Write Review */}
           {currentStep === "review" && selectedPlace && (
-            <div className="space-y-5">
+            <div className="space-y-5 animate-in fade-in duration-150">
               {/* Text review */}
               <div>
                 <label className="text-xs font-semibold text-fg mb-1.5 block">
@@ -586,7 +586,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   value={reviewText}
                   onChange={(e) => setReviewText(e.target.value)}
                   placeholder="Share details on faculty, study environment, WiFi, or food..."
-                  className="w-full h-28 p-3.5 bg-surface-2 border border-hairline rounded-card text-fg placeholder:text-fg-subtle resize-none focus:border-accent-link focus:outline-none text-xs leading-relaxed apple-focus"
+                  className="w-full h-28 p-3.5 bg-surface-2 border border-hairline/[0.08] rounded-[14px] text-fg placeholder:text-fg-subtle resize-none focus-visible:border-accent-link focus-visible:ring-2 focus-visible:ring-accent-link/30 outline-none text-xs leading-relaxed"
                 />
                 <p className="text-[11px] text-fg-subtle mt-1 tabular-nums">
                   {reviewText.length}/500 characters
@@ -604,10 +604,10 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                       key={tag}
                       type="button"
                       onClick={() => toggleTag(tag)}
-                      className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors apple-press apple-focus ${
+                      className={`px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-[background-color,color] duration-150 apple-press apple-focus ${
                         selectedTags.includes(tag)
-                          ? "bg-accent text-white font-semibold"
-                          : "bg-surface-2 text-fg-muted hover:text-fg border border-hairline"
+                          ? "bg-accent text-white"
+                          : "bg-surface-2 text-fg-muted hover:text-fg"
                       }`}
                     >
                       {tag}
@@ -621,7 +621,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                 <label className="text-xs font-semibold text-fg mb-1.5 block">
                   Photo Evidence (Optional EXIF GPS Verification)
                 </label>
-                <label className="flex items-center justify-center gap-2 py-3 px-4 bg-surface-2 border border-dashed border-hairline rounded-card cursor-pointer hover:bg-surface-3 transition-colors apple-focus">
+                <label className="flex items-center justify-center gap-2 py-3 px-4 bg-surface-2 border border-dashed border-hairline/[0.12] rounded-[14px] cursor-pointer hover:bg-surface-3 transition-colors apple-focus">
                   <Camera className="h-4 w-4 text-accent-link" />
                   <span className="text-xs text-fg-muted">Upload on-site photo</span>
                   <input
@@ -666,10 +666,10 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                       key={vis}
                       type="button"
                       onClick={() => setVisibility(vis)}
-                      className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold transition-colors apple-focus ${
+                      className={`flex-1 min-h-[40px] py-2 px-3 rounded-full text-xs font-semibold transition-[background-color,color] duration-150 apple-focus apple-press ${
                         visibility === vis
-                          ? "bg-accent text-white font-semibold"
-                          : "bg-surface-2 text-fg-muted hover:text-fg border border-hairline"
+                          ? "bg-accent text-white"
+                          : "bg-surface-2 text-fg-muted hover:text-fg"
                       }`}
                     >
                       {vis === "PUBLIC" ? "Public Review" : "Private Note"}
@@ -680,7 +680,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
 
               <Button
                 onClick={goNext}
-                className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-xl font-semibold apple-press apple-focus"
+                className="w-full min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus"
               >
                 Review & Confirm &rarr;
               </Button>
@@ -689,9 +689,9 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
 
           {/* STEP 5: Confirm & Submit */}
           {currentStep === "confirm" && selectedPlace && (
-            <div className="space-y-5">
+            <div className="space-y-5 animate-in fade-in duration-150">
               {/* Review Summary */}
-              <div className="p-4 rounded-card bg-surface-2 border border-hairline space-y-2.5 text-xs">
+              <div className="p-4 rounded-[22px] bg-surface-2 space-y-2.5 text-xs">
                 <div className="flex justify-between">
                   <span className="text-fg-subtle">Spot:</span>
                   <span className="font-semibold text-fg">{selectedPlace.name}</span>
@@ -710,14 +710,14 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                   </span>
                 </div>
                 {reviewText && (
-                  <div className="pt-2 border-t border-hairline text-fg-muted italic">
+                  <div className="pt-2 border-t border-hairline/[0.08] text-fg-muted italic">
                     &ldquo;{reviewText}&rdquo;
                   </div>
                 )}
               </div>
 
               {/* DPDP Act 2023 Consent Notice */}
-              <div className="p-3.5 rounded-card bg-accent-tint border border-accent-link/20 text-xs space-y-1">
+              <div className="p-3.5 rounded-[18px] bg-surface-2 text-xs space-y-1">
                 <div className="flex items-center gap-1.5 font-semibold text-accent-link">
                   <Shield className="w-3.5 h-3.5" />
                   <span>Indian DPDP Act 2023 Consent</span>
@@ -744,7 +744,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
               <Button
                 onClick={handleSubmit}
                 disabled={!consentChecked || isSubmitting}
-                className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-xl font-semibold disabled:opacity-40 apple-press apple-focus shadow-lg shadow-accent/20"
+                className="w-full min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold disabled:opacity-40 transition-[background-color,transform] duration-150 apple-press apple-focus"
               >
                 {isSubmitting ? (
                   <>

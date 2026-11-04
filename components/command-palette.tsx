@@ -157,9 +157,9 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       }}
     >
       {/* 0ms instantaneous open per Emil Kowalski 100+/day keyboard standard */}
-      <div className="w-full max-w-xl rounded-card bg-surface border border-hairline shadow-[0_24px_70px_rgba(0,0,0,0.65)] overflow-hidden flex flex-col text-fg">
+      <div className="w-full max-w-xl rounded-[22px] bg-surface border border-hairline/[0.08] shadow-[0_24px_70px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col text-fg">
         {/* Search Input Bar */}
-        <div className="relative flex items-center px-4 py-3.5 border-b border-hairline">
+        <div className="relative flex items-center px-4 py-3.5 border-b border-hairline/[0.08]">
           <Search className="w-5 h-5 text-accent-link shrink-0 mr-3" />
           <input
             ref={inputRef}
@@ -179,7 +179,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
               <X className="w-4 h-4" />
             </button>
           ) : null}
-          <kbd className="hidden sm:inline-block text-[10px] font-mono bg-surface-2 text-fg-subtle border border-hairline px-2 py-0.5 rounded-md">
+          <kbd className="hidden sm:inline-block text-[10px] font-mono bg-surface-2 text-fg-subtle border border-hairline/[0.08] px-2 py-0.5 rounded-md">
             ESC
           </kbd>
         </div>
@@ -200,9 +200,9 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                     type="button"
                     onClick={() => handleSelect(item)}
                     onMouseEnter={() => setSelectedIndex(idx)}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left text-xs transition-[background-color,border-color] duration-150 apple-press apple-focus ${
+                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left text-xs transition-[background-color,color] duration-150 apple-press apple-focus ${
                       isSelected
-                        ? "bg-accent-tint text-fg border border-accent-link/30"
+                        ? "bg-accent-link/[0.12] text-fg"
                         : "text-fg-muted hover:bg-surface-2"
                     }`}
                   >
@@ -217,7 +217,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
                     <div className="flex items-center gap-2 shrink-0">
                       {item.category && (
-                        <span className="text-[10px] font-medium text-accent-link bg-accent-tint px-2.5 py-0.5 rounded-md border border-accent-link/20">
+                        <span className="text-[10px] font-medium text-accent-link bg-accent-link/[0.12] px-2.5 py-0.5 rounded-full">
                           {item.category.replace("_", " ")}
                         </span>
                       )}
@@ -266,7 +266,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                         onClose()
                         router.push(`/discover?search=${encodeURIComponent(hub.query)}`)
                       }}
-                      className="px-3.5 py-1.5 rounded-lg bg-surface-2 hover:bg-surface-3 border border-hairline text-xs text-fg-muted hover:text-fg transition-colors duration-150 apple-press apple-focus flex items-center gap-1.5"
+                      className="px-3.5 py-1.5 rounded-full bg-surface-2 hover:bg-surface-3 border border-hairline/[0.08] text-xs text-fg-muted hover:text-fg transition-[background-color,color] duration-150 apple-press apple-focus flex items-center gap-1.5"
                     >
                       <TrendingUp className="w-3 h-3 text-accent-link" />
                       <span>{hub.label}</span>
@@ -291,9 +291,9 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                           onClose()
                           router.push(cat.href)
                         }}
-                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-fg-muted hover:text-fg hover:bg-surface-2 transition-colors duration-150 text-left apple-press apple-focus"
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-fg-muted hover:text-fg hover:bg-surface-2 transition-[background-color,color] duration-150 text-left apple-press apple-focus"
                       >
-                        <div className="w-7 h-7 rounded-lg bg-accent-tint text-accent-link flex items-center justify-center shrink-0">
+                        <div className="w-7 h-7 rounded-lg bg-accent-link/[0.12] text-accent-link flex items-center justify-center shrink-0">
                           <Icon className="w-3.5 h-3.5" />
                         </div>
                         <span className="font-medium truncate">{cat.name}</span>
@@ -307,7 +307,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         </div>
 
         {/* Footer shortcuts */}
-        <div className="px-4 py-2.5 bg-surface-2/60 border-t border-hairline flex items-center justify-between text-[11px] text-fg-subtle">
+        <div className="px-4 py-2.5 bg-surface-2 border-t border-hairline/[0.08] flex items-center justify-between text-[11px] text-fg-subtle">
           <span className="flex items-center gap-1.5">
             <Sparkles className="w-3 h-3 text-accent-link" />
             <span>RateIT Hyperlocal Search</span>

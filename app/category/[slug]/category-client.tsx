@@ -60,23 +60,23 @@ export function CategoryClient({ categoryName, places }: CategoryClientProps) {
       </nav>
 
       {/* Category Hero Header */}
-      <div className="p-6 md:p-8 rounded-modal bg-surface border-0 relative overflow-hidden shadow-sm">
+      <div className="p-6 md:p-8 rounded-[28px] bg-surface border-0 relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold bg-accent-tint text-accent-link border border-accent-link/20">
+            <span className="inline-flex h-6 px-2.5 items-center gap-1.5 rounded-full text-[11px] font-medium bg-accent-link/[0.12] text-accent-link">
               <Sparkles className="w-3.5 h-3.5" />
               Pune Verified Hubs
             </span>
-            <h1 className="text-3xl sm:text-4xl font-semibold tracking-[-0.022em] text-fg">
+            <h1 className="text-[28px] sm:text-[40px] font-semibold tracking-[-0.022em] text-fg">
               Best {categoryName} in Pune
             </h1>
             <p className="text-fg-muted text-sm max-w-xl">
-              Authentic student & local resident reviews verified via physical GPS geofencing. Zero promotional bias.
+              Authentic student and local resident reviews verified via physical GPS geofencing. Zero promotional bias.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="p-4 rounded-card bg-surface-2 text-center min-w-[100px]">
+            <div className="p-3.5 rounded-[14px] bg-surface-2 text-center min-w-[90px]">
               <div className="text-2xl font-semibold text-accent-link tabular-nums">
                 {places.length}
               </div>
@@ -98,10 +98,10 @@ export function CategoryClient({ categoryName, places }: CategoryClientProps) {
             <button
               key={sort.id}
               onClick={() => setSortBy(sort.id)}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors duration-150 apple-press apple-focus ${
+              className={`h-9 px-4 rounded-full text-[12px] font-medium transition-[background-color,color] duration-150 apple-press apple-focus ${
                 sortBy === sort.id
-                  ? "bg-accent text-white shadow-sm shadow-accent/20"
-                  : "bg-surface-2 text-fg-muted hover:text-fg hover:bg-surface-3 border border-hairline"
+                  ? "bg-accent text-white"
+                  : "bg-surface-2 text-fg-muted hover:text-fg"
               }`}
             >
               {sort.label}
@@ -124,10 +124,10 @@ export function CategoryClient({ categoryName, places }: CategoryClientProps) {
           <Link
             key={item.id}
             href={`/item/${item.id}`}
-            className="block apple-press group apple-focus rounded-card"
+            className="block apple-press group apple-focus rounded-[22px]"
             style={{ animationDelay: `${Math.min(idx * 40, 240)}ms` }}
           >
-            <div className="p-5 rounded-card bg-surface hover:bg-surface-2 transition-[background-color] duration-150 h-full flex flex-col justify-between border-0 shadow-sm">
+            <div className="p-5 rounded-[22px] bg-surface hover:bg-surface-2 transition-[background-color] duration-150 h-full flex flex-col justify-between border-0">
               <div className="space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <div>
@@ -158,7 +158,7 @@ export function CategoryClient({ categoryName, places }: CategoryClientProps) {
                       setShowSaveModal(true)
                     }}
                     title="Save to list"
-                    className="p-1.5 rounded-lg text-fg-subtle hover:text-danger hover:bg-surface-3 transition-colors apple-press apple-focus"
+                    className="w-9 h-9 rounded-full bg-surface-2 hover:bg-surface-3 text-fg-subtle hover:text-danger flex items-center justify-center transition-[background-color,color] duration-150 apple-press apple-focus"
                   >
                     <Heart className="w-4 h-4" />
                   </button>
@@ -177,11 +177,11 @@ export function CategoryClient({ categoryName, places }: CategoryClientProps) {
               </div>
 
               {item.tags && item.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 pt-4 mt-3 border-t border-hairline">
+                <div className="flex flex-wrap gap-1.5 pt-4 mt-3 border-t border-hairline/[0.08]">
                   {item.tags.slice(0, 4).map((tag, tagIdx) => (
                     <span
                       key={tagIdx}
-                      className="text-[10px] font-medium text-fg-muted bg-surface-2 px-2.5 py-0.5 rounded-md border border-hairline"
+                      className="inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium text-fg-muted bg-surface-2"
                     >
                       #{tag}
                     </span>
@@ -193,15 +193,14 @@ export function CategoryClient({ categoryName, places }: CategoryClientProps) {
         ))}
 
         {sortedItems.length === 0 && (
-          <div className="col-span-full py-16 text-center rounded-modal bg-surface space-y-3 border-0">
+          <div className="col-span-full py-16 text-center rounded-[28px] bg-surface space-y-3 border-0">
             <h3 className="text-base font-semibold text-fg">No places listed yet in {categoryName}</h3>
             <p className="text-xs text-fg-muted max-w-sm mx-auto">
               Be the first Pune local or student to add and review a place in this category!
             </p>
             <Button
               onClick={() => openRateModal()}
-              size="sm"
-              className="mt-2 bg-accent hover:bg-accent-hover text-white font-semibold rounded-lg px-5 py-2.5 apple-press apple-focus"
+              className="mt-2 inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus cursor-pointer"
             >
               Add First Spot
             </Button>

@@ -127,11 +127,11 @@ export function ItemClient({ place }: ItemClientProps) {
 
   const getTrustBadge = (score: number) => {
     if (score >= 75) {
-      return { label: "Trusted Resident", color: "text-success bg-success/10 border-success/20" }
+      return { label: "Trusted Resident", color: "text-success bg-success/10" }
     } else if (score >= 40) {
-      return { label: "Verified Visitor", color: "text-accent-link bg-accent-tint border-accent-link/20" }
+      return { label: "Verified Visitor", color: "text-accent-link bg-accent-link/[0.12]" }
     }
-    return { label: "Community Member", color: "text-fg-muted bg-surface-2 border-hairline" }
+    return { label: "Community Member", color: "text-fg-muted bg-surface-2" }
   }
 
   return (
@@ -152,29 +152,29 @@ export function ItemClient({ place }: ItemClientProps) {
       </nav>
 
       {/* Place Hero Visual Card (Apple Minimalist Border + Fill Contrast) */}
-      <div className="p-6 md:p-8 rounded-modal bg-surface relative overflow-hidden border-0 shadow-sm">
+      <div className="p-6 md:p-8 rounded-[28px] bg-surface relative overflow-hidden border-0">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-semibold text-fg-muted bg-surface-2 px-3 py-1 rounded-md border border-hairline">
+              <span className="inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium bg-surface-2 text-fg-muted">
                 {place.category.replace("_", " ")}
               </span>
               {place.isVerifiedBiz ? (
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-success bg-success/10 px-3 py-1 rounded-md border border-success/20">
+                <span className="inline-flex h-6 px-2.5 items-center gap-1.5 rounded-full text-[11px] font-medium text-success bg-success/10">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   Verified Business Claim
                 </span>
               ) : (
                 <Link
                   href={`/business/claim/${place.id}`}
-                  className="inline-flex items-center gap-1 text-[11px] font-medium text-fg-subtle hover:text-fg bg-surface-2 px-3 py-1 rounded-lg border border-hairline transition-colors apple-focus"
+                  className="inline-flex h-6 px-2.5 items-center gap-1 rounded-full text-[11px] font-medium text-fg-subtle hover:text-fg bg-surface-2 transition-[color,background-color] duration-150 apple-focus"
                 >
                   Claim this business &rarr;
                 </Link>
               )}
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-[-0.022em] text-fg">
+            <h1 className="text-[28px] sm:text-[40px] font-semibold tracking-[-0.022em] text-fg">
               {place.name}
             </h1>
 
@@ -220,14 +220,14 @@ export function ItemClient({ place }: ItemClientProps) {
                   longitude: place.longitude,
                 })
               }
-              className="flex-1 sm:flex-initial px-6 py-3 rounded-xl bg-accent hover:bg-accent-hover text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-accent/20 apple-press apple-focus cursor-pointer min-h-[44px]"
+              className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus cursor-pointer"
             >
-              <Star className="w-4 h-4 fill-white" />
+              <Star className="w-4 h-4 fill-white mr-2" />
               <span>Rate this spot</span>
             </button>
             <button
               onClick={() => setShowSaveModal(true)}
-              className="p-3 rounded-xl bg-surface-2 border border-hairline text-fg hover:bg-surface-3 transition-colors apple-press apple-focus min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="min-h-[44px] min-w-[44px] rounded-full bg-surface-2 hover:bg-surface-3 text-fg flex items-center justify-center transition-[background-color,transform] duration-150 apple-press apple-focus"
               title="Save to list"
               aria-label="Save to list"
             >
@@ -235,7 +235,7 @@ export function ItemClient({ place }: ItemClientProps) {
             </button>
             <button
               onClick={handleShare}
-              className="p-3 rounded-xl bg-surface-2 border border-hairline text-fg hover:bg-surface-3 transition-colors apple-press apple-focus min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="min-h-[44px] min-w-[44px] rounded-full bg-surface-2 hover:bg-surface-3 text-fg flex items-center justify-center transition-[background-color,transform] duration-150 apple-press apple-focus"
               title="Share"
               aria-label="Share spot"
             >
@@ -247,24 +247,24 @@ export function ItemClient({ place }: ItemClientProps) {
 
       {/* Tabs Container */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-surface-2 border border-hairline p-1 rounded-xl grid grid-cols-4 max-w-md">
-          <TabsTrigger value="overview" className="rounded-lg text-xs font-semibold data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
+        <TabsList className="bg-surface-2 p-1 rounded-full grid grid-cols-4 max-w-md border-0">
+          <TabsTrigger value="overview" className="rounded-full text-[12px] font-medium data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
             Overview
           </TabsTrigger>
-          <TabsTrigger value="reviews" className="rounded-lg text-xs font-semibold data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
+          <TabsTrigger value="reviews" className="rounded-full text-[12px] font-medium data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
             Reviews ({place.reviews.length})
           </TabsTrigger>
-          <TabsTrigger value="photos" className="rounded-lg text-xs font-semibold data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
+          <TabsTrigger value="photos" className="rounded-full text-[12px] font-medium data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
             Photos
           </TabsTrigger>
-          <TabsTrigger value="info" className="rounded-lg text-xs font-semibold data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
+          <TabsTrigger value="info" className="rounded-full text-[12px] font-medium data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
             Location
           </TabsTrigger>
         </TabsList>
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="mt-6 space-y-6">
-          <div className="p-6 rounded-card bg-surface space-y-3 border-0 shadow-sm">
+          <div className="p-6 rounded-[22px] bg-surface space-y-3 border-0">
             <h3 className="text-base font-semibold text-fg">About</h3>
             <p className="text-sm text-fg-muted leading-relaxed">
               {place.description || "No official description provided yet. Community verified Pune location."}
@@ -272,13 +272,13 @@ export function ItemClient({ place }: ItemClientProps) {
           </div>
 
           {place.tags && place.tags.length > 0 && (
-            <div className="p-6 rounded-card bg-surface space-y-3 border-0 shadow-sm">
+            <div className="p-6 rounded-[22px] bg-surface space-y-3 border-0">
               <h3 className="text-base font-semibold text-fg">Features & Highlights</h3>
               <div className="flex flex-wrap gap-2">
                 {place.tags.map((tag, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-fg-muted bg-surface-2 border border-hairline px-3 py-1 rounded-md"
+                    className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full text-[11px] font-medium text-fg-muted bg-surface-2"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-link" />
                     {tag}
@@ -290,7 +290,7 @@ export function ItemClient({ place }: ItemClientProps) {
 
           {/* Similar Places Nearby */}
           {similarPlaces.length > 0 && (
-            <div className="p-6 rounded-card bg-surface space-y-4 border-0 shadow-sm">
+            <div className="p-6 rounded-[22px] bg-surface space-y-4 border-0">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-base font-semibold text-fg">
@@ -302,15 +302,15 @@ export function ItemClient({ place }: ItemClientProps) {
                       : "Top Bayesian rated in this category"}
                   </p>
                 </div>
-                <span className="text-[10px] uppercase tracking-wider font-semibold text-accent-link bg-accent-tint px-2.5 py-0.5 rounded-md border border-accent-link/20">
+                <span className="inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium text-accent-link bg-accent-link/[0.12]">
                   {similarType === "collaborative" ? "Collaborative" : "Category Match"}
                 </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {similarPlaces.map((sim) => (
-                  <Link key={sim.id} href={`/item/${sim.id}`} className="block apple-press group apple-focus rounded-card">
-                    <div className="p-4 rounded-card bg-surface-2 hover:bg-surface-3 transition-colors space-y-2">
+                  <Link key={sim.id} href={`/item/${sim.id}`} className="block apple-press group apple-focus rounded-[22px]">
+                    <div className="p-4 rounded-[22px] bg-surface-2 hover:bg-surface-3 transition-colors space-y-2">
                       <h4 className="text-sm font-semibold text-fg group-hover:text-accent-link truncate">
                         {sim.name}
                       </h4>
@@ -334,7 +334,7 @@ export function ItemClient({ place }: ItemClientProps) {
         {/* Reviews Tab */}
         <TabsContent value="reviews" className="mt-6 space-y-4">
           {place.reviews.length === 0 ? (
-            <div className="p-12 text-center rounded-modal bg-surface space-y-3 border-0">
+            <div className="p-12 text-center rounded-[28px] bg-surface space-y-3 border-0">
               <Star className="w-10 h-10 text-fg-subtle mx-auto" />
               <h3 className="text-base font-semibold text-fg">No verified reviews yet</h3>
               <p className="text-xs text-fg-muted max-w-sm mx-auto">
@@ -351,8 +351,7 @@ export function ItemClient({ place }: ItemClientProps) {
                     longitude: place.longitude,
                   })
                 }
-                size="sm"
-                className="mt-2 bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl px-5 py-2 apple-press apple-focus cursor-pointer"
+                className="mt-2 inline-flex items-center justify-center min-h-[44px] px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-[14px] font-semibold transition-[background-color,transform] duration-150 apple-press apple-focus cursor-pointer"
               >
                 Write First Review
               </Button>
@@ -365,11 +364,11 @@ export function ItemClient({ place }: ItemClientProps) {
               return (
                 <div
                   key={rev.id}
-                  className="p-5 rounded-card bg-surface space-y-3 border-0 shadow-sm"
+                  className="p-5 rounded-[22px] bg-surface space-y-3 border-0"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-9 h-9 rounded-xl bg-surface-2 border border-hairline flex items-center justify-center font-semibold text-sm text-accent-link">
+                      <div className="w-9 h-9 rounded-full bg-surface-2 flex items-center justify-center font-semibold text-sm text-accent-link">
                         {rev.user?.displayName ? rev.user.displayName[0].toUpperCase() : "U"}
                       </div>
                       <div>
@@ -377,7 +376,7 @@ export function ItemClient({ place }: ItemClientProps) {
                           <h4 className="text-sm font-semibold text-fg">
                             {rev.user?.displayName || "Pune Student"}
                           </h4>
-                          <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-md border ${badge.color}`}>
+                          <span className={`inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium ${badge.color}`}>
                             {badge.label}
                           </span>
                         </div>
@@ -397,7 +396,7 @@ export function ItemClient({ place }: ItemClientProps) {
                     </div>
 
                     {rev.checkinVerified && (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-success bg-success/10 px-2.5 py-1 rounded-md border border-success/20">
+                      <span className="inline-flex h-6 px-2.5 items-center gap-1 rounded-full text-[11px] font-medium text-success bg-success/10">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         GPS Verified
                       </span>
@@ -416,7 +415,7 @@ export function ItemClient({ place }: ItemClientProps) {
                           key={i}
                           src={url}
                           alt="Review attachment"
-                          className="w-20 h-20 object-cover rounded-card border border-hairline"
+                          className="w-20 h-20 object-cover rounded-[14px]"
                         />
                       ))}
                     </div>
@@ -428,7 +427,7 @@ export function ItemClient({ place }: ItemClientProps) {
                       {rev.tags.map((t, idx) => (
                         <span
                           key={idx}
-                          className="text-[10px] font-medium text-fg-muted bg-surface-2 px-2.5 py-0.5 rounded-md border border-hairline"
+                          className="inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium text-fg-muted bg-surface-2"
                         >
                           #{t}
                         </span>
@@ -438,7 +437,7 @@ export function ItemClient({ place }: ItemClientProps) {
 
                   {/* Business Response */}
                   {rev.bizReply && (
-                    <div className="p-3.5 rounded-card bg-surface-2 border border-hairline text-xs space-y-1">
+                    <div className="p-3.5 rounded-[14px] bg-surface-2 text-xs space-y-1">
                       <div className="flex items-center gap-1.5 font-semibold text-accent-link">
                         <MessageSquare className="w-3.5 h-3.5" />
                         <span>Business Owner Reply</span>
@@ -448,13 +447,13 @@ export function ItemClient({ place }: ItemClientProps) {
                   )}
 
                   {/* Helpful Vote Button */}
-                  <div className="pt-2 border-t border-hairline flex items-center justify-between text-xs">
+                  <div className="pt-2 border-t border-hairline/[0.08] flex items-center justify-between text-xs">
                     <button
                       onClick={() => handleHelpfulClick(rev.id)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-colors apple-press apple-focus ${
+                      className={`h-9 px-4 rounded-full text-[12px] font-medium inline-flex items-center gap-1.5 transition-[background-color,transform] duration-150 apple-press apple-focus ${
                         hasVoted[rev.id]
-                          ? "bg-accent-tint border-accent-link/30 text-accent-link font-semibold"
-                          : "bg-surface-2 border-hairline text-fg-subtle hover:text-fg"
+                          ? "bg-accent-link/[0.12] text-accent-link"
+                          : "bg-surface-2 text-fg-muted hover:text-fg"
                       }`}
                     >
                       <ThumbsUp className="w-3.5 h-3.5" />
@@ -475,17 +474,17 @@ export function ItemClient({ place }: ItemClientProps) {
         <TabsContent value="photos" className="mt-6">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {place.imageUrl && (
-              <div className="aspect-square rounded-card overflow-hidden border border-hairline bg-surface-2">
+              <div className="aspect-square rounded-[22px] overflow-hidden bg-surface-2">
                 <img src={place.imageUrl} alt={place.name} className="w-full h-full object-cover" />
               </div>
             )}
             {place.reviews.flatMap((r) => r.photoUrls).map((url, index) => (
-              <div key={index} className="aspect-square rounded-card overflow-hidden border border-hairline bg-surface-2">
+              <div key={index} className="aspect-square rounded-[22px] overflow-hidden bg-surface-2">
                 <img src={url} alt={`Place upload ${index + 1}`} className="w-full h-full object-cover" />
               </div>
             ))}
             {!place.imageUrl && place.reviews.flatMap((r) => r.photoUrls).length === 0 && (
-              <div className="col-span-full py-16 text-center text-fg-muted rounded-modal bg-surface border-0">
+              <div className="col-span-full py-16 text-center text-fg-muted rounded-[28px] bg-surface border-0">
                 No user photos uploaded yet. Upload one during review to earn the EXIF Photo Badge!
               </div>
             )}
@@ -494,7 +493,7 @@ export function ItemClient({ place }: ItemClientProps) {
 
         {/* Location & Info Tab */}
         <TabsContent value="info" className="mt-6">
-          <div className="p-6 rounded-card bg-surface space-y-4 text-xs sm:text-sm border-0 shadow-sm">
+          <div className="p-6 rounded-[22px] bg-surface space-y-4 text-xs sm:text-sm border-0">
             <div>
               <h4 className="font-semibold text-fg mb-1">Physical Address</h4>
               <p className="text-fg-muted">{place.address}, {place.city}</p>
