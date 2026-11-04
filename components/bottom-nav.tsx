@@ -30,15 +30,15 @@ export function BottomNav({ onRateClick }: { onRateClick: () => void }) {
         </filter>
       </svg>
 
-      <nav className="pointer-events-auto relative glass glass-refract flex items-center justify-between px-1.5 py-1 rounded-full w-full max-w-sm">
+      <nav className="pointer-events-auto relative glass glass-refract grid grid-cols-5 p-1 rounded-full w-full max-w-sm items-center">
         {/* Sliding Indicator */}
         {activeIndex !== -1 && activeIndex !== 2 && (
           <div
             className="glass-thumb absolute top-1 bottom-1 rounded-full pointer-events-none"
             style={{
-              width: "calc(20% - 6px)",
-              left: "3px",
-              transform: `translateX(calc(${activeIndex * 100}% + ${activeIndex * 3}px))`,
+              width: "calc((100% - 8px) / 5)",
+              left: "4px",
+              transform: `translateX(${activeIndex * 100}%)`,
             }}
           />
         )}
@@ -46,7 +46,7 @@ export function BottomNav({ onRateClick }: { onRateClick: () => void }) {
         {navItems.map((item, idx) => {
           if (item.isAction) {
             return (
-              <div key={idx} className="flex-1 flex justify-center items-center">
+              <div key={idx} className="flex justify-center items-center">
                 <button
                   type="button"
                   onClick={item.action}
@@ -66,7 +66,7 @@ export function BottomNav({ onRateClick }: { onRateClick: () => void }) {
             <Link
               key={idx}
               href={item.href!}
-              className={`relative z-10 flex-1 flex flex-col items-center justify-center py-1 rounded-full transition-colors duration-150 glass-press min-h-[44px] apple-focus ${
+              className={`relative z-10 flex flex-col items-center justify-center py-1 rounded-full transition-colors duration-150 glass-press min-h-[44px] apple-focus ${
                 isActive
                   ? "text-fg font-semibold"
                   : "text-fg-muted hover:text-fg"

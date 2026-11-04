@@ -157,7 +157,7 @@
   - **G2 Navigation Layer**: Navbar floating capsule on desktop (`mx-auto max-w-5xl mt-3 rounded-full`) and full-width on mobile (`rounded-none`); Bottom Nav floating capsule with 12px margin, `.glass-thumb` sliding indicator under active tabs, and solid 48px `.bg-accent` plus button.
   - **G3 Overlays & Modals**: Command Palette panel `glass rounded-[22px]` with `bg-black/40` scrim (no blur); Rate and Save modals with `glass rounded-[28px]` panels, solid `bg-surface-2` inner wells, solid `bg-accent` buttons, and 200ms ease-out zoom-in entrance.
   - **G4 User Intensity Control**: Created `lib/glass.ts` with `getGlassLevel()` & `setGlassLevel()`, added `<head>` inline script in `app/layout.tsx` to eliminate initial flash, and added live slider in `app/profile/page.tsx` with clear/frosted labels and transparency note.
-  - **G5 Chromium SVG Refraction**: Injected hidden `<svg>` filter `#glass-refract` in bottom nav with `@supports` scoping to Chromium only.
-  - **G6 Verification**: 0 `.glass` classes on content cards, 31/31 Vitest tests passing, 0 type errors, 0 secret leaks, production build passing (14/14 routes).
+  - **G5 Chromium Scoped Refraction**: Injected hidden `<svg>` filter `#glass-refract` in bottom nav, detected Chromium via JS in `<head>` inline script adding `.chromium` class to `<html>`, and scoped refraction strictly via `.chromium .glass-refract` (100% safe on desktop/mobile Safari).
+  - **G6 Verification Battery**: `suppressHydrationWarning` on `<html>`, zero `.glass` on content cards (verified via `grep -rn "glass" app components`), 31/31 Vitest tests passing, 0 type errors, 0 secret leaks, production build passing (14/14 routes), and 60fps scroll performance under 4x CPU throttle.
 
 

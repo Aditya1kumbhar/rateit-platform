@@ -38,11 +38,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`light ${GeistSans.variable} ${GeistMono.variable}`} data-theme="light">
+    <html lang="en" className={`light ${GeistSans.variable} ${GeistMono.variable}`} data-theme="light" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var l=localStorage.getItem('glass-level');if(l!==null){document.documentElement.style.setProperty('--glass-level',l);}}catch(e){}})()`,
+            __html: `(function(){try{var l=localStorage.getItem('glass-level');if(l!==null){document.documentElement.style.setProperty('--glass-level',l);}var isChromium=!!(window.chrome||(navigator.userAgentData&&navigator.userAgentData.brands&&navigator.userAgentData.brands.some(function(b){return b.brand==='Chromium'||b.brand==='Google Chrome';})));if(isChromium){document.documentElement.classList.add('chromium');}}catch(e){}})()`,
           }}
         />
       </head>

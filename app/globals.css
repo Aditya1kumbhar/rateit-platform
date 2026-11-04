@@ -192,10 +192,9 @@
 }
 
 /* G5 Chromium Scoped Refraction */
-@supports (-webkit-appearance: none) and (not (-webkit-touch-callout: none)) {
-  @media (min-width: 0px) {
-    .glass-refract { backdrop-filter: url(#glass-refract) blur(var(--glass-blur)) saturate(180%) brightness(1.06); }
-  }
+.chromium .glass-refract {
+  backdrop-filter: url(#glass-refract) blur(var(--glass-blur)) saturate(180%) brightness(1.06);
+  -webkit-backdrop-filter: url(#glass-refract) blur(var(--glass-blur)) saturate(180%) brightness(1.06);
 }
 
 .liquid-glass-btn {

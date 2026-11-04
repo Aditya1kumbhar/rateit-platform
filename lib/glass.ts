@@ -30,3 +30,4 @@ export function setGlassLevel(n: number): void {
     document.documentElement.style.setProperty("--glass-level", clamped.toString())
   }
 }
+

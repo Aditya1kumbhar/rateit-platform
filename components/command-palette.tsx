@@ -159,7 +159,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       {/* 0ms instantaneous open per Emil Kowalski 100+/day keyboard standard */}
       <div className="w-full max-w-xl rounded-[22px] glass glass-refract overflow-hidden flex flex-col text-fg">
         {/* Search Input Bar */}
-        <div className="relative flex items-center px-4 py-3.5 border-b border-white/[0.08]">
+        <div className="relative flex items-center px-4 py-3.5 border-b border-hairline/[0.08]">
           <Search className="w-5 h-5 text-accent-link shrink-0 mr-3" />
           <input
             ref={inputRef}

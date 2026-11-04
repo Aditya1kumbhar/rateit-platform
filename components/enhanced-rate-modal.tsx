@@ -304,7 +304,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
     >
       <div className="glass rounded-[28px] w-full max-w-lg max-h-[90vh] overflow-y-auto relative text-fg animate-in fade-in-0 zoom-in-[0.96] duration-200 ease-out origin-center">
         {/* Header */}
-        <div className="sticky top-0 bg-transparent border-b border-white/[0.08] p-4 flex items-center justify-between z-10">
+        <div className="sticky top-0 bg-transparent border-b border-hairline/[0.08] p-4 flex items-center justify-between z-10">
           <div className="flex items-center gap-3">
             {currentStepIndex > 0 && (
               <button
