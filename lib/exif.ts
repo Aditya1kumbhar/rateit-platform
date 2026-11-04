@@ -9,6 +9,8 @@
  * - Device fingerprinting (same device posting from multiple "locations"?)
  */
 
+import { haversineDistance } from "./geolocation"
+
 export interface ExifData {
   latitude?: number
   longitude?: number
@@ -20,12 +22,12 @@ export interface ExifData {
 
 /**
  * Extract EXIF metadata from an image file.
- * Returns sanitized metadata — we strip all personal data except
+ * Returns sanitized metadata: we strip all personal data except
  * what's needed for fraud detection (DPDP: purpose limitation).
  */
 export async function extractExifData(file: File): Promise<ExifData> {
   try {
-    // Dynamic import to keep bundle size small — exifr is only
+    // Dynamic import to keep bundle size small: exifr is only
     // loaded when a user actually uploads a photo
     const exifr = (await import('exifr')).default
 
@@ -73,7 +75,6 @@ export function crossCheckExif(
 
   // Check if photo GPS is far from the place
   if (exif.hasGps && exif.latitude && exif.longitude) {
-    const { haversineDistance } = require('./geolocation')
     const photoDistance = haversineDistance(
       exif.latitude,
       exif.longitude,
@@ -98,7 +99,7 @@ export function crossCheckExif(
     }
     // Check if photo is from the future (GPS spoofing indicator)
     if (daysDiff < -1) {
-      warnings.push('Photo timestamp is in the future — possible metadata manipulation')
+      warnings.push('Photo timestamp is in the future: possible metadata manipulation')
     }
   }
 

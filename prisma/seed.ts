@@ -1,5 +1,6 @@
 import { PrismaClient, Category, ClaimStatus } from '@prisma/client'
 import { PUNE_SEED_PLACES, PUNE_SEED_REVIEWS } from '../lib/mock'
+import { calculateBayesianRating } from '../lib/bayesian'
 
 const prisma = new PrismaClient()
 
@@ -46,14 +47,46 @@ async function main() {
     }
   })
 
-  const users = [user1, user2, user3]
+  // Seeded Personalization Proof Users:
+  // User 1: High CAFE affinity
+  const userCafe = await prisma.user.upsert({
+    where: { phone: '+919999900001' },
+    update: {},
+    create: {
+      phone: '+919999900001',
+      phoneVerified: true,
+      displayName: 'Aarav (Cafe Enthusiast)',
+      trustScore: 82.0,
+      consentGiven: true,
+      consentDate: new Date(),
+    }
+  })
+
+  // User 2: High PG_HOSTEL affinity
+  const userHostel = await prisma.user.upsert({
+    where: { phone: '+919999900002' },
+    update: {},
+    create: {
+      phone: '+919999900002',
+      phoneVerified: true,
+      displayName: 'Meera (Student PG Seeker)',
+      trustScore: 75.0,
+      consentGiven: true,
+      consentDate: new Date(),
+    }
+  })
+
+  const users = [user1, user2, user3, userCafe, userHostel]
 
   // 2. Create Places
   const createdPlaces = []
   for (const placeData of PUNE_SEED_PLACES) {
+    const bayesian = calculateBayesianRating(placeData.reviewCount, placeData.avgRating, 4.0, 10)
     const place = await prisma.place.upsert({
       where: { name_address: { name: placeData.name, address: placeData.address } },
-      update: {},
+      update: {
+        bayesianRating: bayesian,
+      },
       create: {
         name: placeData.name,
         category: placeData.category as Category,
@@ -64,6 +97,7 @@ async function main() {
         longitude: placeData.longitude,
         avgRating: placeData.avgRating,
         weightedRating: placeData.avgRating,
+        bayesianRating: bayesian,
         reviewCount: placeData.reviewCount,
         geofenceRadius: 50,
         claimStatus: ClaimStatus.UNCLAIMED,
@@ -72,6 +106,63 @@ async function main() {
       },
     })
     createdPlaces.push(place)
+  }
+
+  // Seed interest profiles for personalized demo users
+  await prisma.userInterest.upsert({
+    where: { userId_category: { userId: userCafe.id, category: 'CAFE' } },
+    update: { affinity: 25.0 },
+    create: { userId: userCafe.id, category: 'CAFE', affinity: 25.0 },
+  })
+
+  await prisma.userInterest.upsert({
+    where: { userId_category: { userId: userHostel.id, category: 'PG_HOSTEL' } },
+    update: { affinity: 25.0 },
+    create: { userId: userHostel.id, category: 'PG_HOSTEL', affinity: 25.0 },
+  })
+
+  // Seed 20+ events for each to establish warm user state (> cold-start threshold of 20 events)
+  const cafePlace = createdPlaces.find((p) => p.category === 'CAFE')
+  const pgPlace = createdPlaces.find((p) => p.category === 'PG_HOSTEL')
+
+  if (cafePlace) {
+    const existingCafeEvents = await prisma.userEvent.count({ where: { userId: userCafe.id } })
+    if (existingCafeEvents < 20) {
+      for (let i = 0; i < 22; i++) {
+        await prisma.userEvent.create({
+          data: {
+            userId: userCafe.id,
+            sessionId: `seed-session-cafe-${i}`,
+            type: i % 2 === 0 ? 'place_save' : 'place_dwell',
+            placeId: cafePlace.id,
+            category: 'CAFE',
+            dwellMs: 30000,
+            ipHash: 'seed-ip-hash',
+            deviceHash: 'seed-device-hash',
+          },
+        })
+      }
+    }
+  }
+
+  if (pgPlace) {
+    const existingPgEvents = await prisma.userEvent.count({ where: { userId: userHostel.id } })
+    if (existingPgEvents < 20) {
+      for (let i = 0; i < 22; i++) {
+        await prisma.userEvent.create({
+          data: {
+            userId: userHostel.id,
+            sessionId: `seed-session-pg-${i}`,
+            type: i % 2 === 0 ? 'place_save' : 'place_dwell',
+            placeId: pgPlace.id,
+            category: 'PG_HOSTEL',
+            dwellMs: 30000,
+            ipHash: 'seed-ip-hash',
+            deviceHash: 'seed-device-hash',
+          },
+        })
+      }
+    }
   }
 
   // 3. Create Seed Reviews

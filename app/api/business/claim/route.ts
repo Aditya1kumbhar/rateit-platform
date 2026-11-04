@@ -3,6 +3,8 @@ import { type NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getAuthenticatedUser } from "@/lib/server-auth"
 import { businessClaimSchema } from "@/lib/validation"
+import { generalApiRateLimit, enforceRateLimit, rateLimitResponse, getIpFromRequest } from "@/lib/ratelimit"
+import { verifyTurnstileToken } from "@/lib/turnstile"
 
 export const dynamic = "force-dynamic"
 
@@ -13,11 +15,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
     }
 
-    const input = businessClaimSchema.safeParse(await request.json())
+    const ip = getIpFromRequest(request)
+    const rl = await enforceRateLimit(generalApiRateLimit, `user:${authenticated.user.id}:ip:${ip}`)
+    if (!rl.success) {
+      return rateLimitResponse(rl)
+    }
+
+    const body = await request.json()
+    const input = businessClaimSchema.safeParse(body)
     if (!input.success) {
       return NextResponse.json(
         { success: false, error: "Invalid claim data", details: input.error.flatten().fieldErrors },
         { status: 400 },
+      )
+    }
+
+    // P1.4: Turnstile verification on business claim
+    const turnstileCheck = await verifyTurnstileToken(input.data.turnstileToken, ip)
+    if (!turnstileCheck.success) {
+      return NextResponse.json(
+        { success: false, error: turnstileCheck.error || "Turnstile verification failed" },
+        { status: 403 }
       )
     }
 

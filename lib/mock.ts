@@ -197,7 +197,7 @@ export const PUNE_SEED_REVIEWS = [
   {
     placeIndex: 4, // Sunrise PG
     rating: 3,
-    text: "Rooms are okay, food is decent Maharashtrian. But water supply is a problem — hot water only in morning slot. WiFi drops frequently.",
+    text: "Rooms are okay, food is decent Maharashtrian. But water supply is a problem: hot water only in morning slot. WiFi drops frequently.",
     tags: ["Food", "Water Supply"],
     checkinVerified: true,
     trustTier: "trusted" as const,
@@ -215,7 +215,7 @@ export const PUNE_SEED_REVIEWS = [
   {
     placeIndex: 7, // Café Good Luck
     rating: 5,
-    text: "A Pune legend. The bun maska here is unmatched. Come early on weekends — it gets crowded. ₹30 for the best breakfast in the city.",
+    text: "A Pune legend. The bun maska here is unmatched. Come early on weekends: it gets crowded. ₹30 for the best breakfast in the city.",
     tags: ["Bun Maska", "Irani Chai", "Budget"],
     checkinVerified: false,
     trustTier: "neutral" as const,

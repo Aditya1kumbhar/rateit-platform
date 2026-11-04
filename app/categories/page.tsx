@@ -1,106 +1,130 @@
-"use client"
+import { Metadata } from 'next'
+import Link from 'next/link'
+import { GraduationCap, Home, Coffee, Utensils, Wrench, BookOpen, ChevronRight, Sparkles, ArrowRight } from 'lucide-react'
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { ArrowLeft, Home, Search, User } from "lucide-react"
-import Link from "next/link"
+export const metadata: Metadata = {
+  title: 'Categories Directory: RateIT Pune',
+  description: 'Browse verified coaching classes, student hostels, cafes, and local services in Pune.',
+}
 
 export default function CategoriesPage() {
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-
   const categories = [
-    { name: "Movies", color: "bg-blue-500" },
-    { name: "Books", color: "bg-amber-500" },
-    { name: "Music", color: "bg-purple-500" },
-    { name: "Restaurants", color: "bg-orange-500" },
-    { name: "Travel Destinations", color: "bg-green-500" },
-    { name: "Tech Gadgets", color: "bg-gray-500" },
-    { name: "Fashion Brands", color: "bg-pink-500" },
-    { name: "Sports Teams", color: "bg-red-500" },
-    { name: "Video Games", color: "bg-indigo-500" },
-    { name: "Art & Design", color: "bg-yellow-500" },
-    { name: "Automobiles", color: "bg-slate-500" },
-    { name: "Health & Wellness", color: "bg-emerald-500" },
+    {
+      name: "Coaching Classes",
+      slug: "coaching-classes",
+      icon: GraduationCap,
+      count: "34 Verified Centers",
+      tag: "Top JEE/NEET Hubs",
+      description: "Faculty, mock test quality, batch sizes, and physical attendance tracking across Kothrud and FC Road.",
+    },
+    {
+      name: "PGs & Hostels",
+      slug: "pgs-hostels",
+      icon: Home,
+      count: "58 Verified Stays",
+      tag: "Biometric & Mess Checked",
+      description: "Authentic student resident reviews on food mess quality, WiFi speed, security deposits, and curfews.",
+    },
+    {
+      name: "Cafés & Study Spots",
+      slug: "cafes",
+      icon: Coffee,
+      count: "42 Study Hubs",
+      tag: "Power Sockets & WiFi",
+      description: "Noise levels, laptop friendliness, espresso quality, and seating capacity for deep study sessions.",
+    },
+    {
+      name: "Restaurants & Messes",
+      slug: "restaurants",
+      icon: Utensils,
+      count: "67 Verified Spots",
+      tag: "Hygiene & Taste Rated",
+      description: "Student-budget daily thali messes, historic Irani cafes, and quick bites verified on-site.",
+    },
+    {
+      name: "Local Services",
+      slug: "local-services",
+      icon: Wrench,
+      count: "29 Verified Services",
+      tag: "Repairs & Utilities",
+      description: "Essential student services: thesis printing, laptop repairs, and laundry pickups.",
+    },
+    {
+      name: "Libraries & Study Spaces",
+      slug: "coaching-classes",
+      icon: BookOpen,
+      count: "12 Silent Hubs",
+      tag: "24/7 Study Halls",
+      description: "Air-conditioned reading rooms and competitive exam study libraries across Pune.",
+    },
   ]
 
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category],
-    )
-  }
-
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="container mx-auto px-4 py-8 max-w-6xl space-y-8">
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-2 text-xs text-fg-subtle">
+        <Link href="/" className="hover:text-fg transition-colors">
+          Home
+        </Link>
+        <ChevronRight className="w-3.5 h-3.5 text-fg-subtle" />
+        <span className="text-fg font-medium">All Pune Categories</span>
+      </nav>
+
       {/* Header */}
-      <header className="bg-gray-900 border-b border-gray-700 px-4 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link href="/">
-              <Button variant="ghost" size="icon" className="text-white hover:bg-gray-800">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-            </Link>
-            <h1 className="text-xl font-bold text-white">RateIt</h1>
+      <div className="p-6 sm:p-8 rounded-modal bg-surface border-0 relative overflow-hidden shadow-sm">
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-1.5 text-xs text-accent-link font-semibold uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5" />
+            Pune Directory
           </div>
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="text-white hover:bg-gray-800">
-              <Home className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-white hover:bg-gray-800">
-              <Search className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-white hover:bg-gray-800">
-              <User className="h-5 w-5" />
-            </Button>
-          </div>
+          <h1 className="text-3xl sm:text-4xl font-semibold text-fg tracking-[-0.022em]">
+            Pune Categories Directory
+          </h1>
+          <p className="text-fg-muted text-sm max-w-2xl leading-relaxed">
+            Browse verified listings across Pune&apos;s key student hubs: FC Road, Kothrud, Hinjewadi, and Viman Nagar.
+          </p>
         </div>
-      </header>
+      </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-white mb-4">Select Your Favorite Categories</h2>
-            <p className="text-gray-300">
-              Choose the categories that interest you the most. Your selections will help us personalize your rating
-              experience.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
-            {categories.map((category, index) => (
-              <Card
-                key={index}
-                className={`cursor-pointer transition-all duration-200 ${
-                  selectedCategories.includes(category.name)
-                    ? "ring-2 ring-white bg-gray-700"
-                    : "bg-gray-800 hover:bg-gray-700"
-                }`}
-                onClick={() => toggleCategory(category.name)}
-              >
-                <CardContent className="p-6 text-center">
-                  <div
-                    className={`w-16 h-16 ${category.color} rounded-lg mx-auto mb-3 flex items-center justify-center`}
-                  >
-                    <span className="text-2xl">🎯</span>
+      {/* Categories Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {categories.map((cat, idx) => (
+          <Link
+            key={idx}
+            href={`/category/${cat.slug}`}
+            className="apple-press group apple-focus rounded-card"
+            style={{ animationDelay: `${Math.min(idx * 40, 240)}ms` }}
+          >
+            <div className="p-6 rounded-card bg-surface hover:bg-surface-2 transition-[background-color] duration-150 border-0 shadow-sm h-full flex flex-col justify-between space-y-4">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-11 h-11 rounded-full bg-accent-tint text-accent-link flex items-center justify-center">
+                    <cat.icon className="w-5 h-5" />
                   </div>
-                  <h3 className="font-semibold text-white text-sm">{category.name}</h3>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  <span className="text-[10px] font-semibold text-accent-link bg-accent-tint px-2.5 py-0.5 rounded-full border border-accent-link/20">
+                    {cat.tag}
+                  </span>
+                </div>
 
-          <div className="text-center">
-            <Link href="/">
-              <Button
-                size="lg"
-                className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3 text-lg font-semibold rounded-full"
-              >
-                Continue
-              </Button>
-            </Link>
-          </div>
-        </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-fg tracking-[-0.022em] group-hover:text-accent-link transition-colors">
+                    {cat.name}
+                  </h3>
+                  <p className="text-xs text-fg-subtle mt-0.5">{cat.count}</p>
+                </div>
+
+                <p className="text-xs text-fg-muted leading-relaxed">
+                  {cat.description}
+                </p>
+              </div>
+
+              <div className="pt-3 border-t border-hairline flex items-center justify-between text-xs text-accent-link font-semibold">
+                <span>Explore spots</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   )

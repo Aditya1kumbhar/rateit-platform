@@ -1,5 +1,5 @@
 /**
- * RateIT Auth — Phone OTP via Supabase
+ * RateIT Auth: Phone OTP via Supabase
  * 
  * Replaces the old plaintext-password JSON file auth.
  * Uses Supabase's built-in phone auth for IS 19000 compliance
@@ -13,6 +13,7 @@ export interface AuthUser {
   email?: string
   phone: string
   displayName?: string | null
+  avatarUrl?: string | null
   phoneVerified: boolean
 }
 
@@ -128,20 +129,64 @@ export const auth = {
   getSession: async (): Promise<AuthUser | null> => {
     try {
       const supabase = createClient()
-      const fetchPromise = supabase.auth.getUser().then(({ data }) => data?.user || null)
-      const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 200))
-      const user = await Promise.race([fetchPromise, timeoutPromise])
+      const { data, error } = await supabase.auth.getUser()
 
-      if (!user) return null
+      if (error || !data?.user) return null
+
+      const user = data.user
+      const metadata = user.user_metadata || {}
+      const displayName =
+        metadata.display_name ||
+        metadata.full_name ||
+        metadata.name ||
+        (user.email ? user.email.split('@')[0] : null)
+
+      const avatarUrl = metadata.avatar_url || metadata.picture || null
 
       return {
         id: user.id,
+        email: user.email,
         phone: user.phone || '',
-        displayName: user.user_metadata?.display_name || null,
+        displayName,
+        avatarUrl,
         phoneVerified: !!user.phone_confirmed_at,
       }
     } catch {
       return null
+    }
+  },
+
+  /**
+   * Sign in with OAuth Provider (Google, GitHub).
+   */
+  signInWithOAuth: async (
+    provider: 'google' | 'github',
+    redirectPath: string = '/'
+  ): Promise<{ error?: string }> => {
+    try {
+      const supabase = createClient()
+      const origin = typeof window !== 'undefined' ? window.location.origin : ''
+      const safeRedirect = redirectPath.startsWith('/') && !redirectPath.startsWith('//') ? redirectPath : '/'
+      const redirectTo = `${origin}/auth/callback?next=${encodeURIComponent(safeRedirect)}`
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        },
+      })
+
+      if (error) {
+        return { error: error.message }
+      }
+
+      return {}
+    } catch (err: any) {
+      return { error: err.message || 'OAuth initialization failed' }
     }
   },
 
@@ -227,7 +272,7 @@ export const auth = {
 
 /**
  * User session helpers for client-side state.
- * Uses Supabase's built-in JWT session management — no more localStorage passwords.
+ * Uses Supabase's built-in JWT session management: no more localStorage passwords.
  */
 export const userSession = {
   getUser: async (): Promise<AuthUser | null> => {

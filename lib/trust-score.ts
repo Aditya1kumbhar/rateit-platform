@@ -1,8 +1,10 @@
+import { CONFIG } from "./personalization-config"
+
 /**
  * Trust Score Engine
  * 
  * Computes per-reviewer trust scores (0-100) based on heuristic signals.
- * This is RateIT's core differentiator — centralized, explainable, no blockchain.
+ * This is RateIT's core differentiator: centralized, explainable, no blockchain.
  * 
  * Trust score determines:
  * - How much weight a user's reviews carry in aggregate ratings
@@ -147,7 +149,7 @@ export function computeTrustScore(
 }
 
 /**
- * Detect impossible travel patterns — reviews at places >50km apart
+ * Detect impossible travel patterns: reviews at places >50km apart
  * within 30 minutes. Indicates GPS spoofing or bot activity.
  */
 function hasImpossibleTravel(reviews: TrustReview[]): boolean {
@@ -184,6 +186,31 @@ function hasImpossibleTravel(reviews: TrustReview[]): boolean {
   }
 
   return false
+}
+
+export type PlatformTrustTier = 'Community Member' | 'Verified Visitor' | 'Trusted Resident'
+
+/**
+ * P5.3: Recalculate trust tier:
+ * - Community Member < 40
+ * - Verified Visitor 40..74
+ * - Trusted Resident >= 75
+ */
+export function calculateTrustTier(score: number): PlatformTrustTier {
+  if (score >= CONFIG.trustTiers.trustedResidentMin) {
+    return 'Trusted Resident'
+  }
+  if (score >= CONFIG.trustTiers.communityMemberMax) {
+    return 'Verified Visitor'
+  }
+  return 'Community Member'
+}
+
+/**
+ * P5.3: Adjust trust score clamped strictly to [0, 100].
+ */
+export function adjustTrustScore(currentScore: number, delta: number): number {
+  return Math.min(CONFIG.trustScoreCap, Math.max(CONFIG.trustScoreMin, currentScore + delta))
 }
 
 /**
@@ -223,28 +250,28 @@ export function getTrustTierDisplay(tier: string): {
         label: 'Trusted Reviewer',
         color: 'text-green-700',
         bgColor: 'bg-green-50 border-green-200',
-        icon: '✅',
+        icon: 'ShieldCheck',
       }
     case 'neutral':
       return {
         label: 'Reviewer',
         color: 'text-gray-700',
         bgColor: 'bg-gray-50 border-gray-200',
-        icon: '👤',
+        icon: 'User',
       }
     case 'suspicious':
       return {
         label: 'Under Review',
         color: 'text-orange-700',
         bgColor: 'bg-orange-50 border-orange-200',
-        icon: '⚠️',
+        icon: 'AlertTriangle',
       }
     default:
       return {
         label: 'Restricted',
         color: 'text-red-700',
         bgColor: 'bg-red-50 border-red-200',
-        icon: '🚫',
+        icon: 'Ban',
       }
   }
 }

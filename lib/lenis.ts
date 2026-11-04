@@ -10,6 +10,11 @@ declare global {
 
 export const useLenis = () => {
   useEffect(() => {
+    // If user prefers reduced motion, disable Lenis smooth momentum scrolling
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return
+    }
+
     let lenis: any
 
     const initLenis = async () => {
@@ -17,7 +22,7 @@ export const useLenis = () => {
       const Lenis = (await import("@studio-freight/lenis")).default
 
       lenis = new Lenis({
-        duration: 1.2,
+        duration: 0.6,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         // @ts-ignore - lenis options typing mismatch
         direction: "vertical",
@@ -26,12 +31,12 @@ export const useLenis = () => {
         smooth: true,
         mouseMultiplier: 1,
         smoothTouch: false,
-        touchMultiplier: 2,
+        touchMultiplier: 1,
         infinite: false,
       })
 
       function raf(time: number) {
-        lenis.raf(time)
+        lenis?.raf(time)
         requestAnimationFrame(raf)
       }
 

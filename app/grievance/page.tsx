@@ -1,134 +1,168 @@
 import { Metadata } from 'next'
+import { GrievanceForm } from './grievance-form'
+import Link from 'next/link'
+import { ShieldCheck, Mail, MapPin, Scale, ChevronRight, FileText, Lock, Building2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Grievance Officer — RateIT',
-  description: 'Contact the RateIT Grievance Officer for complaints and data requests.',
+  title: 'Grievance Officer: RateIT Pune',
+  description: 'Official Grievance Officer desk for complaints, appeals, and data requests under Indian IT Act 2021 and DPDP Act 2023.',
 }
 
 export default function GrievancePage() {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="container mx-auto px-4 py-12 max-w-3xl">
-        <h1 className="text-3xl font-bold text-black mb-2">Grievance Officer</h1>
-        <p className="text-sm text-gray-400 mb-8">
-          As required under the IT (Intermediary Guidelines) Rules, 2021 and the
-          Digital Personal Data Protection Act, 2023.
+    <div className="container mx-auto px-4 py-8 max-w-4xl space-y-8">
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-2 text-xs text-fg-subtle">
+        <Link href="/" className="hover:text-accent-link transition-colors">
+          Home
+        </Link>
+        <ChevronRight className="w-3.5 h-3.5 text-fg-subtle/60" />
+        <span className="text-fg font-medium">Grievance Officer Desk</span>
+      </nav>
+
+      {/* Hero Header */}
+      <div className="p-6 sm:p-8 rounded-modal bg-surface relative overflow-hidden space-y-3">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-accent-tint rounded-full blur-3xl pointer-events-none -z-10" />
+        <div className="inline-flex items-center gap-1.5 text-xs text-accent-link font-semibold uppercase tracking-wider">
+          <ShieldCheck className="w-3.5 h-3.5" />
+          Statutory Compliance Desk
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-[-0.022em] text-fg">
+          Grievance Officer & Legal Redressal
+        </h1>
+        <p className="text-fg-muted text-sm max-w-2xl leading-relaxed">
+          Established in accordance with Rule 3(2) of the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021 and the Digital Personal Data Protection Act, 2023.
         </p>
+      </div>
 
-        <div className="space-y-8">
-          {/* Contact Card */}
-          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
-            <h2 className="text-lg font-semibold text-black mb-4">Grievance Officer Contact</h2>
-            <div className="space-y-3 text-sm">
-              <div className="flex items-start gap-3">
-                <span className="text-gray-500 w-24 flex-shrink-0">Name:</span>
-                <span className="text-gray-800 font-medium">[Your Full Name]</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="text-gray-500 w-24 flex-shrink-0">Designation:</span>
-                <span className="text-gray-800">Grievance Officer, RateIT</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="text-gray-500 w-24 flex-shrink-0">Email:</span>
-                <span className="text-gray-800">grievance@rateit.in</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="text-gray-500 w-24 flex-shrink-0">Address:</span>
-                <span className="text-gray-800">Pune, Maharashtra, India</span>
-              </div>
+      <div className="space-y-8">
+        {/* Contact Card */}
+        <div className="p-6 rounded-modal bg-surface space-y-4">
+          <h2 className="text-base font-semibold text-fg flex items-center gap-2">
+            <Mail className="w-4 h-4 text-accent-link" />
+            <span>Designated Grievance Officer Contact</span>
+          </h2>
+          <div className="grid sm:grid-cols-2 gap-3 text-xs">
+            <div className="p-3.5 rounded-card bg-surface-2">
+              <span className="text-fg-subtle block text-[11px]">Designation:</span>
+              <span className="font-semibold text-fg">Chief Compliance & Grievance Officer</span>
+            </div>
+            <div className="p-3.5 rounded-card bg-surface-2">
+              <span className="text-fg-subtle block text-[11px]">Direct Official Email:</span>
+              <a href="mailto:grievance@rateit.in" className="font-semibold text-accent-link hover:underline">
+                grievance@rateit.in
+              </a>
+            </div>
+            <div className="p-3.5 rounded-card bg-surface-2">
+              <span className="text-fg-subtle block text-[11px]">Registered Address:</span>
+              <span className="font-semibold text-fg">FC Road, Shivajinagar, Pune, Maharashtra 411005</span>
+            </div>
+            <div className="p-3.5 rounded-card bg-surface-2">
+              <span className="text-fg-subtle block text-[11px]">Statutory SLA Timelines:</span>
+              <span className="font-semibold text-success">24h Acknowledgment • 15d Resolution</span>
             </div>
           </div>
+        </div>
 
-          {/* What you can file */}
-          <div>
-            <h2 className="text-lg font-semibold text-black mb-4">What You Can Report</h2>
-            <div className="grid md:grid-cols-2 gap-4">
-              {[
-                {
-                  title: 'Content Complaint',
-                  description: 'Report a review that you believe violates our Terms of Service or is defamatory.',
-                  icon: '📝',
-                },
-                {
-                  title: 'Data Rights Request',
-                  description: 'Request access, correction, or erasure of your personal data under the DPDP Act.',
-                  icon: '🔒',
-                },
-                {
-                  title: 'Moderation Appeal',
-                  description: 'Appeal a moderation decision if your review was hidden or your account restricted.',
-                  icon: '⚖️',
-                },
-                {
-                  title: 'Business Dispute',
-                  description: 'As a reviewed business, report fake reviews or request right-to-reply access.',
-                  icon: '🏪',
-                },
-              ].map((item) => (
-                <div key={item.title} className="bg-white border border-gray-200 rounded-xl p-4">
-                  <div className="text-2xl mb-2">{item.icon}</div>
-                  <h3 className="font-semibold text-gray-800 text-sm mb-1">{item.title}</h3>
-                  <p className="text-xs text-gray-500 leading-relaxed">{item.description}</p>
+        {/* Interactive Grievance Form */}
+        <GrievanceForm />
+
+        {/* What You Can File */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold tracking-[-0.022em] text-fg">What You Can Report</h2>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {[
+              {
+                title: 'Defamatory or Fraudulent Content',
+                description: 'Report reviews that contain false claims, abusive language, or unverified paid attacks.',
+                icon: FileText,
+              },
+              {
+                title: 'DPDP 2023 Data Rights Request',
+                description: 'Request formal erasure or extraction of your phone records, check-in history, or user profile.',
+                icon: Lock,
+              },
+              {
+                title: 'Moderation Decision Appeal',
+                description: 'Appeal a hidden review or trust penalty if you believe your review was mistakenly flagged.',
+                icon: Scale,
+              },
+              {
+                title: 'Business Owner Dispute & Claim',
+                description: 'Claim right-of-reply or report coordinated competitor review bombing against your Pune establishment.',
+                icon: Building2,
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="p-5 rounded-modal bg-surface space-y-2.5"
+              >
+                <div className="w-9 h-9 rounded-full bg-accent-tint text-accent-link flex items-center justify-center">
+                  <item.icon className="w-5 h-5" />
                 </div>
-              ))}
-            </div>
+                <h3 className="font-semibold text-fg text-sm">{item.title}</h3>
+                <p className="text-xs text-fg-muted leading-relaxed">{item.description}</p>
+              </div>
+            ))}
           </div>
+        </div>
 
-          {/* Process */}
-          <div>
-            <h2 className="text-lg font-semibold text-black mb-4">Grievance Process</h2>
-            <div className="space-y-4">
-              {[
-                {
-                  step: '1',
-                  title: 'Submit Your Complaint',
-                  description: 'Email the Grievance Officer with your complaint details, your RateIT account phone number, and the specific review/content in question.',
-                  timeline: '',
-                },
-                {
-                  step: '2',
-                  title: 'Acknowledgment',
-                  description: 'We will acknowledge receipt of your complaint and assign a reference number.',
-                  timeline: 'Within 24 hours',
-                },
-                {
-                  step: '3',
-                  title: 'Investigation & Resolution',
-                  description: 'We will review the complaint, examine the content, and may contact the reviewer for their response. A decision will be communicated to you.',
-                  timeline: 'Within 15 days',
-                },
-              ].map((item) => (
-                <div key={item.step} className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold">
-                    {item.step}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-800 text-sm">{item.title}</h3>
-                    <p className="text-xs text-gray-500 leading-relaxed mt-1">{item.description}</p>
-                    {item.timeline && (
-                      <span className="inline-block mt-2 text-xs px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded-full font-medium">
-                        ⏱ {item.timeline}
-                      </span>
-                    )}
-                  </div>
+        {/* Process Steps */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold tracking-[-0.022em] text-fg">Statutory Grievance Process</h2>
+          <div className="space-y-3">
+            {[
+              {
+                step: '1',
+                title: 'Ticket Submission & Audit Ingest',
+                description: 'Your complaint is assigned a cryptographically signed ticket ID in our audit ledger.',
+                timeline: 'Instant',
+              },
+              {
+                step: '2',
+                title: 'Formal Acknowledgment',
+                description: 'The Grievance Officer reviews the filing and acknowledges receipt via registered email.',
+                timeline: 'Within 24 Hours',
+              },
+              {
+                step: '3',
+                title: 'Investigation & Resolution Order',
+                description: 'Evidence, EXIF headers, and geofence logs are analyzed. A written resolution order is issued.',
+                timeline: 'Within 15 Days',
+              },
+            ].map((item) => (
+              <div
+                key={item.step}
+                className="p-4 rounded-card bg-surface flex items-start gap-4"
+              >
+                <div className="w-8 h-8 rounded-full bg-accent text-white font-semibold text-xs flex items-center justify-center shrink-0">
+                  {item.step}
                 </div>
-              ))}
-            </div>
+                <div className="flex-1 space-y-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h3 className="font-semibold text-fg text-sm">{item.title}</h3>
+                    <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-accent-tint text-accent-link">
+                      {item.timeline}
+                    </span>
+                  </div>
+                  <p className="text-xs text-fg-muted leading-relaxed">{item.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
+        </div>
 
-          {/* Legal references */}
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-            <h3 className="text-sm font-semibold text-gray-700 mb-2">Applicable Legal Framework</h3>
-            <ul className="text-xs text-gray-500 space-y-1">
-              <li>• Information Technology Act, 2000 — Section 79</li>
-              <li>• IT (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021</li>
-              <li>• Digital Personal Data Protection Act, 2023</li>
-              <li>• DPDP Rules, 2025</li>
-              <li>• IS 19000:2022 (BIS Online Consumer Reviews Standard)</li>
-              <li>• Consumer Protection Act, 2019</li>
-              <li>• Bharatiya Nyaya Sanhita (BNS), Section 356</li>
-            </ul>
-          </div>
+        {/* Legal Framework References */}
+        <div className="p-5 rounded-modal bg-surface space-y-2 text-xs">
+          <h3 className="font-semibold text-fg">Applicable Legal Framework (India)</h3>
+          <ul className="text-fg-muted space-y-1 list-disc pl-4 text-[11px]">
+            <li>Information Technology Act, 2000: Section 79 Intermediary Safe Harbour</li>
+            <li>Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021</li>
+            <li>Digital Personal Data Protection Act, 2023 & DPDP Rules 2025</li>
+            <li>IS 19000:2022 (Bureau of Indian Standards - Online Consumer Reviews Standard)</li>
+            <li>Consumer Protection Act, 2019 (Prevention of Misleading Advertisements and Endorsements)</li>
+            <li>Bharatiya Nyaya Sanhita (BNS), 2023: Section 356</li>
+          </ul>
         </div>
       </div>
     </div>

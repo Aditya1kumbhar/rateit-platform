@@ -29,3 +29,12 @@ tmpclaude-*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# OS & Editor
+.DS_Store
+.vscode/
+
+# Local databases & test artifacts
+*.db
+*.db-journal
+backend/data/

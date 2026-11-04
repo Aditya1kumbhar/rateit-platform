@@ -11,6 +11,9 @@
  * 4. EXIF cross-check (photo location vs review location)
  */
 
+import { haversineDistance } from "./geolocation"
+import { CONFIG } from "./personalization-config"
+
 export interface FraudCheckResult {
   isSuspicious: boolean
   flags: FraudFlag[]
@@ -18,7 +21,7 @@ export interface FraudCheckResult {
 }
 
 export interface FraudFlag {
-  type: 'DUPLICATE_TEXT' | 'IMPOSSIBLE_TRAVEL' | 'BULK_POSTING' | 'EXIF_MISMATCH' | 'NEW_ACCOUNT_BURST'
+  type: 'DUPLICATE_TEXT' | 'IMPOSSIBLE_TRAVEL' | 'BULK_POSTING' | 'EXIF_MISMATCH' | 'NEW_ACCOUNT_BURST' | 'COLLUSION_NETWORK' | 'BURST_ON_PLACE'
   severity: 'low' | 'medium' | 'high'
   detail: string
 }
@@ -145,6 +148,100 @@ export function detectNewAccountBurst(
   }
 }
 
+/**
+ * P5.2 (a): Flag when a place receives more than 8 reviews in 1 hour from accounts younger than 7 days.
+ */
+export function detectYoungAccountBurstOnPlace(
+  recentReviewsOnPlace: { accountAgeDays: number; createdAt: Date }[]
+): { isBurst: boolean; count: number } {
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000)
+  const burstReviews = recentReviewsOnPlace.filter(
+    (r) => new Date(r.createdAt) >= oneHourAgo && r.accountAgeDays < CONFIG.burstMaxAccountAgeDays
+  )
+
+  return {
+    isBurst: burstReviews.length > CONFIG.burstMaxReviewsPerHour,
+    count: burstReviews.length,
+  }
+}
+
+/**
+ * P5.2 (b): Flag when 3 or more accounts share one deviceHash or ipHash and review the same place within 24 hours.
+ */
+export function detectCollusionNetwork(
+  recentReviewsOnPlace: { userId: string; ipHash: string; deviceHash: string; createdAt: Date }[]
+): { isCollusion: boolean; sharedHash?: string; count: number } {
+  const twentyFourHoursAgo = new Date(Date.now() - CONFIG.collusionWindowHours * 60 * 60 * 1000)
+  const windowReviews = recentReviewsOnPlace.filter((r) => new Date(r.createdAt) >= twentyFourHoursAgo)
+
+  // Group by ipHash
+  const ipGroups = new Map<string, Set<string>>()
+  // Group by deviceHash
+  const deviceGroups = new Map<string, Set<string>>()
+
+  for (const r of windowReviews) {
+    if (r.ipHash && r.ipHash !== "anonymous") {
+      if (!ipGroups.has(r.ipHash)) ipGroups.set(r.ipHash, new Set())
+      ipGroups.get(r.ipHash)!.add(r.userId)
+    }
+
+    if (r.deviceHash && r.deviceHash !== "anonymous") {
+      if (!deviceGroups.has(r.deviceHash)) deviceGroups.set(r.deviceHash, new Set())
+      deviceGroups.get(r.deviceHash)!.add(r.userId)
+    }
+  }
+
+  for (const [hash, userSet] of ipGroups.entries()) {
+    if (userSet.size >= CONFIG.collusionMinAccounts) {
+      return { isCollusion: true, sharedHash: `ip:${hash.substring(0, 8)}`, count: userSet.size }
+    }
+  }
+
+  for (const [hash, userSet] of deviceGroups.entries()) {
+    if (userSet.size >= CONFIG.collusionMinAccounts) {
+      return { isCollusion: true, sharedHash: `device:${hash.substring(0, 8)}`, count: userSet.size }
+    }
+  }
+
+  return { isCollusion: false, count: 0 }
+}
+
+/**
+ * P5.2 (c): Flag when a single user submits reviews for places more than 50 km apart within 30 minutes.
+ */
+export function detectImpossibleTravelBetweenPlaces(
+  recentUserReviews: { lat: number | null; lng: number | null; createdAt: Date }[],
+  currentLat?: number | null,
+  currentLng?: number | null,
+  currentDate: Date = new Date()
+): { isImpossibleTravel: boolean; distanceKm: number; timeMinutes: number } {
+  if (currentLat === null || currentLat === undefined || currentLng === null || currentLng === undefined) {
+    return { isImpossibleTravel: false, distanceKm: 0, timeMinutes: 0 }
+  }
+
+  for (const prev of recentUserReviews) {
+    if (prev.lat !== null && prev.lng !== null) {
+      const msDiff = Math.abs(currentDate.getTime() - new Date(prev.createdAt).getTime())
+      const minutes = msDiff / (1000 * 60)
+
+      if (minutes <= CONFIG.impossibleTravelMinutes) {
+        const distanceMeters = haversineDistance(currentLat, currentLng, prev.lat, prev.lng)
+        const distanceKm = distanceMeters / 1000
+
+        if (distanceKm > CONFIG.impossibleTravelKm) {
+          return {
+            isImpossibleTravel: true,
+            distanceKm: Math.round(distanceKm),
+            timeMinutes: Math.round(minutes),
+          }
+        }
+      }
+    }
+  }
+
+  return { isImpossibleTravel: false, distanceKm: 0, timeMinutes: 0 }
+}
+
 // ============================================================
 // 4. Composite Fraud Check
 // ============================================================
@@ -159,9 +256,25 @@ export function runFraudChecks(params: {
   userReviewTimestamps: Date[]
   accountCreatedAt: Date
   totalReviewCount: number
+  exifWarnings?: string[]
+  burstOnPlace?: { accountAgeDays: number; createdAt: Date }[]
+  collusionRecentReviews?: { userId: string; ipHash: string; deviceHash: string; createdAt: Date }[]
+  impossibleTravelCheckins?: { lat: number | null; lng: number | null; createdAt: Date }[]
+  currentLat?: number | null
+  currentLng?: number | null
 }): FraudCheckResult {
   const flags: FraudFlag[] = []
   let riskScore = 0
+
+  // Check 0: Photo EXIF Cross-check
+  if (params.exifWarnings && params.exifWarnings.length > 0) {
+    flags.push({
+      type: 'EXIF_MISMATCH',
+      severity: 'high',
+      detail: params.exifWarnings.join('; '),
+    })
+    riskScore += 35
+  }
 
   // Check 1: Near-duplicate text
   const dupCheck = detectNearDuplicateText(
@@ -200,6 +313,49 @@ export function runFraudChecks(params: {
       detail: `Account is only ${burstCheck.accountAgeHours} hours old with ${params.totalReviewCount} reviews`,
     })
     riskScore += 20
+  }
+
+  // Check 4: P5.2(a) Burst on place from young accounts (>8 reviews in 1 hour from accounts < 7 days old)
+  if (params.burstOnPlace && params.burstOnPlace.length > 0) {
+    const placeBurst = detectYoungAccountBurstOnPlace(params.burstOnPlace)
+    if (placeBurst.isBurst) {
+      flags.push({
+        type: 'BURST_ON_PLACE',
+        severity: 'high',
+        detail: `Place received ${placeBurst.count} reviews in 1 hour from accounts under ${CONFIG.burstMaxAccountAgeDays} days old`,
+      })
+      riskScore += 30
+    }
+  }
+
+  // Check 5: P5.2(b) Collusion network (3+ accounts sharing IP/device hash in 24 hours)
+  if (params.collusionRecentReviews && params.collusionRecentReviews.length > 0) {
+    const collusion = detectCollusionNetwork(params.collusionRecentReviews)
+    if (collusion.isCollusion) {
+      flags.push({
+        type: 'COLLUSION_NETWORK',
+        severity: 'high',
+        detail: `Collusion network detected on place: ${collusion.count} accounts sharing ${collusion.sharedHash}`,
+      })
+      riskScore += 35
+    }
+  }
+
+  // Check 6: P5.2(c) Impossible travel (>50km apart within 30 minutes)
+  if (params.impossibleTravelCheckins && params.impossibleTravelCheckins.length > 0) {
+    const travel = detectImpossibleTravelBetweenPlaces(
+      params.impossibleTravelCheckins,
+      params.currentLat,
+      params.currentLng
+    )
+    if (travel.isImpossibleTravel) {
+      flags.push({
+        type: 'IMPOSSIBLE_TRAVEL',
+        severity: 'high',
+        detail: `Impossible travel detected: user reviewed places ${travel.distanceKm}km apart within ${travel.timeMinutes} minutes`,
+      })
+      riskScore += 40
+    }
   }
 
   return {

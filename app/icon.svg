@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="100%" stop-color="#09090b"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="50%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Squircle -->
+  <rect width="32" height="32" rx="7" fill="url(#bgGrad)"/>
+  <rect width="30" height="30" x="1" y="1" rx="6" fill="none" stroke="#f59e0b" stroke-width="0.75" stroke-opacity="0.3"/>
+  <!-- Geometric RateIT Monogram 'R' with Verified Check Accent -->
+  <path d="M9 7h7c3 0 5 1.5 5 4.2 0 2.2-1.3 3.6-3.3 4l4.1 7.8h-3.4l-3.6-7h-2.8v7H9V7zm3 6h3.8c1.5 0 2.4-.7 2.4-2s-.9-2-2.4-2H12v4z" fill="url(#goldGrad)"/>
+  <!-- Verified Micro-Shield Accent in Top Right -->
+  <circle cx="24.5" cy="7.5" r="3" fill="#10b981"/>
+  <path d="M23.3 7.5l0.9 0.9 1.6-1.6" fill="none" stroke="#09090b" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+

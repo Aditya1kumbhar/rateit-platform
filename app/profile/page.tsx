@@ -2,79 +2,99 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import {
-  ArrowLeft,
-  Settings,
   Star,
-  Home,
-  Search,
-  Plus,
-  Heart,
-  User as UserIcon,
-  Grid,
-  Bookmark,
-  Award,
-  Edit3,
-  Share2,
-  LogOut,
   MapPin,
-  CheckCircle2,
   ShieldCheck,
+  Edit3,
+  Bookmark,
+  Sparkles,
+  Camera,
+  Trash2,
   Lock,
   Globe,
+  Share2,
+  AlertTriangle,
   X,
-  Camera,
-  Coffee,
-  GraduationCap,
-  Sparkles,
-  ExternalLink
+  ChevronRight,
+  LogOut,
+  Shield,
+  CheckCircle2,
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { userSession } from "@/lib/userAuth"
-import { EnhancedRateModal } from "@/components/enhanced-rate-modal"
-import { BottomNav } from "@/components/bottom-nav"
+import { toast } from "sonner"
+import { useUI } from "@/components/ui-provider"
 
 export default function ProfilePage() {
+  const router = useRouter()
+  const { openRateModal } = useUI()
   const [profile, setProfile] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<"grid" | "saved" | "badges">("grid")
-  const [showEditModal, setShowEditModal] = useState(false)
-  const [showRateModal, setShowRateModal] = useState(false)
 
-  // Edit Form State
+  // Edit Modal State
+  const [showEditModal, setShowEditModal] = useState(false)
   const [editName, setEditName] = useState("")
   const [editBio, setEditBio] = useState("")
   const [editAvatar, setEditAvatar] = useState("")
   const [isSaving, setIsSaving] = useState(false)
 
-  const router = useRouter()
+  // Data Erasure State (DPDP Act 2023)
+  const [isDeletingData, setIsDeletingData] = useState(false)
 
   useEffect(() => {
-    fetchProfile()
-  }, [])
+    let active = true
 
-  const fetchProfile = async () => {
-    try {
-      setIsLoading(true)
-      const res = await fetch("/api/profile")
-      if (res.status === 401) {
-        // Not logged in -> redirect to login
+    const loadProfile = async () => {
+      const loggedIn = await userSession.isLoggedIn()
+      if (!loggedIn) {
         router.push("/login?reason=profile&redirect=/profile")
         return
       }
-      if (res.ok) {
-        const data = await res.json()
-        setProfile(data)
-        setEditName(data.displayName || "")
-        setEditBio(data.bio || "")
-        setEditAvatar(data.avatarUrl || "")
+
+      try {
+        const res = await fetch("/api/profile")
+        if (res.ok) {
+          const data = await res.json()
+          if (active) {
+            setProfile(data)
+            setEditName(data.displayName || "")
+            setEditBio(data.bio || "")
+            setEditAvatar(data.avatarUrl || "")
+          }
+        }
+      } catch (err) {
+        console.warn("Could not load profile:", err)
+      } finally {
+        if (active) setIsLoading(false)
       }
-    } catch (err) {
-      console.error("Failed to fetch profile:", err)
-    } finally {
-      setIsLoading(false)
+    }
+
+    loadProfile()
+
+    return () => {
+      active = false
+    }
+  }, [router])
+
+  const handleLogout = async () => {
+    await userSession.clearUser()
+    toast.success("Signed out successfully")
+    router.push("/")
+  }
+
+  const handleShareProfile = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: `${profile?.displayName || "Reviewer"} — RateIT Pune Profile`,
+        text: `Check out verified Pune reviews by ${profile?.displayName || "this reviewer"}.`,
+        url: window.location.href,
+      }).catch(() => {})
+    } else {
+      navigator.clipboard.writeText(window.location.href)
+      toast.success("Profile link copied to clipboard")
     }
   }
 
@@ -89,8 +109,8 @@ export default function ProfilePage() {
         body: JSON.stringify({
           displayName: editName.trim(),
           bio: editBio.trim(),
-          avatarUrl: editAvatar.trim() || null
-        })
+          avatarUrl: editAvatar.trim() || null,
+        }),
       })
 
       if (res.ok) {
@@ -99,432 +119,451 @@ export default function ProfilePage() {
           ...prev,
           displayName: updated.displayName,
           bio: updated.bio,
-          avatarUrl: updated.avatarUrl
+          avatarUrl: updated.avatarUrl,
         }))
         setShowEditModal(false)
+        toast.success("Profile updated successfully")
+      } else {
+        toast.error("Failed to update profile")
       }
-    } catch (err) {
-      console.error("Failed to update profile:", err)
+    } catch {
+      toast.error("Network error while updating profile")
     } finally {
       setIsSaving(false)
     }
   }
 
-  const handleLogout = async () => {
-    await userSession.clearUser()
-    router.push("/")
-  }
+  const handleDeletePersonalData = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to permanently withdraw your consent and erase your personal data under the Indian DPDP Act 2023? This will purge your profile, saved lists, and telemetry records."
+    )
+    if (!confirmDelete) return
 
-  const handleShareProfile = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: `${profile?.displayName || "User"}'s Profile on RateIT`,
-        url: window.location.href,
-      }).catch(() => {})
-    } else {
-      navigator.clipboard.writeText(window.location.href)
-      alert("Profile link copied to clipboard!")
+    setIsDeletingData(true)
+    try {
+      const res = await fetch("/api/profile", {
+        method: "DELETE",
+      })
+
+      if (res.ok) {
+        toast.success("Personal data and consent erased under DPDP Act 2023")
+        await userSession.clearUser()
+        router.push("/")
+      } else {
+        toast.error("Failed to erase data. Please contact the Grievance Officer.")
+      }
+    } catch {
+      toast.error("Network error during data erasure")
+    } finally {
+      setIsDeletingData(false)
     }
   }
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="container mx-auto px-4 py-20 flex items-center justify-center">
         <div className="text-center space-y-3">
-          <div className="w-10 h-10 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-xs text-gray-500 font-medium">Loading Instagram Profile...</p>
+          <div className="w-10 h-10 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-fg-muted text-sm font-medium">Loading RateIT Profile...</p>
         </div>
       </div>
     )
   }
 
   const initials = profile?.displayName
-    ? profile.displayName.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
+    ? profile.displayName
+        .split(" ")
+        .map((n: string) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
     : "IT"
 
+  const trustScore = profile?.trustScore || 85
+  const trustTier =
+    trustScore >= 75
+      ? { label: "Trusted Resident", color: "text-success bg-success/10 border-success/20" }
+      : trustScore >= 40
+      ? { label: "Verified Visitor", color: "text-accent-link bg-accent-tint border-accent-link/20" }
+      : { label: "Community Member", color: "text-fg-muted bg-surface-2 border-hairline" }
+
   return (
-    <div className="min-h-screen bg-gray-50 pb-24 text-gray-900 selection:bg-yellow-100">
-      {/* Header Bar */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 px-4 py-4">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link href="/">
-              <Button variant="ghost" size="icon" className="h-9 w-9 text-gray-700 hover:text-black">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-            </Link>
-            <h1 className="text-xl font-bold tracking-tight text-black">
-              Profile
-            </h1>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleLogout}
-              className="hidden md:flex h-9 text-gray-600 hover:text-red-600 border-gray-200"
+    <div className="container mx-auto px-4 py-6 max-w-5xl space-y-6">
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-2 text-xs text-fg-subtle">
+        <Link href="/" className="hover:text-fg transition-colors">
+          Home
+        </Link>
+        <ChevronRight className="w-3.5 h-3.5 text-fg-subtle" />
+        <span className="text-fg font-medium">My Profile</span>
+      </nav>
+
+      {/* Profile Header Card */}
+      <div className="p-6 md:p-8 rounded-modal bg-surface border-0 relative overflow-hidden shadow-sm">
+        <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 text-center md:text-left">
+            {/* Avatar */}
+            <div
+              className="relative group cursor-pointer apple-press"
+              onClick={() => setShowEditModal(true)}
             >
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleLogout}
-              title="Logout"
-              className="md:hidden h-9 w-9 text-gray-500 hover:text-red-600 transition-colors"
-            >
-              <LogOut className="h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <div className="max-w-5xl mx-auto px-4 pt-8">
-        {/* Profile Card Area */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8 mb-8">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-6 w-full md:w-auto">
-              
-              {/* Avatar */}
-              <div className="relative group cursor-pointer" onClick={() => setShowEditModal(true)}>
-                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-gray-50 shadow-sm transition-transform group-hover:scale-105 bg-white">
-                  {profile?.avatarUrl ? (
-                    <img
-                      src={profile.avatarUrl}
-                      alt={profile.displayName}
-                      className="w-full h-full rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full rounded-full bg-gray-900 flex items-center justify-center text-white font-bold text-2xl md:text-4xl tracking-wider">
-                      {initials}
-                    </div>
-                  )}
-                </div>
-                <div className="absolute bottom-1 right-1 bg-white text-gray-900 p-2 rounded-full shadow-md border border-gray-100 hover:bg-gray-50">
-                  <Camera className="h-4 w-4" />
-                </div>
-              </div>
-
-              {/* Name & Bio Info */}
-              <div className="text-center md:text-left space-y-2 mt-2 md:mt-0">
-                <div className="flex flex-col md:flex-row items-center gap-2">
-                  <h2 className="font-bold text-2xl text-gray-900">{profile?.displayName}</h2>
-                  {profile?.phoneVerified && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                      <ShieldCheck className="h-3 w-3" /> Verified
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-600 max-w-md">
-                  {profile?.bio || "Reviewer on RateIT Pune. Sharing authentic ratings & check-ins."}
-                </p>
-                <div className="flex items-center justify-center md:justify-start gap-4 pt-3">
-                  <div className="flex items-center gap-1">
-                    <span className="font-bold text-gray-900">{profile?.reviewsCount || 0}</span>
-                    <span className="text-xs text-gray-500">Reviews</span>
-                  </div>
-                  <div className="w-1 h-1 bg-gray-300 rounded-full" />
-                  <div className="flex items-center gap-1">
-                    <span className="font-bold text-gray-900">{profile?.listsCount || 0}</span>
-                    <span className="text-xs text-gray-500">Lists</span>
-                  </div>
-                  <div className="w-1 h-1 bg-gray-300 rounded-full" />
-                  <div className="flex items-center gap-1.5 text-amber-600">
-                    <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                    <span className="font-bold">{profile?.trustScore ? profile.trustScore.toFixed(0) : "85"}</span>
-                    <span className="text-xs text-gray-500">Trust Score</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Desktop Actions */}
-            <div className="flex flex-row md:flex-col gap-3 w-full md:w-48">
-              <Button
-                onClick={() => setShowEditModal(true)}
-                variant="outline"
-                className="flex-1 rounded-xl border-gray-200 bg-white hover:bg-gray-50 text-sm font-semibold flex items-center justify-center gap-2 shadow-sm"
-              >
-                <Edit3 className="h-4 w-4" />
-                Edit Profile
-              </Button>
-              <Button
-                onClick={handleShareProfile}
-                className="flex-1 rounded-xl bg-yellow-400 hover:bg-yellow-500 text-gray-900 text-sm font-semibold flex items-center justify-center gap-2 shadow-sm"
-              >
-                <Share2 className="h-4 w-4" />
-                Share Profile
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation Tabs */}
-        <div className="bg-white rounded-t-2xl border-t border-x border-gray-200 overflow-hidden">
-          <div className="flex border-b border-gray-100">
-            <button
-              onClick={() => setActiveTab("grid")}
-              className={`flex-1 py-4 flex items-center justify-center gap-2 text-sm font-semibold border-b-2 transition-all ${
-                activeTab === "grid"
-                  ? "border-yellow-400 text-gray-900 bg-gray-50/50"
-                  : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/30"
-              }`}
-            >
-              <Grid className="h-4 w-4" />
-              Reviews
-            </button>
-            <button
-              onClick={() => setActiveTab("saved")}
-              className={`flex-1 py-4 flex items-center justify-center gap-2 text-sm font-semibold border-b-2 transition-all ${
-                activeTab === "saved"
-                  ? "border-yellow-400 text-gray-900 bg-gray-50/50"
-                  : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/30"
-              }`}
-            >
-              <Bookmark className="h-4 w-4" />
-              Lists ({profile?.listsCount || 0})
-            </button>
-            <button
-              onClick={() => setActiveTab("badges")}
-              className={`flex-1 py-4 flex items-center justify-center gap-2 text-sm font-semibold border-b-2 transition-all ${
-                activeTab === "badges"
-                  ? "border-yellow-400 text-gray-900 bg-gray-50/50"
-                  : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/30"
-              }`}
-            >
-              <Award className="h-4 w-4" />
-              Verification
-            </button>
-          </div>
-        </div>
-
-        {/* Tab Contents Area */}
-        <div className="bg-white border-b border-x border-gray-200 rounded-b-2xl p-4 md:p-6 min-h-[400px]">
-          
-          {/* TAB 1: REVIEWS GRID */}
-          {activeTab === "grid" && (
-            <div>
-              {profile?.reviews && profile.reviews.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                  {profile.reviews.map((rev: any) => (
-                    <Card key={rev.id} className="overflow-hidden border border-gray-200 rounded-xl bg-white hover:shadow-lg transition-all group flex flex-col h-full">
-                      <CardContent className="p-5 flex-1 flex flex-col">
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
-                            {rev.place?.category || "Place"}
-                          </span>
-                          <span className="flex items-center gap-1 text-xs font-bold text-amber-700 bg-amber-50 px-2 py-1 rounded-md border border-amber-100">
-                            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                            {rev.rating}.0
-                          </span>
-                        </div>
-                        <h4 className="font-bold text-base text-gray-900 line-clamp-1 group-hover:text-yellow-600 transition-colors mb-2">
-                          {rev.place?.name || "Pune Location"}
-                        </h4>
-                        <p className="text-sm text-gray-600 flex-1 italic bg-gray-50 p-3 rounded-lg">
-                          "{rev.text || "Rated location in Pune."}"
-                        </p>
-                        {rev.checkinVerified && (
-                          <div className="mt-4 pt-3 border-t border-gray-100 flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
-                            <CheckCircle2 className="h-4 w-4" /> GPS Check-in Verified
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-16 px-4 space-y-4">
-                  <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 border border-gray-100">
-                    <Grid className="h-10 w-10" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900">No Reviews Yet</h3>
-                  <p className="text-sm text-gray-500 max-w-sm text-center">
-                    Share your authentic experience for coaching classes, cafes, and PGs in Pune. Your reviews help the community!
-                  </p>
-                  <Button
-                    onClick={() => setShowRateModal(true)}
-                    className="mt-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 rounded-xl px-6 h-11 font-semibold"
-                  >
-                    Post First Review
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* TAB 2: SAVED LISTS */}
-          {activeTab === "saved" && (
-            <div>
-              {profile?.lists && profile.lists.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {profile.lists.map((list: any) => (
-                    <Card key={list.id} className="border border-gray-200 rounded-xl bg-white p-5 hover:shadow-md transition-all group cursor-pointer">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-start space-x-4">
-                          <div className="w-12 h-12 bg-yellow-50 border border-yellow-100 rounded-xl flex items-center justify-center text-yellow-600 group-hover:scale-105 transition-transform">
-                            <Heart className="h-6 w-6" />
-                          </div>
-                          <div>
-                            <h4 className="font-bold text-base text-gray-900 group-hover:text-yellow-600 transition-colors">{list.name}</h4>
-                            <p className="text-sm text-gray-500 mt-1 line-clamp-2">{list.description || "Custom place collection"}</p>
-                          </div>
-                        </div>
-                        <span className="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full border bg-gray-50 text-gray-600 border-gray-200">
-                          {list.isPrivate ? <Lock className="h-3.5 w-3.5 text-gray-400" /> : <Globe className="h-3.5 w-3.5 text-emerald-600" />}
-                          {list.isPrivate ? "Private" : "Public"}
-                        </span>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-16 px-4 space-y-4">
-                  <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 border border-gray-100">
-                    <Bookmark className="h-10 w-10" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900">No Saved Collections</h3>
-                  <p className="text-sm text-gray-500 max-w-sm text-center">
-                    Organize your favorite hostels, coaching batches, and Irani cafes into custom lists.
-                  </p>
-                  <Link href="/lists">
-                    <Button className="mt-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 rounded-xl px-6 h-11 font-semibold">
-                      Create a List
-                    </Button>
-                  </Link>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* TAB 3: TRUST & BADGES */}
-          {activeTab === "badges" && (
-            <div className="space-y-6 max-w-2xl mx-auto">
-              <Card className="border border-amber-200 bg-amber-50 rounded-xl p-6 shadow-sm">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-white shadow-sm text-amber-600 rounded-xl flex items-center justify-center">
-                      <ShieldCheck className="h-7 w-7" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-lg text-gray-900">Trust Engine Score</h4>
-                      <p className="text-sm text-gray-600">Calculated via GPS check-ins & phone verification</p>
-                    </div>
-                  </div>
-                  <div className="text-3xl font-black text-amber-600">
-                    {profile?.trustScore?.toFixed(1) || 85.0}
-                  </div>
-                </div>
-                <div className="w-full bg-white rounded-full h-3 border border-amber-100 overflow-hidden">
-                  <div
-                    className="bg-gradient-to-r from-yellow-400 to-amber-500 h-full transition-all"
-                    style={{ width: `${Math.min(100, profile?.trustScore || 85)}%` }}
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-hairline shadow-xl overflow-hidden bg-surface-2 flex items-center justify-center">
+                {profile?.avatarUrl ? (
+                  <img
+                    src={profile.avatarUrl}
+                    alt={profile.displayName}
+                    className="w-full h-full object-cover"
                   />
-                </div>
-              </Card>
+                ) : (
+                  <span className="text-2xl sm:text-3xl font-semibold text-accent-link">
+                    {initials}
+                  </span>
+                )}
+              </div>
+              <div className="absolute bottom-0 right-0 bg-accent text-white p-2 rounded-full shadow-lg">
+                <Camera className="w-3.5 h-3.5" />
+              </div>
+            </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-5 bg-white border border-gray-200 rounded-xl flex items-start space-x-4 shadow-sm hover:border-emerald-200 transition-colors">
-                  <div className="bg-emerald-50 p-2 rounded-lg text-emerald-600">
-                    <CheckCircle2 className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h5 className="font-bold text-base text-gray-900">Phone Verified</h5>
-                    <p className="text-sm text-gray-500 mt-1">IS 19000 compliant identity verification ensuring authentic reviewers.</p>
-                  </div>
-                </div>
+            {/* Info */}
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
+                <h1 className="text-2xl sm:text-3xl font-semibold text-fg tracking-[-0.022em]">
+                  {profile?.displayName || "RateIT User"}
+                </h1>
+                <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${trustTier.color}`}>
+                  {trustTier.label}
+                </span>
+                {profile?.phoneVerified && (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-success bg-success/10 px-2.5 py-0.5 rounded-full border border-success/20">
+                    <ShieldCheck className="w-3 h-3" /> Phone Verified
+                  </span>
+                )}
+              </div>
 
-                <div className="p-5 bg-white border border-gray-200 rounded-xl flex items-start space-x-4 shadow-sm hover:border-purple-200 transition-colors">
-                  <div className="bg-purple-50 p-2 rounded-lg text-purple-600">
-                    <Sparkles className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h5 className="font-bold text-base text-gray-900">DPDP Compliant</h5>
-                    <p className="text-sm text-gray-500 mt-1">Explicit digital consent logged and secured in the database.</p>
-                  </div>
+              <p className="text-xs sm:text-sm text-fg-muted max-w-md leading-relaxed">
+                {profile?.bio || "Verified Pune student & community reviewer on RateIT."}
+              </p>
+
+              {/* Stats Bar */}
+              <div className="flex items-center justify-center md:justify-start gap-4 pt-2 text-xs">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-semibold text-fg tabular-nums">{profile?.reviewsCount || 0}</span>
+                  <span className="text-fg-subtle">Reviews</span>
+                </div>
+                <span className="text-fg-subtle">•</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-semibold text-fg tabular-nums">{profile?.listsCount || 0}</span>
+                  <span className="text-fg-subtle">Lists</span>
+                </div>
+                <span className="text-fg-subtle">•</span>
+                <div className="flex items-center gap-1.5 text-star font-semibold tabular-nums">
+                  <Star className="w-3.5 h-3.5 fill-star text-star" />
+                  <span>{trustScore.toFixed(0)}</span>
+                  <span className="text-fg-subtle font-normal">Trust Score</span>
                 </div>
               </div>
             </div>
-          )}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap md:flex-col items-center gap-2.5 w-full md:w-auto">
+            <button
+              onClick={() => setShowEditModal(true)}
+              className="flex-1 md:flex-initial px-4 py-2 rounded-full bg-surface-2 hover:bg-surface-3 border border-hairline text-xs font-semibold text-fg flex items-center justify-center gap-2 transition-colors apple-press apple-focus"
+            >
+              <Edit3 className="w-3.5 h-3.5 text-accent-link" />
+              <span>Edit Profile</span>
+            </button>
+            <button
+              onClick={handleShareProfile}
+              className="flex-1 md:flex-initial px-4 py-2 rounded-full bg-surface-2 hover:bg-surface-3 border border-hairline text-xs font-semibold text-fg flex items-center justify-center gap-2 transition-colors apple-press apple-focus"
+            >
+              <Share2 className="w-3.5 h-3.5" />
+              <span>Share</span>
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex-1 md:flex-initial px-4 py-2 rounded-full bg-surface-2 hover:bg-danger/10 border border-hairline hover:border-danger/30 text-xs font-semibold text-fg-subtle hover:text-danger flex items-center justify-center gap-2 transition-colors apple-press apple-focus"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Sign Out</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* EDIT PROFILE MODAL */}
+      {/* Tabs */}
+      <div className="space-y-6">
+        <div className="flex items-center gap-2 border-b border-hairline pb-3 text-xs font-semibold">
+          <button
+            onClick={() => setActiveTab("grid")}
+            className={`px-4 py-1.5 rounded-full transition-colors apple-focus ${
+              activeTab === "grid"
+                ? "bg-accent text-white font-semibold shadow-sm shadow-accent/20"
+                : "text-fg-muted hover:text-fg hover:bg-surface-2"
+            }`}
+          >
+            My Reviews ({profile?.reviewsCount || 0})
+          </button>
+          <button
+            onClick={() => setActiveTab("saved")}
+            className={`px-4 py-1.5 rounded-full transition-colors apple-focus ${
+              activeTab === "saved"
+                ? "bg-accent text-white font-semibold shadow-sm shadow-accent/20"
+                : "text-fg-muted hover:text-fg hover:bg-surface-2"
+            }`}
+          >
+            Saved Collections ({profile?.listsCount || 0})
+          </button>
+          <button
+            onClick={() => setActiveTab("badges")}
+            className={`px-4 py-1.5 rounded-full transition-colors apple-focus ${
+              activeTab === "badges"
+                ? "bg-accent text-white font-semibold shadow-sm shadow-accent/20"
+                : "text-fg-muted hover:text-fg hover:bg-surface-2"
+            }`}
+          >
+            Trust & DPDP Privacy
+          </button>
+        </div>
+
+        {/* TAB 1: REVIEWS */}
+        {activeTab === "grid" && (
+          <div className="space-y-4">
+            {profile?.reviews && profile.reviews.length > 0 ? (
+              profile.reviews.map((rev: any) => (
+                <div
+                  key={rev.id}
+                  className="p-5 rounded-card bg-surface space-y-3 border-0 shadow-sm"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-base font-semibold text-fg tracking-[-0.022em]">{rev.place?.name}</h4>
+                      <p className="text-xs text-fg-subtle flex items-center gap-1 mt-0.5">
+                        <MapPin className="w-3 h-3 text-fg-subtle" />
+                        {rev.place?.address}
+                      </p>
+                    </div>
+                    <div className="flex items-center text-star font-semibold text-xs tabular-nums">
+                      <Star className="w-3.5 h-3.5 fill-star text-star mr-1" />
+                      {rev.rating}.0
+                    </div>
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-fg-muted leading-relaxed">
+                    &ldquo;{rev.text}&rdquo;
+                  </p>
+
+                  <div className="pt-2 border-t border-hairline flex items-center justify-between text-xs text-fg-subtle">
+                    <span>{new Date(rev.publishDate).toLocaleDateString()}</span>
+                    {rev.checkinVerified && (
+                      <span className="text-success font-medium flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" /> GPS Verified
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="py-16 text-center rounded-modal bg-surface space-y-3 border-0">
+                <Star className="w-10 h-10 text-fg-subtle mx-auto" />
+                <h3 className="text-base font-semibold text-fg">No reviews posted yet</h3>
+                <p className="text-xs text-fg-muted max-w-sm mx-auto">
+                  Help fellow students in Pune by sharing your first verified review of a cafe, coaching institute, or PG.
+                </p>
+                <Button
+                  onClick={() => openRateModal()}
+                  className="bg-accent hover:bg-accent-hover text-white font-semibold rounded-full text-xs px-5 py-2 apple-press apple-focus"
+                >
+                  Write First Review
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB 2: SAVED LISTS */}
+        {activeTab === "saved" && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-fg">Your Collections</h3>
+              <Link
+                href="/lists"
+                className="text-xs text-accent-link hover:underline font-semibold"
+              >
+                Manage all lists &rarr;
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {profile?.lists && profile.lists.length > 0 ? (
+                profile.lists.map((l: any) => (
+                  <div
+                    key={l.id}
+                    className="p-5 rounded-card bg-surface hover:bg-surface-2 transition-[background-color] duration-150 space-y-2 border-0 shadow-sm"
+                  >
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-semibold text-fg">{l.name}</h4>
+                      {l.isPrivate ? (
+                        <Lock className="w-3.5 h-3.5 text-fg-subtle" />
+                      ) : (
+                        <Globe className="w-3.5 h-3.5 text-success" />
+                      )}
+                    </div>
+                    <p className="text-xs text-fg-muted">{l.description || "Curated Pune list"}</p>
+                    <p className="text-xs text-accent-link font-semibold pt-2">
+                      {l.items?.length || 0} spots saved
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-full py-12 text-center text-fg-muted rounded-modal bg-surface border-0">
+                  No saved collections yet. Visit <Link href="/lists" className="text-accent-link underline">Lists</Link> to create one.
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: TRUST & DPDP PRIVACY */}
+        {activeTab === "badges" && (
+          <div className="space-y-6">
+            {/* Trust Engine Card */}
+            <div className="p-6 rounded-card bg-surface space-y-4 border-0 shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-accent-tint text-accent-link flex items-center justify-center">
+                    <ShieldCheck className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="text-base font-semibold text-fg">Trust Engine Score</h4>
+                    <p className="text-xs text-fg-muted">
+                      Calculated from physical GPS check-ins, helpful votes (+1), and anti-fraud heuristics.
+                    </p>
+                  </div>
+                </div>
+                <div className="text-3xl font-semibold text-accent-link tabular-nums">
+                  {trustScore.toFixed(0)} <span className="text-xs text-fg-subtle font-normal">/ 100</span>
+                </div>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="w-full bg-surface-2 rounded-full h-2.5 overflow-hidden">
+                <div
+                  className="h-full bg-accent transition-transform duration-500 rounded-full"
+                  style={{ width: `${Math.min(100, Math.max(0, trustScore))}%` }}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+                <div className="p-3.5 rounded-card bg-surface-2 border border-hairline space-y-1">
+                  <span className="font-semibold text-success flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5" /> IS 19000:2022 Compliant
+                  </span>
+                  <p className="text-fg-muted">Verifiable reviewer identity without invasive biometric KYC.</p>
+                </div>
+                <div className="p-3.5 rounded-card bg-surface-2 border border-hairline space-y-1">
+                  <span className="font-semibold text-accent-link flex items-center gap-1.5">
+                    <Shield className="w-3.5 h-3.5" /> DPDP Act 2023 Enforced
+                  </span>
+                  <p className="text-fg-muted">Hardware EXIF stripped. Explicit consent withdrawal supported below.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* DPDP 2023 Data Erasure Zone */}
+            <div className="p-6 rounded-card bg-danger/5 border border-danger/20 space-y-3">
+              <div className="flex items-center gap-2 text-danger font-semibold text-sm">
+                <AlertTriangle className="w-4 h-4" />
+                <span>Digital Personal Data Protection (DPDP) Act 2023 Rights</span>
+              </div>
+              <p className="text-xs text-fg-muted leading-relaxed">
+                Under Section 12 of the Indian DPDP Act 2023, you have the right to withdraw data processing consent and demand the permanent erasure of all personal data, telemetry logs, and search history from our PostgreSQL database.
+              </p>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleDeletePersonalData}
+                disabled={isDeletingData}
+                className="mt-2 text-xs font-semibold rounded-full bg-danger hover:bg-danger/90 apple-press apple-focus"
+              >
+                <Trash2 className="w-3.5 h-3.5 mr-2" />
+                {isDeletingData ? "Erasing Data..." : "Withdraw Consent & Erase My Personal Data"}
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Edit Profile Modal */}
       {showEditModal && (
-        <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 md:p-8 shadow-2xl relative animate-in fade-in zoom-in-95">
-            <button
-              onClick={() => setShowEditModal(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 p-2 rounded-full transition-colors"
-            >
-              <X className="h-5 w-5" />
-            </button>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="bg-surface border border-hairline rounded-modal w-full max-w-md p-6 shadow-[0_24px_70px_rgba(0,0,0,0.65)] relative space-y-5 text-fg">
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-semibold text-fg">Edit Profile</h3>
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="p-1.5 rounded-full text-fg-subtle hover:text-fg hover:bg-surface-2 transition-colors apple-focus"
+                aria-label="Close dialog"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Edit Profile</h2>
-            <p className="text-sm text-gray-500 mb-6">Update your public display name, bio, and avatar image.</p>
-
-            <form onSubmit={handleSaveProfile} className="space-y-5">
-              <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-gray-700">Display Name</label>
+            <form onSubmit={handleSaveProfile} className="space-y-4 text-xs">
+              <div>
+                <label className="font-semibold text-fg block mb-1">Display Name</label>
                 <input
                   type="text"
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  placeholder="e.g. Aditya Kumbhar"
-                  className="w-full px-4 h-12 bg-white border border-gray-300 rounded-xl text-sm text-gray-900 focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10 focus:outline-none transition-all"
+                  placeholder="e.g. Aditya Kulkarni"
                   required
+                  className="w-full px-3.5 py-2.5 bg-surface-2 border border-hairline rounded-input text-fg placeholder:text-fg-subtle focus:border-accent-link focus:outline-none text-xs apple-focus"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-gray-700">Bio</label>
+              <div>
+                <label className="font-semibold text-fg block mb-1">Bio</label>
                 <textarea
                   value={editBio}
                   onChange={(e) => setEditBio(e.target.value)}
-                  placeholder="Tell others what you review in Pune..."
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-sm text-gray-900 focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10 focus:outline-none resize-none h-24 transition-all"
+                  placeholder="Tell students what you review in Pune (e.g., Kothrud cafes, Hinjewadi PGs)..."
+                  className="w-full px-3.5 py-2.5 bg-surface-2 border border-hairline rounded-input text-fg placeholder:text-fg-subtle resize-none h-20 focus:border-accent-link focus:outline-none text-xs apple-focus"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-gray-700">Avatar Image URL (Optional)</label>
+              <div>
+                <label className="font-semibold text-fg block mb-1">Avatar Image URL (Optional)</label>
                 <input
                   type="url"
                   value={editAvatar}
                   onChange={(e) => setEditAvatar(e.target.value)}
                   placeholder="https://..."
-                  className="w-full px-4 h-12 bg-white border border-gray-300 rounded-xl text-sm text-gray-900 focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/10 focus:outline-none transition-all"
+                  className="w-full px-3.5 py-2.5 bg-surface-2 border border-hairline rounded-input text-fg placeholder:text-fg-subtle focus:border-accent-link focus:outline-none text-xs apple-focus"
                 />
               </div>
 
-              <div className="flex gap-3 pt-4">
-                <Button
+              <div className="pt-3 flex justify-end gap-2 border-t border-hairline">
+                <button
                   type="button"
-                  variant="outline"
                   onClick={() => setShowEditModal(false)}
-                  className="flex-1 rounded-xl h-12 text-sm font-medium"
+                  className="text-fg-subtle hover:text-fg text-xs px-3.5 py-1.5 rounded-full transition-colors apple-focus"
                 >
                   Cancel
-                </Button>
-                <Button
+                </button>
+                <button
                   type="submit"
                   disabled={isSaving || !editName.trim()}
-                  className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-gray-900 rounded-xl h-12 text-sm font-bold shadow-sm"
+                  className="bg-accent hover:bg-accent-hover text-white font-semibold text-xs rounded-full px-5 py-2 shadow-md shadow-accent/20 apple-press apple-focus disabled:opacity-50"
                 >
                   {isSaving ? "Saving..." : "Save Changes"}
-                </Button>
+                </button>
               </div>
             </form>
           </div>
         </div>
       )}
-
-      {/* Bottom Navigation */}
-      <BottomNav onRateClick={() => setShowRateModal(true)} />
-
-      {/* Rate Modal */}
-      {showRateModal && <EnhancedRateModal onClose={() => setShowRateModal(false)} />}
     </div>
   )
 }

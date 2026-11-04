@@ -3,14 +3,21 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getAuthenticatedUser } from "@/lib/server-auth"
 import { createListSchema } from "@/lib/validation"
+import { generalApiRateLimit, enforceRateLimit, rateLimitResponse, getIpFromRequest } from "@/lib/ratelimit"
 
 export const dynamic = "force-dynamic"
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const authenticated = await getAuthenticatedUser()
     if (!authenticated) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    const ip = getIpFromRequest(request)
+    const rl = await enforceRateLimit(generalApiRateLimit, `user:${authenticated.user.id}:ip:${ip}`)
+    if (!rl.success) {
+      return rateLimitResponse(rl)
     }
 
     const lists = await prisma.list.findMany({
@@ -33,6 +40,12 @@ export async function POST(request: NextRequest) {
     const authenticated = await getAuthenticatedUser()
     if (!authenticated) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    const ip = getIpFromRequest(request)
+    const rl = await enforceRateLimit(generalApiRateLimit, `user:${authenticated.user.id}:ip:${ip}`)
+    if (!rl.success) {
+      return rateLimitResponse(rl)
     }
 
     const input = createListSchema.safeParse(await request.json())

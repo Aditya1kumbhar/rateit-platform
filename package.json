@@ -1,5 +1,5 @@
 {
-  "name": "my-v0-project",
+  "name": "rateit",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,8 +8,15 @@
     "lint": "next lint",
     "start": "next start",
     "postinstall": "prisma generate",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit/",
     "test:e2e": "playwright test",
-    "test:watch": "playwright test --ui"
+    "test:watch": "playwright test --ui",
+    "db:seed": "prisma db seed",
+    "check:secrets": "bash scripts/check-client-secrets.sh"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -81,6 +88,8 @@
     "@types/react-dom": "^18",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.9.3"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.5"
   }
 }

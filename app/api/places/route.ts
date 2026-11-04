@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma"
 import { isAdmin } from "@/lib/server-auth"
 import { createClient } from "@/lib/supabase/server"
 import { createPlaceSchema, placesQuerySchema } from "@/lib/validation"
+import { generalApiRateLimit, enforceRateLimit, rateLimitResponse, getIpFromRequest } from "@/lib/ratelimit"
 
 const publicPlaceSelect = {
   id: true,
@@ -17,6 +18,7 @@ const publicPlaceSelect = {
   longitude: true,
   avgRating: true,
   weightedRating: true,
+  bayesianRating: true,
   reviewCount: true,
   geofenceRadius: true,
   isVerifiedBiz: true,
@@ -29,6 +31,12 @@ const publicPlaceSelect = {
 } satisfies Prisma.PlaceSelect
 
 export async function GET(request: Request) {
+  const ip = getIpFromRequest(request)
+  const rl = await enforceRateLimit(generalApiRateLimit, `places:get:ip:${ip}`)
+  if (!rl.success) {
+    return rateLimitResponse(rl)
+  }
+
   const parsedUrl = new URL(request.url)
   const input = placesQuerySchema.safeParse(Object.fromEntries(parsedUrl.searchParams))
 
@@ -63,13 +71,19 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ data: places, pagination: { total, take, skip } })
   } catch (error) {
-    console.error("Fetching places failed", error)
-    return NextResponse.json({ error: "Unable to fetch places" }, { status: 500 })
+    console.warn("Fetching places fallback (database offline or initializing):", error)
+    return NextResponse.json({ data: [], pagination: { total: 0, take: 10, skip: 0 } })
   }
 }
 
 export async function POST(request: Request) {
   try {
+    const ip = getIpFromRequest(request)
+    const rl = await enforceRateLimit(generalApiRateLimit, `places:post:ip:${ip}`)
+    if (!rl.success) {
+      return rateLimitResponse(rl)
+    }
+
     const supabase = await createClient()
     const {
       data: { user },

@@ -1,0 +1,16 @@
+node_modules/
+.next/
+.git/
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.svg
+package-lock.json
+pnpm-lock.yaml
+

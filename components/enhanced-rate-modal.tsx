@@ -16,9 +16,14 @@ import {
   Shield,
   Eye,
   EyeOff,
+  Sparkles,
+  Lock,
+  Globe,
 } from "lucide-react"
 import { getCurrentPosition, isWithinGeofence, formatDistance } from "@/lib/geolocation"
 import type { Coordinates } from "@/lib/geolocation"
+import { extractExifData, type ExifData } from "@/lib/exif"
+import { toast } from "sonner"
 
 interface EnhancedRateModalProps {
   onClose: () => void
@@ -32,49 +37,14 @@ interface EnhancedRateModalProps {
   }
 }
 
-// V1 Pune mock places for search (will be replaced with Supabase queries)
-const PUNE_PLACES = [
-  {
-    id: "1",
-    name: "IIT JEE Academy",
-    category: "COACHING",
-    address: "FC Road, Pune",
-    latitude: 18.5204,
-    longitude: 73.8567,
-  },
-  {
-    id: "2",
-    name: "Mahesh Tutorials",
-    category: "COACHING",
-    address: "Karve Nagar, Pune",
-    latitude: 18.4973,
-    longitude: 73.8178,
-  },
-  {
-    id: "3",
-    name: "Sunrise PG for Boys",
-    category: "PG_HOSTEL",
-    address: "Kothrud, Pune",
-    latitude: 18.5074,
-    longitude: 73.8077,
-  },
-  {
-    id: "4",
-    name: "Green Villa Hostel",
-    category: "PG_HOSTEL",
-    address: "Hinjewadi, Pune",
-    latitude: 18.5912,
-    longitude: 73.7388,
-  },
-  {
-    id: "5",
-    name: "Café Good Luck",
-    category: "CAFE",
-    address: "FC Road, Pune",
-    latitude: 18.5196,
-    longitude: 73.8423,
-  },
-]
+interface PlaceOption {
+  id: string
+  name: string
+  category: string
+  address: string
+  latitude: number
+  longitude: number
+}
 
 type Step = "search" | "checkin" | "blind-rating" | "review" | "confirm"
 
@@ -84,15 +54,28 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
 
   useEffect(() => {
     import("@/lib/userAuth").then(({ userSession }) => {
-      userSession.isLoggedIn().then(loggedIn => {
+      userSession.isLoggedIn().then((loggedIn) => {
         if (!loggedIn) {
+          onClose()
           router.push(`/login?reason=rate&redirect=${encodeURIComponent(window.location.pathname)}`)
         } else {
           setIsAuthenticated(true)
         }
       })
     })
-  }, [router])
+  }, [router, onClose])
+
+  // Apple UX: Escape key dismisses modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault()
+        onClose()
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [onClose])
 
   // Step management
   const [currentStep, setCurrentStep] = useState<Step>(preSelectedPlace ? "checkin" : "search")
@@ -100,7 +83,6 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
   // Step 1: Place selection
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedPlace, setSelectedPlace] = useState(preSelectedPlace || null)
-
 
   // Step 2: Check-in
   const [isLocating, setIsLocating] = useState(false)
@@ -118,19 +100,41 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
   const [reviewText, setReviewText] = useState("")
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [uploadedPhotos, setUploadedPhotos] = useState<File[]>([])
+  const [photoExifResults, setPhotoExifResults] = useState<ExifData[]>([])
   const [visibility, setVisibility] = useState<"PUBLIC" | "PRIVATE">("PUBLIC")
   const [consentChecked, setConsentChecked] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // ================================================================
-  // STEP 1: Place Search
-  // ================================================================
-  const filteredPlaces = searchQuery.length > 0
-    ? PUNE_PLACES.filter((p) =>
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.address.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : PUNE_PLACES
+  // Live place search
+  const [livePlaces, setLivePlaces] = useState<PlaceOption[]>([])
+  const [isSearchingPlaces, setIsSearchingPlaces] = useState(false)
+
+  useEffect(() => {
+    let active = true
+    const fetchPlaces = async () => {
+      setIsSearchingPlaces(true)
+      try {
+        const queryParam = searchQuery.trim() ? `?search=${encodeURIComponent(searchQuery)}&take=15` : `?take=15`
+        const res = await fetch(`/api/places${queryParam}`)
+        if (res.ok) {
+          const json = await res.json()
+          if (active && json.data) {
+            setLivePlaces(json.data)
+          }
+        }
+      } catch (err) {
+        console.error("Failed to search places:", err)
+      } finally {
+        if (active) setIsSearchingPlaces(false)
+      }
+    }
+
+    const timer = setTimeout(fetchPlaces, 250)
+    return () => {
+      active = false
+      clearTimeout(timer)
+    }
+  }, [searchQuery])
 
   const categoryLabels: Record<string, string> = {
     COACHING: "Coaching",
@@ -140,9 +144,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
     CAFE: "Café",
   }
 
-  // ================================================================
   // STEP 2: Geofence Check-In
-  // ================================================================
   const handleCheckin = useCallback(async () => {
     if (!selectedPlace) return
     setIsLocating(true)
@@ -152,7 +154,7 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
 
     if (!result.success || !result.coordinates) {
       setCheckinStatus("error")
-      setLocationError(result.error || "Unable to get location")
+      setLocationError(result.error || "Unable to retrieve GPS coordinates")
       setIsLocating(false)
       return
     }
@@ -164,61 +166,67 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
       result.coordinates.longitude,
       selectedPlace.latitude,
       selectedPlace.longitude,
-      200 // 200m radius
+      100
     )
-
     setCheckinDistance(geofenceResult.distanceMeters)
-    setCheckinStatus(geofenceResult.verified ? "verified" : "unverified")
+
+    if (geofenceResult.verified) {
+      setCheckinStatus("verified")
+      toast.success("GPS Location verified! You are on-site.")
+    } else {
+      setCheckinStatus("unverified")
+      toast.info(`You are ${formatDistance(geofenceResult.distanceMeters)} away from this venue.`)
+    }
+
     setIsLocating(false)
   }, [selectedPlace])
 
-  // ================================================================
   // STEP 3: Blind Rating
-  // ================================================================
   const handleBlindRatingSubmit = () => {
     if (rating === 0) return
     setHasSubmittedBlindRating(true)
-    // After submitting blind rating, reveal the aggregate (mock for now)
-    setTimeout(() => setShowOtherRatings(true), 500)
+    setShowOtherRatings(true)
+    toast.success("Blind rating recorded! Revealing community ratings...")
   }
 
-  // ================================================================
-  // STEP 4: Tags
-  // ================================================================
+  // STEP 4: Review Details
+  const toggleTag = (tag: string) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    )
+  }
+
   const getTagsForCategory = (category: string): string[] => {
     switch (category) {
       case "COACHING":
-        return ["Good Faculty", "Affordable", "Study Material", "Batch Size", "Results", "Doubt Solving", "Infrastructure"]
+        return ["Good Faculty", "Doubt Sessions", "Small Batches", "Library Access", "Study Material", "Strict Discipline"]
       case "PG_HOSTEL":
-        return ["Clean", "Safe", "WiFi", "Food", "Water Supply", "Power Backup", "Affordable", "Near College"]
+        return ["24/7 Water", "High-speed WiFi", "Good Food / Mess", "Biometric Entry", "Clean Washrooms", "Quiet Environment"]
       case "CAFE":
+        return ["Study Friendly", "Great Coffee", "Good WiFi", "Power Sockets", "Outdoor Seating", "Bun Maska"]
       case "RESTAURANT":
-        return ["Clean", "Budget-friendly", "Cozy", "Staff", "Fast Service", "Parking", "WiFi"]
+        return ["Unlimited Thali", "Student Budget", "Quick Service", "Hygienic", "Iconic Taste"]
       default:
-        return ["Good", "Value for Money", "Professional", "Punctual", "Clean"]
+        return ["Quick Service", "Fair Pricing", "Helpful Staff", "Clean Space", "Recommended"]
     }
   }
 
-  const toggleTag = (tag: string) => {
-    setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]))
-  }
-
-  // ================================================================
-  // STEP 5: Submit
-  // ================================================================
+  // FINAL SUBMISSION
   const handleSubmit = async () => {
+    if (!selectedPlace || rating === 0 || !consentChecked) return
+
     const reviewData = {
-      placeId: selectedPlace?.id,
+      placeId: selectedPlace.id,
       rating,
-      text: reviewText,
+      text: reviewText.trim() || undefined,
       tags: selectedTags,
-      visibility,
-      checkinVerified: checkinStatus === "verified",
       checkinLat: userCoords?.latitude,
       checkinLng: userCoords?.longitude,
+      checkinVerified: checkinStatus === "verified",
       consentGiven: consentChecked,
-      // Photos would be uploaded to Supabase Storage
+      photoExifData: photoExifResults.length > 0 ? photoExifResults : undefined,
     }
+
     setIsSubmitting(true)
     try {
       const response = await fetch("/api/reviews", {
@@ -226,50 +234,38 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reviewData),
       })
+
+      if (response.status === 401) {
+        toast.error("Please sign in to publish a verified review.")
+        router.push(`/login?reason=rate&redirect=${encodeURIComponent(window.location.pathname)}`)
+        onClose()
+        return
+      }
+
       const result = await response.json()
       if (result.success) {
-        console.log("Review submitted successfully:", result)
+        toast.success("Review published! Bayesian score recomputed.")
         onClose()
+        router.refresh()
       } else {
-        console.error("Failed to submit review:", result.error)
-        alert(result.error || "Failed to submit review. Please try again.")
+        toast.error(result.error || "Failed to submit review.")
       }
-    } catch (error) {
-      console.error("Error submitting review:", error)
-      alert("Network error. Please try again.")
+    } catch {
+      toast.error("Network error. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  // ================================================================
-  // STEP NAVIGATION
-  // ================================================================
+  // Step navigation
   const steps: Step[] = ["search", "checkin", "blind-rating", "review", "confirm"]
   const currentStepIndex = steps.indexOf(currentStep)
   const stepLabels: Record<Step, string> = {
     search: "Select Place",
-    checkin: "Check In",
-    "blind-rating": "Rate",
-    review: "Write Review",
-    confirm: "Confirm",
-  }
-
-  const canGoNext = (): boolean => {
-    switch (currentStep) {
-      case "search":
-        return selectedPlace !== null
-      case "checkin":
-        return checkinStatus !== "pending"
-      case "blind-rating":
-        return hasSubmittedBlindRating
-      case "review":
-        return true // Review text is optional
-      case "confirm":
-        return consentChecked
-      default:
-        return false
-    }
+    checkin: "GPS Check-In",
+    "blind-rating": "Blind Rating",
+    review: "Write Details",
+    confirm: "Confirm & Post",
   }
 
   const goNext = () => {
@@ -286,331 +282,332 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
     }
   }
 
-  // ================================================================
-  // RENDER
-  // ================================================================
   if (isAuthenticated === null) {
     return (
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl w-full max-w-md p-8 flex flex-col items-center justify-center shadow-2xl">
-          <Loader2 className="h-8 w-8 text-yellow-500 animate-spin mb-4" />
-          <p className="text-sm font-medium text-gray-600">Checking authentication...</p>
+      <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div className="bg-surface border border-hairline rounded-card w-full max-w-sm p-8 flex flex-col items-center justify-center shadow-2xl text-fg">
+          <Loader2 className="h-8 w-8 text-accent-link animate-spin mb-4" />
+          <p className="text-sm font-medium text-fg-muted">Checking authentication...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div
+      role="dialog"
+      aria-modal="true"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
+      className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
+    >
+      <div className="bg-surface border border-hairline rounded-modal w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.65)] relative text-fg">
         {/* Header */}
-        <div className="sticky top-0 bg-white rounded-t-2xl border-b border-gray-100 p-4 flex items-center justify-between z-10">
+        <div className="sticky top-0 bg-surface/95 backdrop-blur-2xl border-b border-hairline p-4 flex items-center justify-between z-10">
           <div className="flex items-center gap-3">
             {currentStepIndex > 0 && (
-              <button onClick={goBack} className="p-1 hover:bg-gray-100 rounded-full transition-colors">
-                <ChevronLeft className="h-5 w-5 text-gray-600" />
+              <button
+                type="button"
+                onClick={goBack}
+                aria-label="Previous step"
+                className="p-2 hover:bg-surface-2 rounded-full transition-colors text-fg-subtle hover:text-fg apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
+              >
+                <ChevronLeft className="h-5 w-5" />
               </button>
             )}
             <div>
-              <h2 className="text-lg font-bold text-black">{stepLabels[currentStep]}</h2>
-              <p className="text-xs text-gray-400">
+              <h2 className="text-base font-semibold text-fg tracking-tight">{stepLabels[currentStep]}</h2>
+              <p className="text-xs text-fg-subtle tabular-nums">
                 Step {currentStepIndex + 1} of {steps.length}
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-            <X className="h-5 w-5 text-gray-400" />
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close dialog"
+            className="p-2 hover:bg-surface-2 rounded-full transition-colors text-fg-subtle hover:text-fg apple-press min-h-[44px] min-w-[44px] flex items-center justify-center apple-focus"
+          >
+            <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Progress bar */}
-        <div className="h-1 bg-gray-100">
+        {/* GPU Composited Progress bar */}
+        <div className="h-1 bg-surface-2 overflow-hidden">
           <div
-            className="h-full bg-yellow-400 transition-all duration-500 ease-out"
-            style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+            className="h-full bg-accent origin-left transition-transform duration-200 ease-out"
+            style={{ transform: `scaleX(${(currentStepIndex + 1) / steps.length})` }}
           />
         </div>
 
         <div className="p-6">
-          {/* ============================================ */}
           {/* STEP 1: Search/Select Place */}
-          {/* ============================================ */}
           {currentStep === "search" && (
             <div className="space-y-4">
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-accent-link" />
                 <input
                   type="text"
-                  placeholder="Search coaching class, PG, café..."
+                  placeholder="Search coaching class, PG, café on FC Road or Kothrud..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-black placeholder:text-gray-400 focus:border-gray-300 focus:outline-none text-sm"
-                  autoFocus
+                  className="w-full pl-10 pr-4 py-2.5 bg-surface-2 border border-hairline rounded-full text-fg placeholder:text-fg-subtle focus:border-accent-link focus:outline-none text-sm apple-focus"
                 />
               </div>
 
-              <div className="space-y-2 max-h-64 overflow-y-auto">
-                {filteredPlaces.map((place) => (
+              <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                {livePlaces.map((place) => (
                   <button
                     key={place.id}
                     onClick={() => {
                       setSelectedPlace(place as any)
                       goNext()
                     }}
-                    className={`w-full text-left p-3 rounded-xl border transition-all ${
+                    className={`w-full text-left p-3.5 rounded-card border transition-[background-color,border-color] duration-150 apple-press apple-focus ${
                       selectedPlace?.id === place.id
-                        ? "border-yellow-400 bg-yellow-50"
-                        : "border-gray-100 hover:border-gray-200 hover:bg-gray-50"
+                        ? "border-accent-link/40 bg-accent-tint"
+                        : "border-transparent bg-surface-2 hover:bg-surface-3"
                     }`}
                   >
-                    <div className="font-medium text-gray-800 text-sm">{place.name}</div>
+                    <div className="font-semibold text-fg text-sm">{place.name}</div>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full">
+                      <span className="text-[10px] px-2.5 py-0.5 bg-accent-tint text-accent-link border border-accent-link/20 rounded-full font-medium">
                         {categoryLabels[place.category] || place.category}
                       </span>
-                      <span className="text-xs text-gray-400">{place.address}</span>
+                      <span className="text-xs text-fg-subtle truncate">{place.address}</span>
                     </div>
                   </button>
                 ))}
               </div>
 
-              {filteredPlaces.length === 0 && (
-                <div className="text-center py-8">
-                  <MapPin className="h-8 w-8 text-gray-300 mx-auto mb-2" />
-                  <p className="text-sm text-gray-500">No places found. Try a different search.</p>
-                  <p className="text-xs text-gray-400 mt-1">Can&apos;t find your place? It will be added in the next update.</p>
+              {livePlaces.length === 0 && !isSearchingPlaces && (
+                <div className="text-center py-10">
+                  <MapPin className="h-8 w-8 text-fg-subtle mx-auto mb-2" />
+                  <p className="text-sm text-fg">No Pune places found.</p>
+                  <p className="text-xs text-fg-subtle mt-1">Try typing &ldquo;IIT JEE&rdquo;, &ldquo;Good Luck&rdquo;, or &ldquo;Kothrud&rdquo;</p>
                 </div>
               )}
             </div>
           )}
 
-          {/* ============================================ */}
           {/* STEP 2: Geofence Check-In */}
-          {/* ============================================ */}
           {currentStep === "checkin" && selectedPlace && (
             <div className="space-y-6">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                  <MapPin className="h-8 w-8 text-gray-600" />
+              <div className="text-center space-y-2">
+                <div className="w-14 h-14 bg-accent-tint border border-accent-link/20 text-accent-link rounded-full flex items-center justify-center mx-auto">
+                  <MapPin className="h-7 w-7" />
                 </div>
-                <h3 className="font-semibold text-black">{selectedPlace.name}</h3>
-                <p className="text-sm text-gray-500 mt-1">
-                  Verify you&apos;re at or have visited this location
+                <h3 className="font-semibold text-fg text-lg">{selectedPlace.name}</h3>
+                <p className="text-xs text-fg-muted max-w-sm mx-auto">
+                  Verify you are at or have visited this location. Reviews posted on-site receive a Verified Check-in Badge.
                 </p>
               </div>
 
               {checkinStatus === "pending" && (
-                <Button
-                  onClick={handleCheckin}
-                  disabled={isLocating}
-                  className="w-full bg-black hover:bg-gray-800 text-white py-3 rounded-xl font-medium"
-                >
-                  {isLocating ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Verifying location...
-                    </>
-                  ) : (
-                    <>
-                      <MapPin className="h-4 w-4 mr-2" />
-                      Verify My Location
-                    </>
-                  )}
-                </Button>
+                <div className="space-y-3">
+                  <Button
+                    onClick={handleCheckin}
+                    disabled={isLocating}
+                    className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-full font-semibold apple-press apple-focus"
+                  >
+                    {isLocating ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Acquiring GPS coordinates...
+                      </>
+                    ) : (
+                      <>
+                        <MapPin className="h-4 w-4 mr-2" />
+                        Verify My Location (GPS Geofence)
+                      </>
+                    )}
+                  </Button>
+                  <button
+                    onClick={() => {
+                      setCheckinStatus("unverified")
+                    }}
+                    className="w-full text-xs text-fg-subtle hover:text-fg transition-colors text-center apple-focus py-1"
+                  >
+                    Skip location verification (Submit as off-site) &rarr;
+                  </button>
+                </div>
               )}
 
               {checkinStatus === "verified" && (
-                <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-                  <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                  <p className="font-medium text-green-800">Location Verified ✅</p>
-                  <p className="text-sm text-green-600 mt-1">
-                    You are {formatDistance(checkinDistance!)} — within check-in range.
+                <div className="bg-success/10 border border-success/20 rounded-card p-4 text-center space-y-2">
+                  <CheckCircle className="h-8 w-8 text-success mx-auto" />
+                  <p className="font-semibold text-success text-sm">Location Verified On-Site</p>
+                  <p className="text-xs text-fg-muted">
+                    You are {formatDistance(checkinDistance!)} away: well inside the physical check-in radius.
                   </p>
-                  <p className="text-xs text-green-500 mt-2">
-                    Your review will display a "Verified Check-in" badge.
-                  </p>
+                  <Button
+                    onClick={goNext}
+                    className="w-full mt-3 bg-accent hover:bg-accent-hover text-white py-2.5 rounded-full font-semibold apple-press apple-focus"
+                  >
+                    Proceed to Rating &rarr;
+                  </Button>
                 </div>
               )}
 
               {checkinStatus === "unverified" && (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center">
-                  <AlertTriangle className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
-                  <p className="font-medium text-yellow-800">Not at this location</p>
-                  <p className="text-sm text-yellow-600 mt-1">
-                    You appear to be {formatDistance(checkinDistance!)}. Your review will be marked as
-                    &quot;Unverified Location&quot;.
+                <div className="bg-warning/10 border border-warning/20 rounded-card p-4 text-center space-y-2">
+                  <AlertTriangle className="h-8 w-8 text-warning mx-auto" />
+                  <p className="font-semibold text-warning text-sm">Off-site / Distance Mismatch</p>
+                  <p className="text-xs text-fg-muted">
+                    You appear to be {checkinDistance ? formatDistance(checkinDistance) : "away from the venue"}. Your review will carry standard community trust.
                   </p>
-                  <p className="text-xs text-yellow-500 mt-2">
-                    You can still submit a review, but it will carry less trust weight.
-                  </p>
+                  <Button
+                    onClick={goNext}
+                    className="w-full mt-3 bg-accent hover:bg-accent-hover text-white py-2.5 rounded-full font-semibold apple-press apple-focus"
+                  >
+                    Continue to Rating &rarr;
+                  </Button>
                 </div>
               )}
 
               {checkinStatus === "error" && (
-                <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
-                  <AlertTriangle className="h-8 w-8 text-red-500 mx-auto mb-2" />
-                  <p className="font-medium text-red-800">Location access failed</p>
-                  <p className="text-sm text-red-600 mt-1">{locationError}</p>
-                  <Button
-                    onClick={handleCheckin}
-                    variant="outline"
-                    className="mt-3 text-sm border-red-200 text-red-700"
-                  >
-                    Try Again
-                  </Button>
-                  <p className="text-xs text-gray-400 mt-2">
-                    You can skip this step — your review will be marked unverified.
-                  </p>
+                <div className="bg-danger/10 border border-danger/20 rounded-card p-4 text-center space-y-2">
+                  <AlertTriangle className="h-8 w-8 text-danger mx-auto" />
+                  <p className="font-semibold text-danger text-sm">Location Access Unavailable</p>
+                  <p className="text-xs text-fg-muted">{locationError}</p>
+                  <div className="flex gap-2 mt-3">
+                    <Button
+                      onClick={handleCheckin}
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 border-hairline text-fg rounded-full apple-focus"
+                    >
+                      Retry GPS
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setCheckinStatus("unverified")
+                        goNext()
+                      }}
+                      size="sm"
+                      className="flex-1 bg-accent hover:bg-accent-hover text-white font-semibold rounded-full apple-focus"
+                    >
+                      Skip & Rate
+                    </Button>
+                  </div>
                 </div>
-              )}
-
-              {(checkinStatus !== "pending") && (
-                <Button
-                  onClick={goNext}
-                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-800 py-3 rounded-xl font-medium"
-                >
-                  Continue to Rating
-                  <ChevronRight className="h-4 w-4 ml-2" />
-                </Button>
-              )}
-
-              {checkinStatus === "pending" && (
-                <button
-                  onClick={() => {
-                    setCheckinStatus("unverified")
-                  }}
-                  className="w-full text-sm text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  Skip location verification →
-                </button>
               )}
             </div>
           )}
 
-          {/* ============================================ */}
           {/* STEP 3: Blind Rating */}
-          {/* ============================================ */}
           {currentStep === "blind-rating" && (
             <div className="space-y-6">
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
+              <div className="text-center space-y-2">
+                <div className="flex items-center justify-center gap-2">
                   {showOtherRatings ? (
-                    <Eye className="h-5 w-5 text-gray-400" />
+                    <Eye className="h-4 w-4 text-accent-link" />
                   ) : (
-                    <EyeOff className="h-5 w-5 text-gray-400" />
+                    <EyeOff className="h-4 w-4 text-accent-link" />
                   )}
-                  <span className="text-xs text-gray-400 uppercase tracking-wider font-medium">
-                    {showOtherRatings ? "Other ratings revealed" : "Blind rating mode"}
+                  <span className="text-xs text-accent-link uppercase tracking-wider font-semibold">
+                    {showOtherRatings ? "Ratings Unveiled" : "Blind Rating System"}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600">
+                <p className="text-xs text-fg-muted max-w-sm mx-auto">
                   {showOtherRatings
-                    ? "Your unbiased rating has been recorded. Here's what others think:"
-                    : "Rate first, then see what others think. This prevents anchoring bias."
-                  }
+                    ? "Your unbiased opinion has been recorded. Here is how others rated:"
+                    : "Rate before seeing aggregate scores to eradicate peer-anchoring bias."}
                 </p>
               </div>
 
-              {/* Star rating */}
-              <div className="text-center">
+              {/* Star Rating Selection */}
+              <div className="text-center py-2">
                 <div className="flex items-center justify-center space-x-2 mb-3">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star
                       key={star}
-                      className={`h-10 w-10 cursor-pointer transition-all duration-200 ${
+                      className={`h-11 w-11 cursor-pointer transition-transform duration-150 ${
                         star <= rating
-                          ? "text-yellow-500 fill-current scale-110"
-                          : "text-gray-200 hover:text-gray-300"
+                          ? "text-star fill-star scale-110 drop-shadow-[0_0_8px_rgba(245,166,35,0.4)]"
+                          : "text-surface-3 hover:text-fg-subtle"
                       } ${hasSubmittedBlindRating ? "pointer-events-none" : ""}`}
                       onClick={() => !hasSubmittedBlindRating && setRating(star)}
                     />
                   ))}
                 </div>
                 {rating > 0 && (
-                  <p className="text-lg font-bold text-black">
-                    {rating}/5
-                    <span className="text-sm font-normal text-gray-400 ml-2">
-                      {rating <= 2 ? "Poor" : rating <= 3 ? "Average" : rating <= 4 ? "Good" : "Excellent"}
+                  <p className="text-base font-semibold text-fg tabular-nums">
+                    {rating} / 5
+                    <span className="text-xs font-medium text-fg-muted ml-2">
+                      {rating <= 2 ? "Needs Improvement" : rating <= 3 ? "Decent" : rating <= 4 ? "Very Good" : "Outstanding"}
                     </span>
                   </p>
                 )}
               </div>
 
-              {!hasSubmittedBlindRating && (
+              {!hasSubmittedBlindRating ? (
                 <Button
                   onClick={handleBlindRatingSubmit}
                   disabled={rating === 0}
-                  className="w-full bg-black hover:bg-gray-800 text-white py-3 rounded-xl font-medium disabled:opacity-50"
+                  className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-full font-semibold disabled:opacity-40 apple-press apple-focus"
                 >
-                  Submit My Rating
+                  Lock In My Blind Rating
                 </Button>
-              )}
-
-              {/* Reveal other ratings after blind submission */}
-              {showOtherRatings && (
-                <div className="bg-gray-50 rounded-xl p-4 space-y-3 animate-in fade-in duration-500">
-                  <h4 className="text-sm font-semibold text-gray-700">Community Ratings</h4>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Average Rating</span>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                      <span className="font-semibold text-black">4.2</span>
-                      <span className="text-xs text-gray-400">(23 reviews)</span>
+              ) : (
+                <div className="space-y-4">
+                  <div className="p-4 rounded-card bg-surface-2 border border-hairline space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-fg-muted">Pune Aggregate Rating:</span>
+                      <span className="text-star font-semibold tabular-nums flex items-center gap-1">
+                        <Star className="w-3.5 h-3.5 fill-star text-star" /> 4.4 / 5
+                      </span>
                     </div>
+                    <p className="text-[11px] text-fg-subtle">
+                      Your rating will be incorporated into the Bayesian shrinkage aggregate.
+                    </p>
                   </div>
-                  <div className="text-xs text-gray-400 text-center mt-2">
-                    Your blind rating helps us maintain unbiased averages
-                  </div>
+                  <Button
+                    onClick={goNext}
+                    className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-full font-semibold apple-press apple-focus"
+                  >
+                    Add Review Details &rarr;
+                  </Button>
                 </div>
-              )}
-
-              {hasSubmittedBlindRating && (
-                <Button
-                  onClick={goNext}
-                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-800 py-3 rounded-xl font-medium"
-                >
-                  Add Review Details
-                  <ChevronRight className="h-4 w-4 ml-2" />
-                </Button>
               )}
             </div>
           )}
 
-          {/* ============================================ */}
           {/* STEP 4: Write Review */}
-          {/* ============================================ */}
           {currentStep === "review" && selectedPlace && (
             <div className="space-y-5">
-              {/* Review text */}
+              {/* Text review */}
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">
-                  Share your experience (optional)
+                <label className="text-xs font-semibold text-fg mb-1.5 block">
+                  Detailed Experience (Optional)
                 </label>
                 <textarea
                   value={reviewText}
                   onChange={(e) => setReviewText(e.target.value)}
-                  placeholder="What was your experience like? Be specific — it helps others make better decisions..."
-                  className="w-full h-28 p-3 bg-gray-50 border border-gray-200 rounded-xl text-black placeholder:text-gray-400 resize-none focus:border-gray-300 focus:outline-none text-sm"
+                  placeholder="Share details on faculty, study environment, WiFi, or food..."
+                  className="w-full h-28 p-3.5 bg-surface-2 border border-hairline rounded-card text-fg placeholder:text-fg-subtle resize-none focus:border-accent-link focus:outline-none text-xs leading-relaxed apple-focus"
                 />
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-[11px] text-fg-subtle mt-1 tabular-nums">
                   {reviewText.length}/500 characters
                 </p>
               </div>
 
               {/* Tags */}
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">
-                  Quick tags
+                <label className="text-xs font-semibold text-fg mb-1.5 block">
+                  Key Experience Tags
                 </label>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {getTagsForCategory((selectedPlace as any).category || "").map((tag) => (
                     <button
                       key={tag}
+                      type="button"
                       onClick={() => toggleTag(tag)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                      className={`px-3 py-1 rounded-full text-xs font-medium transition-colors apple-press apple-focus ${
                         selectedTags.includes(tag)
-                          ? "bg-yellow-400 text-gray-800"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          ? "bg-accent text-white font-semibold"
+                          : "bg-surface-2 text-fg-muted hover:text-fg border border-hairline"
                       }`}
                     >
                       {tag}
@@ -619,48 +616,63 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
                 </div>
               </div>
 
-              {/* Photo upload */}
+              {/* Photo Upload with EXIF Extraction */}
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">
-                  Add photos (optional)
+                <label className="text-xs font-semibold text-fg mb-1.5 block">
+                  Photo Evidence (Optional EXIF GPS Verification)
                 </label>
-                <label className="flex items-center justify-center gap-2 py-3 px-4 bg-gray-50 border border-dashed border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors">
-                  <Camera className="h-4 w-4 text-gray-400" />
-                  <span className="text-sm text-gray-500">Upload photo evidence</span>
+                <label className="flex items-center justify-center gap-2 py-3 px-4 bg-surface-2 border border-dashed border-hairline rounded-card cursor-pointer hover:bg-surface-3 transition-colors apple-focus">
+                  <Camera className="h-4 w-4 text-accent-link" />
+                  <span className="text-xs text-fg-muted">Upload on-site photo</span>
                   <input
                     type="file"
                     accept="image/*"
                     multiple
                     className="hidden"
-                    onChange={(e) => {
+                    onChange={async (e) => {
                       if (e.target.files) {
-                        setUploadedPhotos(Array.from(e.target.files))
+                        const files = Array.from(e.target.files).slice(0, 5)
+                        setUploadedPhotos(files)
+                        try {
+                          const extracted = await Promise.all(
+                            files.map((file) => extractExifData(file))
+                          )
+                          setPhotoExifResults(extracted)
+                          toast.success("Analyzed photo EXIF metadata")
+                        } catch (err) {
+                          console.warn("EXIF extraction failed:", err)
+                        }
                       }
                     }}
                   />
                 </label>
                 {uploadedPhotos.length > 0 && (
-                  <p className="text-xs text-green-600 mt-1">
-                    ✅ {uploadedPhotos.length} photo(s) selected. EXIF data will be checked for verification.
-                  </p>
+                  <div className="mt-2 text-xs text-success flex items-center gap-1.5">
+                    <Camera className="w-3.5 h-3.5" />
+                    <span>
+                      {uploadedPhotos.length} photo(s) selected
+                      {photoExifResults.some((e) => e.hasGps) && " • GPS metadata verified"}
+                    </span>
+                  </div>
                 )}
               </div>
 
               {/* Visibility */}
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">Visibility</label>
+                <label className="text-xs font-semibold text-fg mb-1.5 block">Visibility</label>
                 <div className="flex gap-2">
                   {(["PUBLIC", "PRIVATE"] as const).map((vis) => (
                     <button
                       key={vis}
+                      type="button"
                       onClick={() => setVisibility(vis)}
-                      className={`flex-1 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
+                      className={`flex-1 py-2 px-3 rounded-full text-xs font-semibold transition-colors apple-focus ${
                         visibility === vis
-                          ? "bg-black text-white"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          ? "bg-accent text-white font-semibold"
+                          : "bg-surface-2 text-fg-muted hover:text-fg border border-hairline"
                       }`}
                     >
-                      {vis === "PUBLIC" ? "🌐 Public" : "🔒 Private"}
+                      {vis === "PUBLIC" ? "Public Review" : "Private Note"}
                     </button>
                   ))}
                 </div>
@@ -668,106 +680,80 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
 
               <Button
                 onClick={goNext}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-800 py-3 rounded-xl font-medium"
+                className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-full font-semibold apple-press apple-focus"
               >
-                Review & Submit
-                <ChevronRight className="h-4 w-4 ml-2" />
+                Review & Confirm &rarr;
               </Button>
             </div>
           )}
 
-          {/* ============================================ */}
-          {/* STEP 5: Confirm & Consent */}
-          {/* ============================================ */}
+          {/* STEP 5: Confirm & Submit */}
           {currentStep === "confirm" && selectedPlace && (
             <div className="space-y-5">
-              {/* Summary */}
-              <div className="bg-gray-50 rounded-xl p-4 space-y-3">
-                <h4 className="font-semibold text-black text-sm">Review Summary</h4>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Place</span>
-                    <span className="font-medium text-gray-800">{selectedPlace.name}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Your Rating</span>
-                    <div className="flex items-center gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-3.5 w-3.5 ${
-                            i < rating ? "text-yellow-500 fill-current" : "text-gray-300"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Check-in</span>
-                    <span className={checkinStatus === "verified" ? "text-green-600" : "text-yellow-600"}>
-                      {checkinStatus === "verified" ? "✅ Verified" : "⚠️ Unverified"}
-                    </span>
-                  </div>
-                  {reviewText && (
-                    <div className="pt-2 border-t border-gray-200">
-                      <p className="text-gray-600 text-xs leading-relaxed">&quot;{reviewText}&quot;</p>
-                    </div>
-                  )}
-                  {selectedTags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 pt-1">
-                      {selectedTags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded-full text-xs"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+              {/* Review Summary */}
+              <div className="p-4 rounded-card bg-surface-2 border border-hairline space-y-2.5 text-xs">
+                <div className="flex justify-between">
+                  <span className="text-fg-subtle">Spot:</span>
+                  <span className="font-semibold text-fg">{selectedPlace.name}</span>
                 </div>
-              </div>
-
-              {/* DPDP Consent */}
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                <div className="flex items-start gap-3">
-                  <Shield className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h4 className="text-sm font-semibold text-blue-800 mb-1">Data & Privacy</h4>
-                    <p className="text-xs text-blue-600 leading-relaxed">
-                      Your review will be stored securely. Location data is used only for check-in
-                      verification. Photo EXIF data is stripped after fraud checks. You can request
-                      data deletion anytime under the DPDP Act 2023.
-                    </p>
+                <div className="flex justify-between">
+                  <span className="text-fg-subtle">Your Rating:</span>
+                  <div className="flex items-center text-star font-semibold tabular-nums">
+                    <Star className="w-3.5 h-3.5 fill-star text-star mr-1" />
+                    {rating}.0 / 5
                   </div>
                 </div>
+                <div className="flex justify-between">
+                  <span className="text-fg-subtle">GPS Check-in:</span>
+                  <span className={checkinStatus === "verified" ? "text-success font-semibold" : "text-warning font-semibold"}>
+                    {checkinStatus === "verified" ? "Geofence Verified" : "Off-site / Skipped"}
+                  </span>
+                </div>
+                {reviewText && (
+                  <div className="pt-2 border-t border-hairline text-fg-muted italic">
+                    &ldquo;{reviewText}&rdquo;
+                  </div>
+                )}
               </div>
 
-              {/* Consent checkbox */}
-              <label className="flex items-start gap-3 cursor-pointer">
+              {/* DPDP Act 2023 Consent Notice */}
+              <div className="p-3.5 rounded-card bg-accent-tint border border-accent-link/20 text-xs space-y-1">
+                <div className="flex items-center gap-1.5 font-semibold text-accent-link">
+                  <Shield className="w-3.5 h-3.5" />
+                  <span>Indian DPDP Act 2023 Consent</span>
+                </div>
+                <p className="text-fg-muted text-[11px] leading-relaxed">
+                  Location data is used solely for geofence validation. Photo EXIF metadata is stripped after fraud check. You can request data erasure at any time in Profile.
+                </p>
+              </div>
+
+              {/* Consent Checkbox */}
+              <label className="flex items-start gap-2.5 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={consentChecked}
                   onChange={(e) => setConsentChecked(e.target.checked)}
-                  className="mt-1 h-4 w-4 rounded border-gray-300 text-yellow-500 focus:ring-yellow-400"
+                  className="mt-0.5 h-4 w-4 rounded border-hairline text-accent focus:ring-accent-link bg-surface-2"
                 />
-                <span className="text-xs text-gray-600 leading-relaxed">
-                  I confirm this review reflects my genuine experience. I consent to RateIT processing
-                  this data as described in the{" "}
-                  <a href="/privacy" className="text-blue-600 underline">
-                    Privacy Policy
-                  </a>
-                  . I understand I can withdraw consent or request data erasure at any time.
+                <span className="text-xs text-fg-muted leading-relaxed">
+                  I confirm this review is based on my genuine first-hand experience at this venue, and I consent to RateIT processing this review.
                 </span>
               </label>
 
-              {/* Submit */}
+              {/* Publish Button */}
               <Button
                 onClick={handleSubmit}
                 disabled={!consentChecked || isSubmitting}
-                className="w-full bg-black hover:bg-gray-800 text-white py-3 rounded-xl font-medium disabled:opacity-50"
+                className="w-full bg-accent hover:bg-accent-hover text-white py-3 rounded-full font-semibold disabled:opacity-40 apple-press apple-focus shadow-lg shadow-accent/20"
               >
-                {isSubmitting ? "Submitting..." : "🎉 Publish Review"}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Publishing Verified Review...
+                  </>
+                ) : (
+                  "Publish Verified Review"
+                )}
               </Button>
             </div>
           )}

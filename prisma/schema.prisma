@@ -30,6 +30,7 @@ model User {
   lists         List[]
   reviews       Review[]
   claims        BusinessClaim[]
+  helpfulVotes  ReviewHelpful[]
 
   @@index([phone])
   @@index([trustScore])
@@ -46,6 +47,7 @@ model Place {
   longitude      Float
   avgRating      Float       @default(0)
   weightedRating Float       @default(0)
+  bayesianRating Float       @default(0)
   reviewCount    Int         @default(0)
   geofenceRadius Int         @default(50)
   isVerifiedBiz  Boolean     @default(false)
@@ -90,6 +92,7 @@ model Review {
   createdAt       DateTime   @default(now())
   bizReply        BizReply?
   flags           Flag[]
+  helpfulVotes    ReviewHelpful[]
   place           Place      @relation(fields: [placeId], references: [id], onDelete: Cascade)
   user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -179,6 +182,93 @@ enum ClaimStatus {
 enum Visibility {
   PUBLIC
   PRIVATE
+  HIDDEN
+}
+
+model ModerationAction {
+  id         String   @id @default(uuid())
+  actorId    String
+  action     String   // hide, unhide, ban_user, dismiss_flag
+  targetType String   // review, user, grievance
+  targetId   String
+  reason     String
+  createdAt  DateTime @default(now())
+
+  @@index([targetType, targetId])
+  @@index([actorId])
+}
+
+model GrievanceAppeal {
+  id             String   @id @default(uuid())
+  userId         String?
+  name           String
+  email          String
+  phone          String?
+  reportType     String   // content_complaint, data_rights, moderation_appeal, business_dispute
+  targetReviewId String?
+  description    String
+  status         String   @default("PENDING") // PENDING, UNDER_REVIEW, RESOLVED, REJECTED
+  resolution     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([status])
+  @@index([email])
+}
+
+model UserEvent {
+  id         String   @id @default(uuid())
+  userId     String?
+  sessionId  String
+  type       String   // place_view, place_dwell, category_browse, search_query, search_click, review_submit, review_helpful, place_save, list_add, share_click, feed_impression
+  placeId    String?
+  category   String?
+  query      String?
+  dwellMs    Int?
+  ipHash     String
+  deviceHash String
+  createdAt  DateTime @default(now())
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([placeId, type])
+  @@index([type, createdAt(sort: Desc)])
+}
+
+model UserInterest {
+  id        String   @id @default(uuid())
+  userId    String
+  category  String
+  affinity  Float    @default(0)
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([userId, category])
+  @@index([userId])
+}
+
+model SearchLog {
+  id          String   @id @default(uuid())
+  query       String
+  normalized  String
+  city        String   @default("Pune")
+  resultCount Int
+  lastSeen    DateTime @default(now())
+  count       Int      @default(1)
+
+  @@unique([normalized, city])
+  @@index([city, count(sort: Desc)])
+}
+
+model ReviewHelpful {
+  id        String   @id @default(uuid())
+  reviewId  String
+  userId    String
+  createdAt DateTime @default(now())
+
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewId, userId])
+  @@index([reviewId])
 }
 
 enum FlagReason {
