@@ -284,8 +284,8 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
 
   if (isAuthenticated === null) {
     return (
-      <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
-        <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-sm p-8 flex flex-col items-center justify-center shadow-[0_24px_70px_rgba(0,0,0,0.6)] text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
+      <div className="fixed inset-0 bg-black/30 dark:bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+        <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-sm p-8 flex flex-col items-center justify-center shadow-[0_24px_70px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.6)] text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
           <Loader2 className="h-8 w-8 text-accent-link animate-spin mb-4" />
           <p className="text-sm font-medium text-fg-muted">Checking authentication...</p>
         </div>
@@ -300,9 +300,9 @@ export function EnhancedRateModal({ onClose, preSelectedPlace }: EnhancedRateMod
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
-      className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black/30 dark:bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
     >
-      <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.6)] relative text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
+      <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.6)] relative text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
         {/* Header */}
         <div className="sticky top-0 bg-surface/95 backdrop-blur-2xl border-b border-hairline/[0.08] p-4 flex items-center justify-between z-10">
           <div className="flex items-center gap-3">

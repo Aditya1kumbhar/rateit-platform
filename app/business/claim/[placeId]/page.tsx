@@ -57,7 +57,7 @@ export default function BusinessClaimPage({ params }: { params: { placeId: strin
         </div>
 
         {/* Card */}
-        <div className="p-6 sm:p-8 rounded-[28px] bg-surface border border-hairline/[0.08] shadow-[0_24px_70px_rgba(0,0,0,0.6)] text-fg">
+        <div className="p-6 sm:p-8 rounded-[28px] bg-surface border border-hairline/[0.08] shadow-[0_24px_70px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.6)] text-fg">
           {step === "intro" && (
             <div className="space-y-6">
               <div className="bg-accent-link/[0.08] p-4 rounded-[14px] flex gap-3 text-xs">

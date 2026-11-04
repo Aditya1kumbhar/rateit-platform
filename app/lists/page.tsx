@@ -207,8 +207,8 @@ export default function ListsPage() {
 
       {/* New List Modal */}
       {showNewListModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
-          <div className="bg-surface border border-hairline/[0.08] rounded-[28px] shadow-[0_24px_70px_rgba(0,0,0,0.6)] w-full max-w-md p-6 relative space-y-5 text-fg">
+        <div className="fixed inset-0 bg-black/30 dark:bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="bg-surface border border-hairline/[0.08] rounded-[28px] shadow-[0_24px_70px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.6)] w-full max-w-md p-6 relative space-y-5 text-fg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="w-9 h-9 rounded-full bg-accent-link/[0.12] text-accent-link flex items-center justify-center">

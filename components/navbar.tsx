@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { Search, User, Shield, Plus, Sparkles, MapPin, LogOut } from "lucide-react"
 import { userSession, type AuthUser } from "@/lib/userAuth"
 import { useUI } from "@/components/ui-provider"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export function Navbar() {
   const pathname = usePathname()
@@ -110,6 +111,9 @@ export function Navbar() {
             <span className="hidden sm:inline">Rate Spot</span>
             <span className="sm:hidden">Rate</span>
           </button>
+
+          {/* Apple Light/Dark Theme Toggle */}
+          <ThemeToggle />
 
           {/* User State */}
           {user ? (

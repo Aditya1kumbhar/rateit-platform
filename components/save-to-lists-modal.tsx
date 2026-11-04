@@ -177,9 +177,9 @@ export function SaveToListsModal({ placeId, placeName, itemName, onClose }: Save
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
-      className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black/30 dark:bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
     >
-      <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-md max-h-[85vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.6)] relative text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
+      <div className="bg-surface border border-hairline/[0.08] rounded-[28px] w-full max-w-md max-h-[85vh] overflow-y-auto shadow-[0_24px_70px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.6)] relative text-fg animate-in fade-in-0 zoom-in-95 duration-200 ease-out origin-center">
         <div className="p-6 space-y-5">
           {/* Header */}
           <div className="flex items-center justify-between">

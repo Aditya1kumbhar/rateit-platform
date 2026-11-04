@@ -17,7 +17,7 @@ export function BottomNav({ onRateClick }: { onRateClick: () => void }) {
 
   return (
     <div className="fixed bottom-[max(1rem,calc(env(safe-area-inset-bottom)+0.5rem))] inset-x-0 z-40 flex justify-center pointer-events-none md:hidden px-4 select-none">
-      <nav className="pointer-events-auto flex items-center justify-around gap-1 px-3 py-1.5 rounded-full bg-surface/70 backdrop-blur-xl backdrop-saturate-150 border border-hairline/[0.08] shadow-[0_16px_40px_rgba(0,0,0,0.7)] w-full max-w-sm">
+      <nav className="pointer-events-auto flex items-center justify-around gap-1 px-3 py-1.5 rounded-full bg-surface/80 backdrop-blur-xl backdrop-saturate-150 border border-hairline/[0.08] shadow-[0_12px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.7)] w-full max-w-sm">
         {navItems.map((item, idx) => {
           if (item.isAction) {
             return (

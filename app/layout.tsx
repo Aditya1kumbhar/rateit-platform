@@ -25,7 +25,10 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#000000',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+  ],
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
@@ -38,7 +41,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`dark ${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`light ${GeistSans.variable} ${GeistMono.variable}`} data-theme="light" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('rateit-theme');if(t==='dark'){document.documentElement.classList.remove('light');document.documentElement.classList.add('dark');document.documentElement.setAttribute('data-theme','dark');}else{document.documentElement.classList.remove('dark');document.documentElement.classList.add('light');document.documentElement.setAttribute('data-theme','light');}}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body className="bg-canvas text-fg flex flex-col min-h-screen selection:bg-accent-link selection:text-white antialiased font-sans" suppressHydrationWarning>
         <LenisProvider>
           <UIProvider>
@@ -51,7 +61,7 @@ export default function RootLayout({
             </main>
 
             {/* Unified Safe Harbour Footer (IT Act 2021 Compliant) */}
-            <footer className="border-t border-hairline bg-surface/90 backdrop-blur-md mt-auto mb-16 md:mb-0">
+            <footer className="border-t border-hairline/[0.08] bg-surface/90 backdrop-blur-md mt-auto mb-16 md:mb-0">
               <div className="container mx-auto px-4 py-8">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-fg-subtle">
                   <div className="flex items-center gap-2">

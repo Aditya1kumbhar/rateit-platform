@@ -4,7 +4,67 @@
 
 @layer base {
   :root {
-    /* Apple Hardware Pro Dark Universe (Default): Space-separated RGB for Tailwind alpha support */
+    /* Apple MacBook Pro Light Hardware Theme (Default) */
+    --bg: 255 255 255;
+    --bg-alt: 245 245 247;
+    --surface: 245 245 247;
+    --surface-2: 232 232 237;
+    --surface-3: 210 210 215;
+
+    --fg: 29 29 31;
+    --fg-muted: 110 110 115;
+    --fg-subtle: 134 134 139;
+
+    --hairline: 0 0 0;
+    --hairline-border: rgba(0, 0, 0, 0.08);
+
+    --accent: 0 113 227;
+    --accent-hover: 0 119 237;
+    --accent-link: 0 102 204;
+
+    --success: 40 167 69;
+    --warning: 255 149 0;
+    --danger: 255 59 48;
+    --star: 245 166 35;
+
+    --glass: rgba(255, 255, 255, 0.82);
+    --shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.12);
+    --shadow-dock: 0 12px 32px rgba(0, 0, 0, 0.08);
+
+    /* Radii */
+    --radius-pill: 9999px;
+    --radius-card: 22px;
+    --radius-modal: 28px;
+    --radius-input: 14px;
+    --radius: 1.25rem;
+
+    /* Apple / Emil Motion Tokens */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+    --dur-press: 160ms;
+    --dur-modal: 200ms;
+
+    /* Radix / Shadcn compatibility */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 240 4.8% 95.9%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 211 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 211 100% 50%;
+  }
+
+  .dark, [data-theme="dark"] {
+    /* Apple Hardware Pro Dark Universe */
     --bg: 0 0 0;
     --bg-alt: 10 10 11;
     --surface: 22 22 23;
@@ -28,22 +88,9 @@
     --star: 245 166 35;
 
     --glass: rgba(22, 22, 23, 0.72);
+    --shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.65);
+    --shadow-dock: 0 16px 40px rgba(0, 0, 0, 0.7);
 
-    /* Radii */
-    --radius-pill: 9999px;
-    --radius-card: 22px;
-    --radius-modal: 28px;
-    --radius-input: 14px;
-    --radius: 1.25rem;
-
-    /* Apple / Emil Motion Tokens */
-    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
-    --dur-press: 160ms;
-    --dur-modal: 200ms;
-
-    /* Radix / Shadcn compatibility */
     --background: 0 0% 0%;
     --foreground: 240 5% 96%;
     --card: 240 2% 9%;
@@ -60,61 +107,21 @@
     --input: 240 3% 14%;
     --ring: 211 100% 58%;
   }
-
-  /* Optional Light Theme keyed off [data-theme="light"] */
-  [data-theme="light"] {
-    --bg: 255 255 255;
-    --bg-alt: 245 245 247;
-    --surface: 255 255 255;
-    --surface-2: 250 250 252;
-    --surface-3: 232 232 237;
-
-    --fg: 29 29 31;
-    --fg-muted: 110 110 115;
-    --fg-subtle: 134 134 139;
-
-    --hairline: 0 0 0;
-    --hairline-border: rgba(0, 0, 0, 0.08);
-
-    --accent: 0 113 227;
-    --accent-hover: 0 119 237;
-    --accent-link: 0 102 204;
-
-    --success: 36 138 61;
-    --warning: 201 52 0;
-    --danger: 215 0 21;
-    --star: 245 166 35;
-
-    --glass: rgba(255, 255, 255, 0.72);
-
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 211 100% 50%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 211 100% 50%;
-  }
 }
 
 @layer base {
   * {
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: rgb(var(--hairline) / 0.08);
   }
   html {
-    color-scheme: dark;
+    color-scheme: light;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     background-color: rgb(var(--bg));
+  }
+  html.dark, html[data-theme="dark"] {
+    color-scheme: dark;
   }
   body {
     @apply bg-canvas text-fg antialiased;
@@ -173,9 +180,9 @@
 
 .surface-modal {
   background-color: rgb(var(--surface));
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgb(var(--hairline) / 0.08);
   border-radius: var(--radius-modal);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65);
+  box-shadow: var(--shadow-modal);
 }
 
 /* Minimum 44x44px Click Target */
