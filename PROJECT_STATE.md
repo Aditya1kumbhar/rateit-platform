@@ -170,6 +170,18 @@
   - **Middleware Exception Guard**: Wrapped root `middleware.ts` in defensive `try/catch` with fallback to `NextResponse.next({ request })` to eliminate `MIDDLEWARE_INVOCATION_FAILED` ("This page is unavailable") on edge routers.
   - **Supabase Env Guard**: Added strict presence checks on `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `lib/supabase/middleware.ts`, `lib/supabase/client.ts`, and `lib/supabase/server.ts` to prevent missing production keys from crashing server requests.
   - **Verification**: `npx tsc --noEmit` (0 errors), `npm run test` (31/31 passed), `npm run build` (14/14 static and dynamic routes compiled).
+- [x] **P19 Adversarial UI Stress-Test Hardening & Break-UI Resolution**:
+  - **Surrogate Pair & ZWJ Avatar Initials**: Implemented `Array.from()` grapheme-safe extraction in `getInitial()` (`item-client.tsx`) to eliminate broken replacement characters on emoji/ZWJ names (`🦊 Fox`, `👩🏽‍💻 Priya`).
+  - **Flex Containment & GPS Badge Preservation**: Added `shrink-0` to avatar and GPS badges, `min-w-0` to author column, and `truncate max-w-[130px] sm:max-w-[220px]` to prevent long compound names (`Aleksandra Wiśniewska-Kowalczyk`) from crushing badges or blowing out 320px-375px mobile viewports.
+  - **Unbreakable String Containment**: Added `break-words [overflow-wrap:anywhere]` across review bodies, business replies, and physical addresses to prevent long emails (`bartholomew.fitzgerald@...`) and URLs from causing horizontal scroll blowout.
+  - **Pluralization & Locale Number Formatting**: Replaced hardcoded `"reviews"` with `{place.reviewCount.toLocaleString()} review{count === 1 ? "" : "s"}` across `item-client.tsx` and `discover-client.tsx`.
+  - **Relative Date Formatting**: Added `formatRelativeDate` helper using relative time thresholds ("Just now", "2m ago", "Yesterday", "3d ago") instead of cold localized calendar strings.
+  - **Robust Fallbacks & Tag Constraints**: Handled whitespace-only review comments via `rev.text?.trim()`, suppressed broken photo URLs with `onError` hidden fallback, and constrained 40+ character tags with `max-w-full truncate`.
+  - **Apple Button Geometry Lock**: Converted legacy `rounded-full` buttons in `app/error.tsx` and `app/item/[id]/item-client.tsx` to Apple standard `rounded-xl` and `rounded-lg`.
+  - **Hero & Landing Simplification**: Removed eyebrow badge ("Dual-Signal Physical Verification • Pune V1"), verbose subcopy, and the entire "Why RateIT is Unbreakable" / Security Architecture bento section (along with unused `Shield`, `Camera`, and `Cpu` icons) from `app/page.tsx` to streamline the landing page directly toward search and live verified reviews.
+  - **Adversarial Dev Harness**: Created `lib/mock-worst-case.ts`, `components/break-ui-toggle.tsx`, and prototype route `app/dev/break-ui/page.tsx` for one-click toggling between Demo, Worst Case, Empty, and Single-item fixtures.
+  - **Verification**: `npx tsc --noEmit` (0 errors), Vitest (31/31 passed), and manual verification across all 4 modes.
+
 
 
 

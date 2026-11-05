@@ -345,7 +345,9 @@ function DiscoverContent({ initialPlaces }: DiscoverClientProps) {
                       {place.avgRating ? place.avgRating.toFixed(1) : "0.0"}
                     </div>
                     <span className="text-fg-subtle">•</span>
-                    <span className="text-[12px] text-fg-subtle tabular-nums">{place.reviewCount} reviews</span>
+                    <span className="text-[12px] text-fg-subtle tabular-nums">
+                      {place.reviewCount.toLocaleString()} review{place.reviewCount === 1 ? "" : "s"}
+                    </span>
                     {place.priceRange && (
                       <>
                         <span className="text-fg-subtle">•</span>

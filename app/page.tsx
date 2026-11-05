@@ -7,15 +7,12 @@ import {
   GraduationCap,
   Home,
   Utensils,
-  Shield,
   MapPin,
   CheckCircle2,
   Coffee,
   Wrench,
   ArrowRight,
   ShieldCheck,
-  Camera,
-  Cpu,
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -152,16 +149,6 @@ function HomePageContent() {
       {/* Hero Section */}
       <section className="relative pt-12 pb-16 md:pt-20 md:pb-24 container mx-auto px-4 max-w-6xl">
         <div className="max-w-4xl mx-auto text-center space-y-6">
-          {/* Eyebrow Micro-Label */}
-          <div className="inline-flex items-center gap-2 h-7 px-3 rounded-full bg-surface-2 text-fg-subtle text-[11px] font-medium">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent-link animate-pulse" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-fg">
-              Dual-Signal Physical Verification
-            </span>
-            <span className="text-fg-subtle">•</span>
-            <span className="text-[11px] font-medium text-fg-subtle">Pune V1</span>
-          </div>
-
           {/* Clean Headline */}
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold text-fg tracking-[-0.022em] leading-[1.05]">
             Physically Verified Pune Reviews.<br />
@@ -169,11 +156,6 @@ function HomePageContent() {
               Zero paid spam. Authentic local ratings.
             </span>
           </h1>
-
-          {/* Direct, Specific Subcopy */}
-          <p className="text-base sm:text-lg text-fg-muted max-w-2xl mx-auto leading-relaxed font-normal">
-            Independent reviews for coaching centers, student PGs, hostels, and cafes across FC Road, Kothrud, Viman Nagar, and Hinjewadi. Every review is verified via 200m physical GPS geofencing and photo EXIF camera metadata.
-          </p>
 
           {/* Search Bar */}
           <form onSubmit={handleHeroSearch} className="max-w-2xl mx-auto relative group pt-2">
@@ -432,134 +414,6 @@ function HomePageContent() {
             </Link>
           </div>
         )}
-      </section>
-
-      {/* Bento Grid Architecture: Why RateIT is Unbreakable */}
-      <section className="container mx-auto px-4 py-20 border-t border-hairline/[0.08] max-w-6xl">
-        <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-accent-link">
-            Security Architecture
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-semibold tracking-[-0.022em] text-fg">
-            Why RateIT is Unbreakable
-          </h2>
-          <p className="text-fg-muted text-base">Four independent layers defending reviews from fraud and bot rings</p>
-        </div>
-
-        {/* Modular Bento Grid: 2 Large Span-2 cards + 2 Compact Span-1 cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Bento Card 1: Wide Span 2 - Physical GPS Geofence */}
-          <div className="md:col-span-2 p-8 rounded-[22px] bg-surface flex flex-col justify-between space-y-6 relative overflow-hidden group border-0">
-            <div className="space-y-3 max-w-md z-10">
-              <div className="w-12 h-12 rounded-[14px] bg-surface-2 text-success flex items-center justify-center">
-                <MapPin className="h-6 w-6" />
-              </div>
-              <div className="text-[11px] uppercase tracking-[0.08em] font-semibold text-fg-subtle">
-                Real-Time Proximity
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-semibold tracking-[-0.022em] text-fg">
-                200m Physical GPS Geofence
-              </h3>
-              <p className="text-sm text-fg-muted leading-relaxed">
-                Reviewers must be within the physical perimeter of the venue to earn a Verified Check-in Badge. Travel velocity checks detect coordinate spoofing across Pune hubs.
-              </p>
-            </div>
-
-            {/* Radar Spec Visualizer */}
-            <div className="p-4 rounded-[14px] bg-surface-2 flex items-center justify-between text-xs font-mono text-fg-subtle z-10 border-0">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-success animate-ping" />
-                <span className="text-fg">FC Road Hub: 18.5204° N, 73.8567° E</span>
-              </div>
-              <span className="text-success font-semibold">100% In-Bounds</span>
-            </div>
-          </div>
-
-          {/* Bento Card 2: Span 1 - Hardware EXIF Extraction */}
-          <div className="p-8 rounded-[22px] bg-surface flex flex-col justify-between space-y-6 group border-0">
-            <div className="space-y-3">
-              <div className="w-12 h-12 rounded-[14px] bg-surface-2 text-accent-link flex items-center justify-center">
-                <Camera className="h-6 w-6" />
-              </div>
-              <div className="text-[11px] uppercase tracking-[0.08em] font-semibold text-fg-subtle">
-                Hardware Forensics
-              </div>
-              <h3 className="text-2xl font-semibold tracking-[-0.022em] text-fg">
-                Camera EXIF Extraction
-              </h3>
-              <p className="text-sm text-fg-muted leading-relaxed">
-                Hardware capture timestamp, focal specs, and device GPS tags are validated on upload, eradicating stock photos and WhatsApp forward spam.
-              </p>
-            </div>
-
-            <div className="space-y-1.5 pt-2 text-xs font-mono text-fg-subtle">
-              <div className="flex justify-between py-1 border-b border-hairline/[0.08]">
-                <span>Aperture:</span>
-                <span className="text-fg">f/1.8</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-hairline/[0.08]">
-                <span>Exposure:</span>
-                <span className="text-fg">1/120s</span>
-              </div>
-              <div className="flex justify-between py-1">
-                <span>Timestamp Check:</span>
-                <span className="text-success font-semibold">Pass</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Bento Card 3: Span 1 - Bayesian Shrinkage Mathematics */}
-          <div className="p-8 rounded-[22px] bg-surface flex flex-col justify-between space-y-6 group border-0">
-            <div className="space-y-3">
-              <div className="w-12 h-12 rounded-[14px] bg-surface-2 text-accent-link flex items-center justify-center">
-                <Cpu className="h-6 w-6" />
-              </div>
-              <div className="text-[11px] uppercase tracking-[0.08em] font-semibold text-fg-subtle">
-                Statistical Integrity
-              </div>
-              <h3 className="text-2xl font-semibold tracking-[-0.022em] text-fg">
-                Bayesian Shrinkage
-              </h3>
-              <p className="text-sm text-fg-muted leading-relaxed">
-                Sparse or low-count ratings are mathematically shrunk toward the city prior, neutralizing 1-review skew and 5-star manipulation rings.
-              </p>
-            </div>
-
-            <div className="p-3.5 rounded-[14px] bg-surface-2 text-center font-mono text-xs text-accent-link border-0">
-              {"(v / (v + m)) · R + (m / (v + m)) · C"}
-            </div>
-          </div>
-
-          {/* Bento Card 4: Wide Span 2 - Collusion Network & Legal Safe Harbour */}
-          <div className="md:col-span-2 p-8 rounded-[22px] bg-surface flex flex-col justify-between space-y-6 group border-0">
-            <div className="space-y-3 max-w-lg">
-              <div className="w-12 h-12 rounded-[14px] bg-surface-2 text-accent-link flex items-center justify-center">
-                <Shield className="h-6 w-6" />
-              </div>
-              <div className="text-[11px] uppercase tracking-[0.08em] font-semibold text-fg-subtle">
-                Statutory Governance
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-semibold tracking-[-0.022em] text-fg">
-                Collusion Defense & IT Act Safe Harbour
-              </h3>
-              <p className="text-sm text-fg-muted leading-relaxed">
-                Automated young-account burst protection, salted SHA-256 IP device hashes, and full statutory compliance under Indian IT Act 2021 and DPDP Act 2023.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2 pt-2">
-              <span className="inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium bg-surface-2 text-fg">
-                Rule 3(2) IT Rules 2021
-              </span>
-              <span className="inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium bg-surface-2 text-fg">
-                DPDP 2023 Consent Flow
-              </span>
-              <span className="inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium bg-accent-link/[0.12] text-accent-link">
-                IS 19000:2022 Verified
-              </span>
-            </div>
-          </div>
-        </div>
       </section>
     </div>
   )

@@ -3,6 +3,7 @@ import { ItemClient } from "./item-client"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { MapPin, Compass } from "lucide-react"
+import { BreakUIToggle } from "@/components/break-ui-toggle"
 
 export const dynamic = "force-dynamic"
 
@@ -10,9 +11,42 @@ interface ItemPageProps {
   params: {
     id: string
   }
+  searchParams?: {
+    data?: string
+  }
 }
 
-export default async function ItemDetailPage({ params }: ItemPageProps) {
+export default async function ItemDetailPage({ params, searchParams }: ItemPageProps) {
+  const mode = searchParams?.data
+
+  if (mode === "worst") {
+    const { WORST_CASE_PLACE } = await import("@/lib/mock-worst-case")
+    return (
+      <>
+        <ItemClient place={WORST_CASE_PLACE as any} />
+        <BreakUIToggle />
+      </>
+    )
+  }
+  if (mode === "empty") {
+    const { EMPTY_PLACE } = await import("@/lib/mock-worst-case")
+    return (
+      <>
+        <ItemClient place={EMPTY_PLACE as any} />
+        <BreakUIToggle />
+      </>
+    )
+  }
+  if (mode === "single") {
+    const { SINGLE_REVIEW_PLACE } = await import("@/lib/mock-worst-case")
+    return (
+      <>
+        <ItemClient place={SINGLE_REVIEW_PLACE as any} />
+        <BreakUIToggle />
+      </>
+    )
+  }
+
   let place = null
   try {
     place = await prisma.place.findUnique({
@@ -91,5 +125,10 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
     )
   }
 
-  return <ItemClient place={place} />
+  return (
+    <>
+      <ItemClient place={place} />
+      {process.env.NODE_ENV !== "production" && <BreakUIToggle />}
+    </>
+  )
 }

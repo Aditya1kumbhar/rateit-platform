@@ -17,7 +17,7 @@ export default function Error({ error, reset }: ErrorProps) {
         </p>
         <button
           onClick={reset}
-          className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold cursor-pointer"
+          className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-xl liquid-glass-btn text-[14px] font-semibold cursor-pointer apple-press apple-focus"
         >
           Try again
         </button>

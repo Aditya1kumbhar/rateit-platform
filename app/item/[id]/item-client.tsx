@@ -66,6 +66,34 @@ interface ItemClientProps {
   place: Place
 }
 
+function getInitial(displayName: string | null | undefined): string {
+  if (!displayName || !displayName.trim()) return "U"
+  const chars = Array.from(displayName.trim())
+  return chars.length > 0 ? chars[0].toUpperCase() : "U"
+}
+
+function formatRelativeDate(dateInput: Date | string): string {
+  try {
+    const date = new Date(dateInput)
+    if (isNaN(date.getTime())) return "Recently"
+    const now = Date.now()
+    const diffMs = now - date.getTime()
+    const diffSec = Math.floor(diffMs / 1000)
+    const diffMin = Math.floor(diffSec / 60)
+    const diffHours = Math.floor(diffMin / 60)
+    const diffDays = Math.floor(diffHours / 24)
+
+    if (diffSec < 60) return "Just now"
+    if (diffMin < 60) return `${diffMin}m ago`
+    if (diffHours < 24) return `${diffHours}h ago`
+    if (diffDays === 1) return "Yesterday"
+    if (diffDays < 7) return `${diffDays}d ago`
+    return date.toLocaleDateString()
+  } catch {
+    return "Recently"
+  }
+}
+
 export function ItemClient({ place }: ItemClientProps) {
   const { openRateModal } = useUI()
   const [activeTab, setActiveTab] = useState("overview")
@@ -146,7 +174,7 @@ export function ItemClient({ place }: ItemClientProps) {
           Discover
         </Link>
         <ChevronRight className="w-3.5 h-3.5 text-fg-subtle" />
-        <span className="text-fg font-medium truncate max-w-[200px] sm:max-w-none">
+        <span className="text-fg font-medium truncate max-w-[200px] sm:max-w-md">
           {place.name}
         </span>
       </nav>
@@ -154,27 +182,27 @@ export function ItemClient({ place }: ItemClientProps) {
       {/* Place Hero Visual Card (Apple Minimalist Border + Fill Contrast) */}
       <div className="p-6 md:p-8 rounded-[28px] bg-surface relative overflow-hidden border-0">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="space-y-3">
+          <div className="space-y-3 min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium bg-surface-2 text-fg-muted">
+              <span className="inline-flex h-6 px-2.5 items-center rounded-lg text-[11px] font-medium bg-surface-2 text-fg-muted">
                 {place.category.replace("_", " ")}
               </span>
               {place.isVerifiedBiz ? (
-                <span className="inline-flex h-6 px-2.5 items-center gap-1.5 rounded-full text-[11px] font-medium text-success bg-success/10">
+                <span className="inline-flex h-6 px-2.5 items-center gap-1.5 rounded-lg text-[11px] font-medium text-success bg-success/10">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   Verified Business Claim
                 </span>
               ) : (
                 <Link
                   href={`/business/claim/${place.id}`}
-                  className="inline-flex h-6 px-2.5 items-center gap-1 rounded-full text-[11px] font-medium text-fg-subtle hover:text-fg bg-surface-2 transition-[color,background-color] duration-150 apple-focus"
+                  className="inline-flex h-6 px-2.5 items-center gap-1 rounded-lg text-[11px] font-medium text-fg-subtle hover:text-fg bg-surface-2 transition-[color,background-color] duration-150 apple-focus"
                 >
                   Claim this business &rarr;
                 </Link>
               )}
             </div>
 
-            <h1 className="text-[28px] sm:text-[40px] font-semibold tracking-[-0.022em] text-fg">
+            <h1 className="text-[28px] sm:text-[40px] font-semibold tracking-[-0.022em] text-fg break-words [overflow-wrap:anywhere]">
               {place.name}
             </h1>
 
@@ -184,7 +212,9 @@ export function ItemClient({ place }: ItemClientProps) {
                 <span className="text-lg">{place.avgRating ? place.avgRating.toFixed(1) : "0.0"}</span>
               </div>
               <span className="text-fg-subtle">•</span>
-              <span className="text-fg-subtle tabular-nums">{place.reviewCount} verified reviews</span>
+              <span className="text-fg-subtle tabular-nums">
+                {place.reviewCount.toLocaleString()} verified review{place.reviewCount === 1 ? "" : "s"}
+              </span>
               {place.priceRange && (
                 <>
                   <span className="text-fg-subtle">•</span>
@@ -193,14 +223,14 @@ export function ItemClient({ place }: ItemClientProps) {
               )}
             </div>
 
-            <div className="flex items-center gap-2 text-xs sm:text-sm text-fg-subtle">
+            <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-fg-subtle">
               <MapPin className="w-4 h-4 text-accent-link shrink-0" />
-              <span>{place.address}, {place.city}</span>
+              <span className="break-words [overflow-wrap:anywhere]">{place.address}, {place.city}</span>
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${place.name} ${place.address} ${place.city}`)}`}
                 target="_blank"
                 rel="noreferrer"
-                className="text-accent-link hover:underline flex items-center gap-1 ml-1 text-xs"
+                className="text-accent-link hover:underline inline-flex items-center gap-1 shrink-0 text-xs ml-1"
               >
                 Maps <ExternalLink className="w-3 h-3" />
               </a>
@@ -208,7 +238,7 @@ export function ItemClient({ place }: ItemClientProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2.5 w-full sm:w-auto shrink-0">
             <button
               onClick={() =>
                 openRateModal({
@@ -220,14 +250,14 @@ export function ItemClient({ place }: ItemClientProps) {
                   longitude: place.longitude,
                 })
               }
-              className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold cursor-pointer"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center min-h-[44px] px-5 sm:px-6 rounded-xl liquid-glass-btn text-[14px] font-semibold cursor-pointer apple-press apple-focus"
             >
-              <Star className="w-4 h-4 fill-stone-950 text-stone-950 mr-2" />
-              <span>Rate this spot</span>
+              <Star className="w-4 h-4 fill-stone-950 text-stone-950 mr-2 shrink-0" />
+              <span>Rate spot</span>
             </button>
             <button
               onClick={() => setShowSaveModal(true)}
-              className="min-h-[44px] min-w-[44px] rounded-full bg-surface-2 hover:bg-surface-3 text-fg flex items-center justify-center transition-[background-color,transform] duration-150 apple-press apple-focus"
+              className="min-h-[44px] min-w-[44px] rounded-xl bg-surface-2 hover:bg-surface-3 text-fg flex items-center justify-center transition-[background-color,transform] duration-150 apple-press apple-focus shrink-0"
               title="Save to list"
               aria-label="Save to list"
             >
@@ -235,7 +265,7 @@ export function ItemClient({ place }: ItemClientProps) {
             </button>
             <button
               onClick={handleShare}
-              className="min-h-[44px] min-w-[44px] rounded-full bg-surface-2 hover:bg-surface-3 text-fg flex items-center justify-center transition-[background-color,transform] duration-150 apple-press apple-focus"
+              className="min-h-[44px] min-w-[44px] rounded-xl bg-surface-2 hover:bg-surface-3 text-fg flex items-center justify-center transition-[background-color,transform] duration-150 apple-press apple-focus shrink-0"
               title="Share"
               aria-label="Share spot"
             >
@@ -247,17 +277,17 @@ export function ItemClient({ place }: ItemClientProps) {
 
       {/* Tabs Container */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-surface-2 p-1 rounded-full grid grid-cols-4 max-w-md border-0">
-          <TabsTrigger value="overview" className="rounded-full text-[12px] font-medium data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
+        <TabsList className="bg-surface-2 p-1 rounded-xl grid grid-cols-4 max-w-md border-0">
+          <TabsTrigger value="overview" className="rounded-lg text-[12px] font-medium data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
             Overview
           </TabsTrigger>
-          <TabsTrigger value="reviews" className="rounded-full text-[12px] font-medium data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
+          <TabsTrigger value="reviews" className="rounded-lg text-[12px] font-medium data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
             Reviews ({place.reviews.length})
           </TabsTrigger>
-          <TabsTrigger value="photos" className="rounded-full text-[12px] font-medium data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
+          <TabsTrigger value="photos" className="rounded-lg text-[12px] font-medium data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
             Photos
           </TabsTrigger>
-          <TabsTrigger value="info" className="rounded-full text-[12px] font-medium data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
+          <TabsTrigger value="info" className="rounded-lg text-[12px] font-medium data-[state=active]:bg-surface-3 data-[state=active]:text-fg text-fg-muted transition-colors">
             Location
           </TabsTrigger>
         </TabsList>
@@ -278,10 +308,10 @@ export function ItemClient({ place }: ItemClientProps) {
                 {place.tags.map((tag, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full text-[11px] font-medium text-fg-muted bg-surface-2"
+                    className="inline-flex items-center gap-1.5 h-6 px-2.5 rounded-lg text-[11px] font-medium text-fg-muted bg-surface-2 max-w-full"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-accent-link" />
-                    {tag}
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent-link shrink-0" />
+                    <span className="truncate">{tag}</span>
                   </span>
                 ))}
               </div>
@@ -320,7 +350,7 @@ export function ItemClient({ place }: ItemClientProps) {
                           {(sim.bayesianRating || sim.avgRating || 0).toFixed(1)}
                         </span>
                         <span>•</span>
-                        <span>{sim.reviewCount} reviews</span>
+                        <span>{sim.reviewCount.toLocaleString()} review{sim.reviewCount === 1 ? "" : "s"}</span>
                       </div>
                       <p className="text-xs text-fg-subtle truncate">{sim.address}</p>
                     </div>
@@ -351,7 +381,7 @@ export function ItemClient({ place }: ItemClientProps) {
                     longitude: place.longitude,
                   })
                 }
-                className="mt-2 inline-flex items-center justify-center min-h-[44px] px-6 rounded-full liquid-glass-btn text-[14px] font-semibold cursor-pointer"
+                className="mt-2 inline-flex items-center justify-center min-h-[44px] px-6 rounded-xl liquid-glass-btn text-[14px] font-semibold cursor-pointer"
               >
                 Write First Review
               </Button>
@@ -367,21 +397,21 @@ export function ItemClient({ place }: ItemClientProps) {
                   className="p-5 rounded-[22px] bg-surface space-y-3 border-0"
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-9 h-9 rounded-full bg-surface-2 flex items-center justify-center font-semibold text-sm text-accent-link">
-                        {rev.user?.displayName ? rev.user.displayName[0].toUpperCase() : "U"}
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-9 h-9 shrink-0 rounded-full bg-surface-2 flex items-center justify-center font-semibold text-sm text-accent-link">
+                        {getInitial(rev.user?.displayName)}
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h4 className="text-sm font-semibold text-fg">
+                      <div className="min-w-0">
+                        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                          <h4 className="text-sm font-semibold text-fg truncate max-w-[130px] sm:max-w-[220px]">
                             {rev.user?.displayName || "Pune Student"}
                           </h4>
-                          <span className={`inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium ${badge.color}`}>
+                          <span className={`inline-flex h-5 px-2 items-center rounded-lg text-[10px] sm:text-[11px] font-medium shrink-0 ${badge.color}`}>
                             {badge.label}
                           </span>
                         </div>
                         <div className="flex items-center gap-2 mt-0.5 text-xs text-fg-subtle">
-                          <div className="flex items-center text-star">
+                          <div className="flex items-center text-star shrink-0">
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
@@ -390,21 +420,22 @@ export function ItemClient({ place }: ItemClientProps) {
                             ))}
                           </div>
                           <span>•</span>
-                          <span>{new Date(rev.publishDate).toLocaleDateString()}</span>
+                          <span className="shrink-0">{formatRelativeDate(rev.publishDate)}</span>
                         </div>
                       </div>
                     </div>
 
                     {rev.checkinVerified && (
-                      <span className="inline-flex h-6 px-2.5 items-center gap-1 rounded-full text-[11px] font-medium text-success bg-success/10">
+                      <span className="inline-flex h-6 px-2.5 items-center gap-1 rounded-lg text-[11px] font-medium text-success bg-success/10 shrink-0">
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        GPS Verified
+                        <span className="hidden sm:inline">GPS Verified</span>
+                        <span className="sm:hidden">Verified</span>
                       </span>
                     )}
                   </div>
 
-                  <p className="text-xs sm:text-sm text-fg-muted leading-relaxed">
-                    {rev.text || "(No written comment provided)"}
+                  <p className="text-xs sm:text-sm text-fg-muted leading-relaxed break-words [overflow-wrap:anywhere]">
+                    {rev.text?.trim() ? rev.text : "(No written comment provided)"}
                   </p>
 
                   {/* Photo Thumbnails */}
@@ -415,7 +446,10 @@ export function ItemClient({ place }: ItemClientProps) {
                           key={i}
                           src={url}
                           alt="Review attachment"
-                          className="w-20 h-20 object-cover rounded-[14px]"
+                          className="w-20 h-20 object-cover rounded-[14px] shrink-0 bg-surface-2"
+                          onError={(e) => {
+                            e.currentTarget.style.display = "none"
+                          }}
                         />
                       ))}
                     </div>
@@ -427,9 +461,9 @@ export function ItemClient({ place }: ItemClientProps) {
                       {rev.tags.map((t, idx) => (
                         <span
                           key={idx}
-                          className="inline-flex h-6 px-2.5 items-center rounded-full text-[11px] font-medium text-fg-muted bg-surface-2"
+                          className="inline-flex h-6 px-2.5 items-center rounded-lg text-[11px] font-medium text-fg-muted bg-surface-2 max-w-full"
                         >
-                          #{t}
+                          <span className="truncate">#{t}</span>
                         </span>
                       ))}
                     </div>
@@ -437,12 +471,12 @@ export function ItemClient({ place }: ItemClientProps) {
 
                   {/* Business Response */}
                   {rev.bizReply && (
-                    <div className="p-3.5 rounded-[14px] bg-surface-2 text-xs space-y-1">
-                      <div className="flex items-center gap-1.5 font-semibold text-accent-link">
+                    <div className="p-3.5 rounded-[14px] bg-surface-2 text-xs space-y-1 max-h-60 overflow-y-auto">
+                      <div className="flex items-center gap-1.5 font-semibold text-accent-link shrink-0">
                         <MessageSquare className="w-3.5 h-3.5" />
                         <span>Business Owner Reply</span>
                       </div>
-                      <p className="text-fg-muted leading-relaxed">{rev.bizReply.text}</p>
+                      <p className="text-fg-muted leading-relaxed break-words [overflow-wrap:anywhere]">{rev.bizReply.text}</p>
                     </div>
                   )}
 
@@ -450,15 +484,15 @@ export function ItemClient({ place }: ItemClientProps) {
                   <div className="pt-2 border-t border-hairline/[0.08] flex items-center justify-between text-xs">
                     <button
                       onClick={() => handleHelpfulClick(rev.id)}
-                      className={`h-9 px-4 rounded-full text-[12px] font-medium inline-flex items-center gap-1.5 transition-[background-color,transform] duration-150 apple-press apple-focus ${
+                      className={`h-9 px-3.5 rounded-xl text-[12px] font-medium inline-flex items-center gap-1.5 transition-[background-color,transform] duration-150 apple-press apple-focus ${
                         hasVoted[rev.id]
                           ? "bg-accent-link/[0.12] text-accent-link"
                           : "bg-surface-2 text-fg-muted hover:text-fg"
                       }`}
                     >
-                      <ThumbsUp className="w-3.5 h-3.5" />
+                      <ThumbsUp className="w-3.5 h-3.5 shrink-0" />
                       <span>Helpful</span>
-                      {votes > 0 && <span className="tabular-nums font-semibold">({votes})</span>}
+                      {votes > 0 && <span className="tabular-nums font-semibold">({votes.toLocaleString()})</span>}
                     </button>
                     <span className="text-[10px] text-fg-subtle font-mono">
                       Trust score feedback active
