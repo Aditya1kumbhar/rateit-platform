@@ -22,6 +22,20 @@ export const metadata: Metadata = {
     ],
     apple: '/icon.svg',
   },
+  openGraph: {
+    title: 'RateIT: Hyperlocal Verified Reviews for Pune',
+    description: 'Verified reviews for coaching classes, PGs, hostels, cafes, and local spots across FC Road, Kothrud, Hinjewadi, and Viman Nagar. GPS and EXIF verified. Zero fake reviews.',
+    url: 'https://rateit-platform.vercel.app',
+    siteName: 'RateIT',
+    images: [{ url: 'https://rateit-platform.vercel.app/og-rateit.jpg', width: 1200, height: 630, alt: 'RateIT, hyperlocal verified reviews for Pune' }],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'RateIT: Hyperlocal Verified Reviews for Pune',
+    description: 'Verified reviews for coaching classes, PGs, hostels, cafes, and local spots across Pune. GPS and EXIF verified. Zero fake reviews.',
+    images: ['https://rateit-platform.vercel.app/og-rateit.jpg'],
+  },
 }
 
 export const viewport: Viewport = {
